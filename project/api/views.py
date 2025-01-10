@@ -1,12 +1,15 @@
 # from django.shortcuts import render
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, generics
 from api.serializers import UserSerializer
 from .models import User
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """API endpoint which allows user to be viewed or edited"""
+class UserAPIView(generics.ListAPIView):
+    """API endpoint which retrieves a list of all Users"""
 
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by("id")
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+user_list_view = UserAPIView.as_view()
