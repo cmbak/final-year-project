@@ -3,9 +3,9 @@ from rest_framework import serializers
 from .models import User
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer for user model"""
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for user model - maps JSON to User object"""
 
     class Meta:
         model = User
-        fields = ["url", "username", "email"]
+        fields = ["id", "username", "email"]
