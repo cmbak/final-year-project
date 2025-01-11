@@ -25,9 +25,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email", "password"]
+        field_kw_args = {"required": True, "allow_blank": False}
+        extra_kwargs = {
+            "username": field_kw_args,
+            "email": field_kw_args,
+            "password": field_kw_args,
+        }
 
     def validate_email(self, value):
         """Check that no user with given email already exists"""
+        print(User.objects.filter(email=value).exists())
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("A user with that email already exists")
         return value

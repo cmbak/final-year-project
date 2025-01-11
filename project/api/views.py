@@ -23,13 +23,12 @@ class SignupView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "signup.html"
     permission_classes = [permissions.AllowAny]
-    style = {"template_pack": "rest_framework/vertical/"}  # TODO delete
 
     def get(self, request):
         """Handle GET request to signup page"""
         serializer = UserSerializer
         return response.Response(
-            {"serializer": serializer, "style": self.style},
+            {"serializer": serializer},
             status=status.HTTP_200_OK,
         )
 
