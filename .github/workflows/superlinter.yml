@@ -27,6 +27,9 @@ jobs:
         uses: super-linter/super-linter@v7.2.1
         env:
           VALIDATE_PYTHON_FLAKE8: true
+          PYTHON_FLAKE8_CONFIG_FILE: .flake8
           VALIDATE_PYTHON_BLACK: true
+          VALIDATE_PYTHON_ISORT: true
+          PYTHON_ISORT_CONFIG_FILE: pyproject.toml
           VALIDATE_TSX: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
