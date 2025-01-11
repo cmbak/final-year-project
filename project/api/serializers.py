@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", "password"]
         field_kw_args = {"required": True, "allow_blank": False}
         extra_kwargs = {
-            "username": field_kw_args,
+            "username": {"required": True, "allow_blank": False, "help_text": ""},
             "email": field_kw_args,
             "password": field_kw_args,
         }
