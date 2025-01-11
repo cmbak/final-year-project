@@ -1,0 +1,6 @@
+[flake8]
+# black default is 88 chars
+max-line-length = 88
+exclude =
+    migrations
+    settings.py
