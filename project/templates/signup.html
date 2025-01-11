@@ -1,11 +1,23 @@
-{% load rest_framework %}
+{% load rest_framework %} {% load static %}
 
-<html><body>
-
-<form action="{% url 'signup'%}" method="POST">
-    {% csrf_token %}
-    {% render_form serializer %}
-    <input type="submit" value="Save">
-</form>
-
-</body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href={% static 'forms.css'%}>
+  </head>
+  <body>
+    <div class="container-center">
+      <div class="form">
+        <h1 class="title">sign up</h1>
+        <form action="{% url 'signup'%}" method="POST">
+          {% csrf_token %} {% render_form serializer %}
+          <div class="form-group">
+            <label for="confirm-password">confirm password</label>
+            <input type="password" name="confirm-password" />
+          </div>
+          <input type="submit" value="Sign up" class="btn-signup" />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
