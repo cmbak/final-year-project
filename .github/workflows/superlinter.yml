@@ -26,6 +26,7 @@ jobs:
       - name: Lint code using Super-linter # from super-linter marketplace page
         uses: super-linter/super-linter@v7.2.1
         env:
+          FILTER_REGEX_EXCLUDE: (^|/)migrations/
           VALIDATE_PYTHON_FLAKE8: true
           PYTHON_FLAKE8_CONFIG_FILE: .flake8
           VALIDATE_PYTHON_BLACK: true
