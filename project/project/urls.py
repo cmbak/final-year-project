@@ -22,7 +22,7 @@ from api import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/users/", views.user_list_view, name="list users"),
+    path("api/users/", views.user_list_create_view, name="list/create users"),
     # path('signup/', views.signupview, name='signup')
     # path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_frmwrk")),
