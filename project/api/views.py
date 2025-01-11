@@ -1,9 +1,7 @@
 from api.serializers import UserSerializer
-from rest_framework import generics, permissions
-from rest_framework.views import APIView
+from rest_framework import generics, permissions, response, status
 from rest_framework.renderers import TemplateHTMLRenderer
-
-from rest_framework import response
+from rest_framework.views import APIView
 
 from .models import User
 
@@ -30,16 +28,23 @@ class SignupView(APIView):
     def get(self, request):
         """Handle GET request to signup page"""
         serializer = UserSerializer
-        return response.Response({"serializer": serializer, "style": self.style})
+        return response.Response(
+            {"serializer": serializer, "style": self.style},
+            status=status.HTTP_200_OK,
+        )
 
     def post(self, request):
         """Handle POST request to signup page"""
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
             # Show invalid field errors to user
-            return response.Response({"serializer": serializer})
-        serializer.save()
-        # TODO redirect to login page
+            return response.Response(
+                {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            # TODO check confirm password same as password
+            serializer.save()
+        # TODO redirect to login page, 201 created
 
 
 user_signup_view = SignupView.as_view()
