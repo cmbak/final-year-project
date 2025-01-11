@@ -41,10 +41,16 @@ input {
   border-radius: 1rem;
   padding: 0.8rem;
   border: 1px solid darkgray;
+  font-size: 1rem;
+}
+
+.help-block,
+.required-span {
+  color: rgb(192, 0, 0);
 }
 
 .btn-signup {
-  font-size: 1rem;
+  font-size: 1.2rem;
   background-color: #2595e5;
   color: white;
   border: none;
