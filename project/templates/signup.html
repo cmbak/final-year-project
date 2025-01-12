@@ -12,9 +12,9 @@
         <h1 class="title">sign up</h1>
         <form action="{% url 'signup'%}" method="POST">
           {% csrf_token %} {% render_form serializer %}
-          <div class="form-group">
-            <label for="confirm-password">confirm password</label>
-            <input type="password" name="confirm-password" required />
+          <div class="show-password-container">
+            <input type="checkbox" name="show-password" id="showPassword" />
+            <label for="showPassword">show password</label>
           </div>
           <input type="submit" value="Sign up" class="btn-signup" />
         </form>

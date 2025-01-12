@@ -2,6 +2,7 @@ from api.serializers import UserSerializer
 from rest_framework import generics, permissions, response, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
+from django.shortcuts import redirect
 
 from .models import User
 
@@ -34,16 +35,17 @@ class SignupView(APIView):
 
     def post(self, request):
         """Handle POST request to signup page"""
+
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
             # Show invalid field errors to user
             return response.Response(
                 {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
             )
-        else:
-            # TODO check confirm password same as password
-            serializer.save()
-        # TODO redirect to login page, 201 created
+        serializer.save()
+        # TODO auth user
+        # TODO redirect to home page OR login page
+        # TODO choose response code
 
 
 user_signup_view = SignupView.as_view()

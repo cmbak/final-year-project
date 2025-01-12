@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
         style={"input_type": "password"},
         error_messages={
             "invalid": (
-                "Your password must contain at least one digit 0-9 and one character from @+-_!?."  # noqa: E501
+                "Your password must contain at least one digit from 0-9 and one character from @+-_!?."  # noqa: E501
             )
         },
     )
@@ -34,7 +34,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         """Check that no user with given email already exists"""
-        print(User.objects.filter(email=value).exists())
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("A user with that email already exists")
         return value
