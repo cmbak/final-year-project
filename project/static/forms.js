@@ -5,7 +5,12 @@ const inputs = document.getElementsByTagName('input');
 const labels = document.getElementsByTagName('label');
 
 for (const input of inputs) {
-  if (input.type === 'submit') break;
+  if (input.type === 'submit') {
+    continue;
+  } else if (input.type === 'password') {
+    input.minLength = 8; // not working
+    input.maxLength = 16;
+  }
   input.required = true;
 }
 
