@@ -2,7 +2,6 @@ from api.serializers import UserSerializer
 from rest_framework import generics, permissions, response, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
-from django.shortcuts import redirect
 
 from .models import User
 
