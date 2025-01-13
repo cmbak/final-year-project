@@ -1,0 +1,11 @@
+[run]
+omit = 
+    */admin.py
+    */apps.py
+    */migrations/*
+    */urls.py
+    */tests/*
+    */venv/*
+
+[coverage:report]
+skip_empty = true

@@ -1,2 +1,9 @@
 [tool.isort]
 profile = "black"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "project.settings"
+python_files = "test.py test_*.py *_tests.py"
+testpaths = [
+    "tests",
+]
