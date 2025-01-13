@@ -62,3 +62,9 @@ input {
 .btn-signup:hover {
   background-color: #1071b7;
 }
+
+@media (max-width: 768px) {
+  .form-container {
+    width: 75%;
+  }
+}
