@@ -43,5 +43,6 @@ def test_unique_user_email():
     """
     Test that creating a user with the same email as an exisiting user is not allowed
     """
+    create_db_user()
     with pytest.raises(IntegrityError):
-        create_db_user(username="John Doe", email=USER_EMAIL)
+        create_db_user(username="John Doe")
