@@ -53,6 +53,16 @@ jobs:
           postgresql version: '16'
 
       - name: Run migrations
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+          DEV_ORIGIN: ${{ secrets.DEV_ORIGIN }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_ENGINE: ${{ secrets.DB_ENGINE }}
         working-directory: ./project
         run: python manage.py migrate
 
