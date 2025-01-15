@@ -12,8 +12,12 @@ class User(AbstractUser):
         blank=False,  # Email required on forms
     )
 
+    def __str__(self):
+        """Return string representation of user"""
+        return f"{self.username} ({self.email})"
+
     def as_dict(self):
-        """Returns representation of user as a dictionary"""
+        """Return representation of user as a dictionary"""
         return {
             "id": self.id,
             "username": self.username,
