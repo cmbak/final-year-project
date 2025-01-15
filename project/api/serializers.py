@@ -1,7 +1,8 @@
+from typing import List
+
 from rest_framework import serializers
 
 from .models import User
-from typing import List
 
 
 class UserSerializer(serializers.ModelSerializer):
