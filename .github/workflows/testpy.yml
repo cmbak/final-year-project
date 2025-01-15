@@ -1,6 +1,6 @@
 name: Test python code
 
-on:
+'on':
   push:
     branches:
       - main
@@ -16,16 +16,21 @@ jobs:
       contents: read
 
     steps:
-      - name: Setup python
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' 
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Test python code using pytest
-        run: pytest
+        run: pytest --cov -v
+
+      - name: Generate coverage report
+        run: coverage report -m
