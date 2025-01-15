@@ -72,7 +72,7 @@ def test_password_invalid_length(password: str, expected: str, username, email):
     "password, expected",
     [("apassword", True), ("apassword1", True), ("apassword@", True)],
 )
-def test_password_missing_reqs(password: str, expected: bool):
+def test_password_missing_reqs(username, email, password: str, expected: bool):
     """
     Test that the correct error message is shown
     if the password is missing a digit from 0-9
@@ -80,8 +80,8 @@ def test_password_missing_reqs(password: str, expected: bool):
     """
     serializer = UserSerializer(
         data={
-            "username": "bob",
-            "email": "email@gmail.com",
+            "username": username,
+            "email": email,
             "password": password,
         }
     )
