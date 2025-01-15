@@ -53,6 +53,7 @@ jobs:
           postgresql version: '16'
 
       - name: Run migrations
+        working-directory: ./project
         run: python manage.py migrate
 
       - name: Test using pytest
