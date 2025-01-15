@@ -11,3 +11,11 @@ class User(AbstractUser):
         max_length=255,
         blank=False,  # Email required on forms
     )
+
+    def as_dict(self):
+        """Returns representation of user as a dictionary"""
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+        }
