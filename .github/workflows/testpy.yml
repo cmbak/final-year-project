@@ -1,6 +1,6 @@
 name: Test python code
 
-'on':
+on:
   push:
     branches:
       - main
