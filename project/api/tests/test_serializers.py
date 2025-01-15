@@ -33,7 +33,9 @@ def test_email_already_exists():
     email_errors = serializer.errors.get("email")
     assert email_errors is not None  # Check that there are errors for email field
     assert len(email_errors) == 1  # Check that it's the only error
-    # assert "A user with that email already exists" == email_errors[0]
+    assert (
+        email_errors[0] == "user with this email address already exists."
+    )  # taken from Field constructor unique error
 
 
 @pytest.mark.django_db(True)
