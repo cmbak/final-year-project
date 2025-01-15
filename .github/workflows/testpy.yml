@@ -29,7 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Test python code using pytest
+      - name: Test using pytest
+        working-directory: ./project/api
         run: pytest --cov -v
 
       - name: Generate coverage report
