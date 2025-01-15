@@ -30,6 +30,11 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Test using pytest
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+          DEV_ORIGIN: ${{ secrets.DEV_ORIGIN }}
+
         working-directory: ./project/api
         run: pytest --cov -v
 
