@@ -39,7 +39,14 @@ def test_email_already_exists():
 
 
 @pytest.mark.django_db(True)
-def test_password_too_short(username, email):
+@pytest.mark.parametrize(
+    "password, expected",
+    [
+        ("short", "Ensure this field has at least 8 characters."),
+        ("verylongpassword1@", "Ensure this field has no more than 16 characters."),
+    ],
+)
+def test_password_invalid_length(password: str, expected: str, username, email):
     """
     Test that the user serializer is invalid and the correct error message is shown
     if the password of the User passed to the serializer is too short
@@ -48,7 +55,7 @@ def test_password_too_short(username, email):
         data={
             "username": username,
             "email": email,
-            "password": "short",
+            "password": password,
         }
     )
     assert serializer.is_valid() is False
@@ -57,27 +64,7 @@ def test_password_too_short(username, email):
     password_errors = [
         str(error) for error in password_errors
     ]  # Only have string reps of ErrorDetails (subclass of str)
-    assert "Ensure this field has at least 8 characters." in password_errors
-
-
-@pytest.mark.django_db(True)
-def test_password_too_long(username, email):
-    """
-    Test that the correct error message is shown
-    if the password of the User passed to the serializer is too short
-    """
-    serializer = UserSerializer(
-        data={
-            "username": username,
-            "email": email,
-            "password": "verylongpassword1@",
-        }
-    )
-    assert serializer.is_valid() is False
-    password_errors = serializer.errors.get("password")
-    assert password_errors is not None
-    password_errors = [str(error) for error in password_errors]
-    assert "Ensure this field has no more than 16 characters." in password_errors
+    assert expected in password_errors
 
 
 @pytest.mark.django_db(True)
