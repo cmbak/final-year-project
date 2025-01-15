@@ -78,3 +78,28 @@ def test_password_too_long():
     assert password_errors is not None
     password_errors = [str(error) for error in password_errors]
     assert "Ensure this field has no more than 16 characters." in password_errors
+
+
+@pytest.mark.django_db(True)
+def test_password_missing_reqs():
+    """
+    Test that the correct error message is shown
+    if the password is missing a digit from 0-9
+    and a character from @+-_!?
+    """
+    serializer = UserSerializer(
+        data={
+            "username": "bob",
+            "email": "email@gmail.com",
+            "password": "apassword",
+        }
+    )
+
+    assert serializer.is_valid() is False
+    password_errors = serializer.errors.get("password")
+    assert password_errors is not None
+    password_errors = [str(error) for error in password_errors]
+    assert (
+        "Your password must contain at least one digit from 0-9 and one character from @+-_!?."  # noqa E501
+        in password_errors
+    )
