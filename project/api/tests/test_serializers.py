@@ -1,14 +1,14 @@
 import pytest
+from api.models import User
 from api.serializers import UserSerializer
 
-from .test_models import create_db_user
-from api.models import User
+from .conftest import custom_user
 
 
 @pytest.fixture
-def create_user_and_serializer() -> tuple[User, UserSerializer]:
+def create_user_and_serializer(standard_user) -> tuple[User, UserSerializer]:
     """Create and return a User intance and User serializer"""
-    return create_db_user(), UserSerializer()
+    return standard_user, UserSerializer()
 
 
 @pytest.mark.django_db(True)
@@ -25,7 +25,7 @@ def test_email_already_exists():
     Test that the user serializer is invalid and the correct error message is shown
     if a user is passed to the serializer with an email which another user already has
     """
-    user = create_db_user(username="new_user")
+    user = custom_user(username="new_user")
     serializer = UserSerializer(
         data={"username": user.username, "email": user.email, "password": user.password}
     )
@@ -39,15 +39,15 @@ def test_email_already_exists():
 
 
 @pytest.mark.django_db(True)
-def test_password_too_short():
+def test_password_too_short(username, email):
     """
     Test that the user serializer is invalid and the correct error message is shown
     if the password of the User passed to the serializer is too short
     """
     serializer = UserSerializer(
         data={
-            "username": "bob",
-            "email": "email@gmail.com",
+            "username": username,
+            "email": email,
             "password": "short",
         }
     )
@@ -61,15 +61,15 @@ def test_password_too_short():
 
 
 @pytest.mark.django_db(True)
-def test_password_too_long():
+def test_password_too_long(username, email):
     """
     Test that the correct error message is shown
     if the password of the User passed to the serializer is too short
     """
     serializer = UserSerializer(
         data={
-            "username": "bob",
-            "email": "email@gmail.com",
+            "username": username,
+            "email": email,
             "password": "verylongpassword1@",
         }
     )
