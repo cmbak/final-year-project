@@ -29,3 +29,12 @@ def test_unique_user_email(standard_user):
     """
     with pytest.raises(IntegrityError):
         custom_user(username="John Doe")
+
+
+@pytest.mark.django_db(True)
+def test_user_string(standard_user):
+    """
+    Test that string method of User returns the correctly formatted string:
+    ``` username (email) ```
+    """
+    assert str(standard_user) == f"{standard_user.username} ({standard_user.email})"
