@@ -74,7 +74,7 @@ jobs:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_ENGINE: ${{ secrets.DB_ENGINE }}
 
-        working-directory: ./api
+        working-directory: ./project/api
         run: pytest --cov -v
 
       # - name: Generate coverage report
