@@ -81,7 +81,11 @@ def test_password_too_long():
 
 
 @pytest.mark.django_db(True)
-def test_password_missing_reqs():
+@pytest.mark.parametrize(
+    "password, expected",
+    [("apassword", True), ("apassword1", True), ("apassword@", True)],
+)
+def test_password_missing_reqs(password: str, expected: bool):
     """
     Test that the correct error message is shown
     if the password is missing a digit from 0-9
@@ -91,7 +95,7 @@ def test_password_missing_reqs():
         data={
             "username": "bob",
             "email": "email@gmail.com",
-            "password": "apassword",
+            "password": password,
         }
     )
 
@@ -102,4 +106,4 @@ def test_password_missing_reqs():
     assert (
         "Your password must contain at least one digit from 0-9 and one character from @+-_!?."  # noqa E501
         in password_errors
-    )
+    ) is expected
