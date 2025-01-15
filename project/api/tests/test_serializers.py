@@ -20,23 +20,37 @@ def test_valid_user(create_user_and_serializer):
 
 
 @pytest.mark.django_db(True)
-def test_email_already_exists(create_user_and_serializer):
+def test_email_already_exists():
     """
-    Test that correct error message shows if a user is passed to the serializer
-    with an email which another user already has
+    Test that the user serializer is invalid and the correct error message is shown
+    if a user is passed to the serializer with an email which another user already has
     """
-    user, serializer = create_user_and_serializer
-    print(user)
-    print(serializer)
+    user = create_db_user(username="new_user")
+    serializer = UserSerializer(
+        data={"username": user.username, "email": user.email, "password": user.password}
+    )
+    assert serializer.is_valid() is False
+    email_errors = serializer.errors.get("email")
+    assert email_errors is not None  # Check that there are errors for email field
+    assert len(email_errors) == 1  # Check that it's the only error
+    # assert "A user with that email already exists" == email_errors[0]
 
 
 @pytest.mark.django_db(True)
 def test_password_too_short():
     """
-    Test that the correct error message is shown
+    Test that the user serializer is invalid and the correct error message is shown
     if the password of the User passed to the serializer is too short
     """
-    pass
+    serializer = UserSerializer(
+        data={
+            "username": "bob",
+            "email": "email@gmail.com",
+            "password": "short",
+        }
+    )
+    assert serializer.is_valid() is False
+    # TODO check exact error message expected
 
 
 @pytest.mark.django_db(True)
