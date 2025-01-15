@@ -1,13 +1,14 @@
 from rest_framework import serializers
 
 from .models import User
+from typing import List
 
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for user model - maps JSON to User object"""
 
     # Need to set input type to password and validate
-    password = serializers.RegexField(
+    password: serializers.RegexField = serializers.RegexField(
         # Look for digit, special char, match those chars 8-16
         regex=r"^(?=.*\d)(?=.*[@+\-_!?])[A-Za-z\d@+\-_!?]{8,16}$",
         write_only=True,
@@ -23,22 +24,22 @@ class UserSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = User
-        fields = ["id", "username", "email", "password"]
-        field_kw_args = {"required": True, "allow_blank": False}
-        extra_kwargs = {
+        model: User = User
+        fields: List[str] = ["id", "username", "email", "password"]
+        field_kw_args: dict[str, bool] = {"required": True, "allow_blank": False}
+        extra_kwargs: dict[str, dict] = {
             "username": {"required": True, "allow_blank": False, "help_text": ""},
             "email": field_kw_args,
             "password": field_kw_args,
         }
 
-    def validate_email(self, value):
+    def validate_email(self, value: str) -> str:
         """Check that no user with given email already exists"""
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("A user with that email already exists")
         return value
 
-    def validate_password(self, value):
+    def validate_password(self, value: str) -> str:
         """Check that length of password is between 8 and 16 characters"""
 
         if len(value) < 8 or len(value) > 16:
