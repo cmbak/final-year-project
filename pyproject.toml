@@ -10,12 +10,15 @@ testpaths = [
 
 [tool.coverage.run]
 omit = [
-    "/admin.py",
-    "*/apps.py",
-    "*/migrations/*",
+    "admin.py",
+    "apps.py",
+    "migrations/*",
     "*/urls.py",
-    "*/tests/*",
-    "*/venv/*",
+    "tests/*",
+    "venv/*",
+    "*/settings.py",
+    "*/__init__.py",
+    "__init__.py",
 ]
 
 [tool.coverage.report]
