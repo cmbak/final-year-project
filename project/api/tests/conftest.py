@@ -1,5 +1,6 @@
 import pytest
 from api.models import User
+from rest_framework.test import APIClient
 
 USER_USERNAME = "bob"
 USER_EMAIL = "bob@gmail.com"
@@ -23,7 +24,7 @@ def standard_user() -> User:
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def username() -> str:
     """
     Return a valid username for a User instance.
@@ -32,7 +33,7 @@ def username() -> str:
     return USER_USERNAME
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def email() -> str:
     """
     Return a valid email for a User instance.
@@ -41,10 +42,16 @@ def email() -> str:
     return USER_EMAIL
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def password() -> str:
     """
     Return a valid password for a User instance.
     Same password as the one of the user returned from standard_user fixture
     """
     return USER_PASSWORD
+
+
+@pytest.fixture
+def api_client() -> APIClient:
+    """Return an API client instance"""
+    return APIClient()
