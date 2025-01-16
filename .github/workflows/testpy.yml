@@ -12,20 +12,70 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      # Service container label
+      postgres:
+        # Docker image
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Map TCP port 5432 on service container to host
+          - 5432:5432
+
     permissions:
       contents: read
 
     steps:
-      - name: Setup python
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' 
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Test python code using pytest
-        run: pytest
+      - name: Run migrations
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+          DEV_ORIGIN: ${{ secrets.DEV_ORIGIN }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_ENGINE: ${{ secrets.DB_ENGINE }}
+        working-directory: ./project
+        run: python manage.py migrate
+
+      - name: Test using pytest
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+          DEV_ORIGIN: ${{ secrets.DEV_ORIGIN }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_ENGINE: ${{ secrets.DB_ENGINE }}
+
+        working-directory: ./project/api
+        run: pytest --cov -v
+
+      # - name: Generate coverage report
+      #   run: coverage report -m

@@ -7,3 +7,19 @@ python_files = "test.py test_*.py *_tests.py"
 testpaths = [
     "tests",
 ]
+
+[tool.coverage.run]
+omit = [
+    "admin.py",
+    "apps.py",
+    "migrations/*",
+    "*/urls.py",
+    "tests/*",
+    "venv/*",
+    "*/settings.py",
+    "*/__init__.py",
+    "__init__.py",
+]
+
+[tool.coverage.report]
+skip_empty = true
