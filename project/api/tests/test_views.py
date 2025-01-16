@@ -3,6 +3,9 @@ from api.models import User
 from rest_framework.test import APIClient
 
 
+# Users API Endpoint
+
+
 @pytest.mark.django_db(True)
 def test_get_users_auth(standard_user: User, api_client: APIClient) -> None:
     """
@@ -147,3 +150,33 @@ def test_post_user_password_missing_reqs(
         "Your password must contain at least one digit from 0-9 and one character from @+-_!?.".lower()  # noqa E501
         in password_errors
     )
+
+
+# Signup View (separate)
+
+
+def test_get_signup(api_client: APIClient) -> None:
+    """Test that sending a GET request to the signup page returns a 200 response"""
+    response = api_client.get("/signup/")
+
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db(True)
+def test_post_valid_signup(api_client: APIClient) -> None:
+    """
+    Test that sending a POST request to the signup page
+    with valid user data returns a 303 response
+    """
+    data = {
+        "username": "new_user",
+        "email": "new.user@gmail.com",
+        "password": "password1@",
+    }
+
+    response = api_client.post("/signup/", data)
+
+    assert response.status_code == 303
+
+
+# e2e testing for specific form errors...

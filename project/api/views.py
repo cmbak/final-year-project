@@ -43,8 +43,7 @@ class SignupView(APIView):
             )
         serializer.save()
         # TODO auth user
-        # TODO redirect to home page OR login page
-        # TODO choose response code
+        # TODO redirect to home page OR login page w/ code 303
 
 
 user_signup_view = SignupView.as_view()
