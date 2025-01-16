@@ -9,13 +9,14 @@ testpaths = [
 ]
 
 [tool.coverage.run]
-omit = 
-    */admin.py,
-    */apps.py,
-    */migrations/*,
-    */urls.py,
-    */tests/*,
-    */venv/*,
+omit = [
+    "/admin.py",
+    "*/apps.py",
+    "*/migrations/*",
+    "*/urls.py",
+    "*/tests/*",
+    "*/venv/*",
+]
 
 [tool.coverage.report]
 skip_empty = true
