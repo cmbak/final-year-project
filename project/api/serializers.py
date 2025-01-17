@@ -1,9 +1,9 @@
-from typing import List, Dict
+from typing import Dict, List
 
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from .models import User
-from django.contrib.auth import authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -38,9 +38,10 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
     """Serializer for handling user data for logging in users"""
 
+    username = serializers.CharField()
     password = serializers.CharField(
         write_only=True,
         style={"input_type": "password"},
@@ -53,13 +54,3 @@ class LoginSerializer(serializers.ModelSerializer):
             error = "Invalid username or password"
             raise serializers.ValidationError({"username": error, "password": error})
         return data
-
-    class Meta:
-        """Metadata options for LoginSerializer - based on User model"""
-
-        model: User = User
-        fields: List[str] = ["username", "password"]
-        extra_kwargs: Dict[str, dict] = {
-            "username": {"required": True, "allow_blank": False, "help_text": ""},
-            "password": {"required": True, "allow_blank": False},
-        }

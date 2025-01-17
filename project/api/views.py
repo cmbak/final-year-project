@@ -1,9 +1,10 @@
-from api.serializers import UserSerializer, LoginSerializer
+from api.serializers import LoginSerializer, UserSerializer
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from rest_framework import generics, permissions, status
-from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth import authenticate
 
 from .models import User
 
@@ -43,9 +44,10 @@ class SignupView(APIView):
             return Response(
                 {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
             )
-        serializer.save()
-        # TODO auth user
-        # TODO redirect to home page OR login page w/ code 303
+
+        user = serializer.save()
+        login(request, user)
+        redirect("/main/")
 
 
 user_signup_view = SignupView.as_view()
@@ -70,13 +72,12 @@ class LoginView(APIView):
 
         if not serializer.is_valid():
             # Show errors on form
-            print("not valid")
-            print(serializer.errors)
-            print(serializer.error_messages)
             return Response(
                 {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
             )
-        return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+        login(request, User.objects.get(username=request.data["username"]))
+        redirect("/main/")
 
 
 user_login_view = LoginView.as_view()
