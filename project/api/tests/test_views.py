@@ -56,7 +56,7 @@ def test_post_invalid_login(api_client: APIClient):
     Test that sending a POST requets to the login page with invalid user data
     returs a 400 response and shows the correct error message
     """
-    pass
+    assert True is False
 
 
 # TODO e2e testing for specific form errors...
