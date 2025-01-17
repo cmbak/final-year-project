@@ -2,21 +2,21 @@
 
 <!DOCTYPE html>
 <html lang="en-GB">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{% block title %} {% endblock %}</title>
-    {% block head %} {% endblock %}
-  </head>
-  <body>
-    <main>
-      <div class="container-center">
-        <div class="form-container">
-          <h1 class="title">{% block form_title %} {% endblock %}</h1>
-          {% block form %}
-          {% endblock %}
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>{% block title %} {% endblock %}</title>
+        {% block head %} {% endblock %}
+    </head>
+    <body>
+        <main>
+        <div class="container-center">
+            <div class="form-container">
+                <h1 class="title">{% block form_title %} {% endblock %}</h1>
+                {% block form %}
+                {% endblock %}
+            </div>
         </div>
-      </div>
-    </main>
-  </body>
+        </main>
+    </body>
 </html>

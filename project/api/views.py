@@ -1,8 +1,9 @@
-from api.serializers import UserSerializer
+from api.serializers import UserSerializer, LoginSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
+from django.contrib.auth import authenticate
 
 from .models import User
 
@@ -31,10 +32,7 @@ class SignupView(APIView):
     def get(self, request):
         """Handle GET request to signup page"""
         serializer = UserSerializer
-        return Response(
-            {"serializer": serializer},
-            status=status.HTTP_200_OK,
-        )
+        return Response({"serializer": serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
         """Handle POST request to signup page"""
@@ -62,7 +60,27 @@ class LoginView(APIView):
 
     def get(self, request):
         """Handle GET request to login page"""
-        return Response(template_name=self.template_name)
+        serializer = LoginSerializer()
+        return Response({"serializer": serializer})
+
+    def post(self, request):
+        """Handle POST request to login page"""
+        # Check if form data is valid
+        serializer = LoginSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            # Show errors on form
+            return Response(
+                {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = authenticate(
+            username=serializer.data["username"], password=serializer.data["password"]
+        )
+        if user is not None:  # Sucessfully authed
+            print("hi")  # Redirect to main page
+            return Response("hi")
+        return Response({"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST)
 
 
 user_login_view = LoginView.as_view()
