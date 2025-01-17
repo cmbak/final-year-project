@@ -1,5 +1,6 @@
 from api.serializers import UserSerializer
-from rest_framework import generics, permissions, response, status
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 
@@ -18,7 +19,10 @@ user_list_create_view = UserListCreateAPIView.as_view()
 
 
 class SignupView(APIView):
-    """View for user to signup and create user account from form details"""
+    """
+    View for user to signup and create user account from form details
+    and get redirected to main page
+    """
 
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "signup.html"
@@ -27,7 +31,7 @@ class SignupView(APIView):
     def get(self, request):
         """Handle GET request to signup page"""
         serializer = UserSerializer
-        return response.Response(
+        return Response(
             {"serializer": serializer},
             status=status.HTTP_200_OK,
         )
@@ -38,7 +42,7 @@ class SignupView(APIView):
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
             # Show invalid field errors to user
-            return response.Response(
+            return Response(
                 {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
             )
         serializer.save()
@@ -47,3 +51,18 @@ class SignupView(APIView):
 
 
 user_signup_view = SignupView.as_view()
+
+
+class LoginView(APIView):
+    """View for user to login with their details and be redirected to main page"""
+
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "login.html"
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        """Handle GET request to login page"""
+        return Response(template_name=self.template_name)
+
+
+user_login_view = LoginView.as_view()
