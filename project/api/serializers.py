@@ -3,6 +3,7 @@ from typing import List, Dict
 from rest_framework import serializers
 
 from .models import User
+from django.contrib.auth import authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,11 +43,16 @@ class LoginSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(
         write_only=True,
-        # required=True,
-        min_length=8,
-        max_length=16,
         style={"input_type": "password"},
     )
+
+    def validate(self, data):
+        """Check that username and password match against an existing user"""
+        user = authenticate(username=data["username"], password=data["password"])
+        if user is None:
+            error = "Invalid username or password"
+            raise serializers.ValidationError({"username": error, "password": error})
+        return data
 
     class Meta:
         """Metadata options for LoginSerializer - based on User model"""
