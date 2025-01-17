@@ -61,7 +61,7 @@ class LoginView(APIView):
     def get(self, request):
         """Handle GET request to login page"""
         serializer = LoginSerializer()
-        return Response({"serializer": serializer})
+        return Response({"serializer": serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
         """Handle POST request to login page"""
@@ -70,17 +70,13 @@ class LoginView(APIView):
 
         if not serializer.is_valid():
             # Show errors on form
+            print("not valid")
+            print(serializer.errors)
+            print(serializer.error_messages)
             return Response(
                 {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
             )
-
-        user = authenticate(
-            username=serializer.data["username"], password=serializer.data["password"]
-        )
-        if user is not None:  # Sucessfully authed
-            print("hi")  # Redirect to main page
-            return Response("hi")
-        return Response({"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 user_login_view = LoginView.as_view()
