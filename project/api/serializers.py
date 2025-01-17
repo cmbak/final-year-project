@@ -41,10 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     """Serializer for handling user data for logging in users"""
 
-    username = serializers.CharField()
+    username = serializers.CharField(required=True)
     password = serializers.CharField(
-        write_only=True,
-        style={"input_type": "password"},
+        write_only=True, style={"input_type": "password"}, required=True
     )
 
     def validate(self, data):

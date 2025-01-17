@@ -3,7 +3,16 @@
 
 {% block head %}
   <link rel='stylesheet' href={% static 'forms.css'%}>
-  {% comment %} <script src="{% static 'forms.js' %}" defer></script> {% endcomment %}
+  <style>
+    p {
+        text-align: center;
+    }
+
+    .link-signup {
+        color: black;
+        text-underline-offset: 0.2rem;
+    }
+  </style>
 {% endblock %}
 
 {% block title %}Login{% endblock %}
@@ -13,7 +22,11 @@
 {% block form %}
     <form action="{% url 'login'%}" method="POST">
         {% csrf_token %} {% render_form serializer %}
-        <p><a href="/signup">don't have an account? sign up here</a></p>
-        <input type="submit" value="Login" />
+        <div class="show-password-container">
+            <input type="checkbox" name="show-password" id="showPassword" />
+            <label for="show-password">show password</label>
+        </div>
+        <p><a href="/signup" class='link-signup'>don't have an account? sign up here</a></p>
+        <input type="submit" value="Login" class='btn-primary'id='submitBtn'/>
   </form>
 {% endblock %}

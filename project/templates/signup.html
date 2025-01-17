@@ -3,11 +3,6 @@
 
 {% block title %}Signup{% endblock %}
 
-{% block head %}
-    <link rel='stylesheet' href={% static 'forms.css'%}>
-    <script src="{% static 'forms.js' %}" defer></script>
-{% endblock %}
-
 {% block form_title %}sign up{% endblock %}
 
 {% block form %}
@@ -15,8 +10,24 @@
         {% csrf_token %} {% render_form serializer %}
         <div class="show-password-container">
             <input type="checkbox" name="show-password" id="showPassword" />
-            <label for="showPassword">show password</label>
+            <label for="show-password">show password</label>
         </div>
-        <input type="submit" value="Sign up" class="btn-signup" />
+        <input type="submit" value="Sign up" class="btn-primary" id='submitBtn'/>
     </form>
+{% endblock %}
+
+{% block deferred_scripts %}
+<script defer>
+    const labels = document.getElementsByTagName('label');
+    const signupPassword = document.querySelector('input[type=password]');
+
+    signupPassword.minLength = 8;
+    signupPassword.maxLength = 16;
+
+    // Add required symbol next to labels
+    for (const label of labels) {
+    if (label.htmlFor === 'show-password') continue;
+        label.innerHTML += " <span class='required-span'>*</span>";
+    }
+</script>
 {% endblock %}

@@ -49,7 +49,7 @@ input {
   color: rgb(192, 0, 0);
 }
 
-.btn-signup {
+.btn-primary {
   font-size: 1.2rem;
   background-color: #2595e5;
   color: white;
@@ -59,7 +59,7 @@ input {
   transition: background-color 300ms ease;
 }
 
-.btn-signup:hover {
+.btn-primary:hover {
   background-color: #1071b7;
 }
 
