@@ -1,7 +1,6 @@
 import pytest
-from rest_framework.test import APIClient
 from api.models import User
-
+from rest_framework.test import APIClient
 
 # Signup View
 
