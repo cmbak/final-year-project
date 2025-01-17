@@ -98,10 +98,10 @@ def test_post_user_email_already_exists(
 def test_post_user_password_invalid_length(
     standard_user: User,
     api_client: APIClient,
-    password: str,
-    expected: str,
     username: str,
     email: str,
+    password: str,
+    expected: str,
 ) -> None:
     """
     Test that sending a POST request to the users endpoint with an invalid

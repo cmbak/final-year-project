@@ -1,13 +1,17 @@
 import pytest
 from rest_framework.test import APIClient
+from api.models import User
 
 
 # Signup View
 
 
-def test_get_signup(api_client: APIClient) -> None:
-    """Test that sending a GET request to the signup page returns a 200 response"""
-    response = api_client.get("/signup/")
+@pytest.mark.parametrize("path", [("/signup/"), ("/login/")])
+def test_get_signup(path: str, api_client: APIClient) -> None:
+    """
+    Test that sending a GET request to the signup/login page returns a 200 response
+    """
+    response = api_client.get(path)
 
     assert response.status_code == 200
 
@@ -17,6 +21,7 @@ def test_post_valid_signup(api_client: APIClient) -> None:
     """
     Test that sending a POST request to the signup page
     with valid user data returns a 303 response
+    and creates a new user with those details
     """
     data = {
         "username": "new_user",
@@ -26,7 +31,32 @@ def test_post_valid_signup(api_client: APIClient) -> None:
 
     response = api_client.post("/signup/", data)
 
+    assert User.objects.filter(username=data["username"]).exists()
     assert response.status_code == 303
 
 
-# e2e testing for specific form errors...
+# Login View
+def test_post_valid_login(
+    api_client: APIClient, username: str, email: str, password: str
+) -> None:
+    """
+    Test that sending a POST request to the login page with valid user data
+    returns a 303 response and redirects the user to the main page
+    """
+    data = {"username": username, "email": email, "password": password}
+
+    response = api_client.post("/login/", data)
+
+    assert response.status_code == 303
+    assert "new url" == "main page"
+
+
+def test_post_invalid_login(api_client: APIClient):
+    """
+    Test that sending a POST requets to the login page with invalid user data
+    returs a 400 response and shows the correct error message
+    """
+    pass
+
+
+# TODO e2e testing for specific form errors...
