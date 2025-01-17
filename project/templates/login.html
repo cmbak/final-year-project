@@ -1,5 +1,19 @@
 {% extends 'formbase.html' %}
+{% load rest_framework %} {% load static %}
+
+{% block head %}
+  <link rel='stylesheet' href={% static 'forms.css'%}>
+  {% comment %} <script src="{% static 'forms.js' %}" defer></script> {% endcomment %}
+{% endblock %}
 
 {% block title %}Login{% endblock %}
 
-{% block form_title %}Login{% endblock %}
+{% block form_title %}login{% endblock %}
+
+{% block form %}
+    <form action="{% url 'login'%}" method="POST">
+        {% csrf_token %} {% render_form serializer %}
+        <p><a href="/signup">don't have an account? sign up here</a></p>
+        <input type="submit" value="Login" />
+  </form>
+{% endblock %}

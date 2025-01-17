@@ -4,19 +4,19 @@
 {% block title %}Signup{% endblock %}
 
 {% block head %}
-  <link rel='stylesheet' href={% static 'forms.css'%}>
-  <script src="{% static 'forms.js' %}" defer></script>
+    <link rel='stylesheet' href={% static 'forms.css'%}>
+    <script src="{% static 'forms.js' %}" defer></script>
 {% endblock %}
 
 {% block form_title %}sign up{% endblock %}
 
 {% block form %}
-  <form action="{% url 'signup'%}" method="POST">
-    {% csrf_token %} {% render_form serializer %}
-    <div class="show-password-container">
-      <input type="checkbox" name="show-password" id="showPassword" />
-      <label for="showPassword">show password</label>
-    </div>
-    <input type="submit" value="Sign up" class="btn-signup" />
-  </form>
+    <form action="{% url 'signup'%}" method="POST">
+        {% csrf_token %} {% render_form serializer %}
+        <div class="show-password-container">
+            <input type="checkbox" name="show-password" id="showPassword" />
+            <label for="showPassword">show password</label>
+        </div>
+        <input type="submit" value="Sign up" class="btn-signup" />
+    </form>
 {% endblock %}
