@@ -1,7 +1,9 @@
+from typing import List
+
 import pytest
 from api.models import User
+from decouple import config
 from rest_framework.test import APIClient
-from typing import List
 
 invalid_signup_data = [
     (
@@ -78,6 +80,7 @@ def test_post_valid_signup(api_client: APIClient) -> None:
 
     assert User.objects.filter(username=data["username"]).exists()
     assert response.status_code == 303
+    assert response.url == config("FRONTEND_URL")
 
 
 @pytest.mark.django_db(True)
