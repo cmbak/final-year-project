@@ -1,12 +1,19 @@
 from api.serializers import LoginSerializer, UserSerializer
+from decouple import config
 from django.contrib.auth import login
-from django.shortcuts import redirect
+from django.http.response import HttpResponseRedirectBase
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User
+
+
+class HttpResponseSeeOther(HttpResponseRedirectBase):
+    """Redirect using 303 See Other"""
+
+    status_code = 303
 
 
 class UserListCreateAPIView(generics.ListCreateAPIView):
@@ -48,7 +55,7 @@ class SignupView(APIView):
 
         user = serializer.save()
         login(request, user)
-        redirect("/main/")
+        return HttpResponseSeeOther(config("FRONTEND_URL"))
 
 
 user_signup_view = SignupView.as_view()
@@ -79,7 +86,7 @@ class LoginView(APIView):
             )
 
         login(request, User.objects.get(username=request.data["username"]))
-        redirect("/main/")
+        return HttpResponseSeeOther(config("FRONTEND_URL"))
 
 
 user_login_view = LoginView.as_view()

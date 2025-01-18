@@ -1,5 +1,8 @@
 import pytest
+from api.models import User
+from decouple import config
 from rest_framework.test import APIClient
+
 from .test_view_signup import get_response_errors
 
 invalid_logins = [
@@ -15,22 +18,16 @@ def test_post_valid_login(api_client: APIClient) -> None:
     Test that sending a POST request to the login page with valid user data
     returns a 303 response and redirects the user to the main page
     """
-    # Create user to be logged in by signing up
-    api_client.post(
-        "/signup/",
-        {
-            "username": "new_user",
-            "email": "new_user@gmail.com",
-            "password": "password1@",
-        },
+    # Create user for login
+    User.objects.create_user(
+        username="new_user", email="new_user@gmail.com", password="password1@"
     )
-    # Data for POST
     data = {"username": "new_user", "password": "password1@"}
 
     response = api_client.post("/login/", data)
 
     assert response.status_code == 303
-    assert "new url" == "main page"
+    assert response.url == config("FRONTEND_URL")
 
 
 @pytest.mark.django_db(True)
