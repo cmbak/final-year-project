@@ -42,7 +42,8 @@ class SignupView(APIView):
         if not serializer.is_valid():
             # Show invalid field errors to user
             return Response(
-                {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
+                {"serializer": serializer, "errors": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         user = serializer.save()
