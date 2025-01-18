@@ -73,7 +73,8 @@ class LoginView(APIView):
         if not serializer.is_valid():
             # Show errors on form
             return Response(
-                {"serializer": serializer}, status=status.HTTP_400_BAD_REQUEST
+                {"serializer": serializer, "errors": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         login(request, User.objects.get(username=request.data["username"]))
