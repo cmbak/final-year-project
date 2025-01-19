@@ -95,12 +95,12 @@ user_login_view = LoginView.as_view()
 class CurrentUserView(APIView):
     """View for retriving the details of the currently signed in user"""
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request):
         """Handle GET request to current user page"""
-        print(request.user)
-        print(request.user.is_authenticated)
+        if request.user.is_anonymous:
+            return JsonResponse({"user": {}})
         return JsonResponse({"user": request.user.as_dict()})
 
 
