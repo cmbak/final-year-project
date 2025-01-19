@@ -1,8 +1,15 @@
+import { Routes, Route, BrowserRouter } from "react-router";
+import Dashboard from "./components/Dashboard";
+import Home from "./Home";
+
 function App() {
   return (
-    <>
-      <h1>Main Page</h1>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
