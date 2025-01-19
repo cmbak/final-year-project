@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "../axiosConfig";
 
 export default function ProtectedRoute() {
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await api.get("/current-user/");
@@ -21,13 +21,19 @@ export default function ProtectedRoute() {
     window.location.href = `${import.meta.env.VITE_BACKEND_URL}/login`;
   };
 
-  if (isPending) {
-    return <h1>Loading...</h1>;
-  }
+  // Otherwise 'Loading...' will flicker briefly before url changed
+  // if (isPending) {
+  //   // return <h1>Loading...<h1/>;
+  //   // return null;
+  // }
 
   if (isError) {
     return <h1>Error: {error.message}</h1>;
   }
 
-  return isEmpty(data) ? redirectToLogin() : <Outlet />;
+  if (isEmpty(data)) {
+    redirectToLogin();
+    return null;
+  }
+  return <Outlet />;
 }
