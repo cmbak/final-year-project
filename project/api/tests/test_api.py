@@ -21,12 +21,12 @@ def test_get_users_auth(standard_user: User, api_client: APIClient) -> None:
 def test_get_users_not_auth(api_client: APIClient) -> None:
     """
     Test that an unauthenticated user sending a GET request to the users endpoint
-    recieves a 403 response
+    recieves a 401 response
     """
     api_client.force_authenticate(None)
     response = api_client.get("/api/users/")
 
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 @pytest.mark.django_db(True)
@@ -55,12 +55,12 @@ def test_post_valid_user(standard_user: User, api_client: APIClient) -> None:
 def test_post_user_not_auth(api_client: APIClient) -> None:
     """
     Test that an unauthenticated user sending a POST request to the users endpoint
-    recieves a 403 response
+    recieves a 401 response
     """
     api_client.force_authenticate(None)
     response = api_client.post("/api/users/")
 
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 @pytest.mark.django_db(True)

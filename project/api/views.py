@@ -1,7 +1,7 @@
 from api.serializers import LoginSerializer, UserSerializer
 from decouple import config
 from django.contrib.auth import login
-from django.http.response import HttpResponseRedirectBase
+from django.http.response import HttpResponseRedirectBase, JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -90,3 +90,18 @@ class LoginView(APIView):
 
 
 user_login_view = LoginView.as_view()
+
+
+class CurrentUserView(APIView):
+    """View for retriving the details of the currently signed in user"""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        """Handle GET request to current user page"""
+        print(request.user)
+        print(request.user.is_authenticated)
+        return JsonResponse({"user": request.user.as_dict()})
+
+
+current_user_view = CurrentUserView.as_view()
