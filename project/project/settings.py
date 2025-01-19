@@ -159,3 +159,4 @@ AUTH_USER_MODEL = "api.User"
 
 # Cors middleware
 CORS_ALLOWED_ORIGINS = [config("DEV_ORIGIN")]
+CORS_ALLOW_CREDENTIALS = True
