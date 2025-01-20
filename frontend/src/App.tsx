@@ -11,9 +11,9 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <>
-      <Navbar />
-
       <QueryClientProvider client={queryClient}>
+        <Navbar />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route element={<ProtectedRoute />}>

@@ -1,11 +1,25 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
+import { fetchUser } from "../utils/fetchUser";
+import { isEmpty } from "../utils/isEmpty";
 
 export default function Navbar() {
+  const { data } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
   return (
     <nav>
       <Link to="/">Name</Link>
-      <Link to="dashboard">Dashboard</Link>
-      <Link to="login">Login</Link>
+      {/* If user hasn't logged in, only show login */}
+      {isEmpty(data) ? (
+        <Link to="login">Login</Link>
+      ) : (
+        <>
+          <Link to="dashboard">Dashboard</Link>
+          <Link to="logout">Logout</Link>
+        </>
+      )}
     </nav>
   );
 }
