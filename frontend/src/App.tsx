@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Navbar from "./components/Navbar";
 import "./reset.css";
+import "./App.css";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <Navbar />
-
+        <h1>Hi</h1>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route element={<ProtectedRoute />}>
