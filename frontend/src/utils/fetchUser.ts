@@ -1,6 +1,6 @@
-import { api } from "../axiosConfig";
+import { instance } from "../axiosConfig";
 
 export const fetchUser = async () => {
-  const response = await api.get("/current-user/");
+  const response = await instance.get("/api/current-user/");
   return response.data.user;
 };
