@@ -1,4 +1,4 @@
-from api.views import user_list_create_view, current_user_view
+from api.views import current_user_view, user_list_create_view
 from django.urls import path
 
 urlpatterns = [

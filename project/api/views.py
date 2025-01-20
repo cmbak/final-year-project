@@ -1,6 +1,6 @@
 from api.serializers import LoginSerializer, UserSerializer
 from decouple import config
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirectBase, JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -105,3 +105,17 @@ class CurrentUserView(APIView):
 
 
 current_user_view = CurrentUserView.as_view()
+
+
+class LogoutView(APIView):
+    """View for logging out the currently signed in user"""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        """Handle POST request to login page"""
+        logout(request)
+        return JsonResponse({"user": str(request.user)}, status=status.HTTP_200_OK)
+
+
+logout_view = LogoutView.as_view()
