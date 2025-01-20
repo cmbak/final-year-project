@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Navbar from "./components/Navbar";
+import "./reset.css";
 
 const queryClient = new QueryClient();
 
