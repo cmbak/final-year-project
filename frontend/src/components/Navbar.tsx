@@ -1,10 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { fetchUser } from "../utils/fetchUser";
 import { isEmpty } from "../utils/isEmpty";
+import { instance } from "../axiosConfig";
 
 export default function Navbar() {
-  const { data } = useQuery({
+  const queryClient = useQueryClient();
+  let { data } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
   });
@@ -17,7 +19,15 @@ export default function Navbar() {
       ) : (
         <>
           <Link to="dashboard">Dashboard</Link>
-          <Link to="logout">Logout</Link>
+          <button
+            onClick={async () => {
+              await instance.post("/logout/", {}, { withXSRFToken: true });
+              // Query data out of date since user now logged out
+              queryClient.invalidateQueries({ queryKey: ["user"] });
+            }}
+          >
+            Logout
+          </button>
         </>
       )}
     </nav>
