@@ -1,21 +1,13 @@
 import { Outlet } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "../axiosConfig";
+import { isEmpty } from "../utils/isEmpty";
+import { fetchUser } from "../utils/fetchUser";
 
 export default function ProtectedRoute() {
   const { data, isError, error } = useQuery({
     queryKey: ["user"],
-    queryFn: async () => {
-      const response = await api.get("/current-user/");
-      return response.data.user;
-    },
+    queryFn: fetchUser,
   });
-
-  // https://stackoverflow.com/questions/679915/how-do-i-test-for-an-empty-javascript-object
-  const isEmpty = (object: Object): boolean => {
-    for (var _ in object) return false;
-    return true;
-  };
 
   const redirectToLogin = () => {
     window.location.href = `${import.meta.env.VITE_BACKEND_URL}/login`;
@@ -26,6 +18,7 @@ export default function ProtectedRoute() {
   //   // return <h1>Loading...<h1/>;
   //   // return null;
   // }
+  // TODO slow internet might mean they can see dashboard
 
   if (isError) {
     return <h1>Error: {error.message}</h1>;
