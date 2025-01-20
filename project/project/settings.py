@@ -143,8 +143,8 @@ CSRF_TRUSTED_ORIGINS = [config("DEV_ORIGIN")]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.BasicAuthentication", - logout in api html view doesn't work
+        "authentication.SessionAuthentication",  # Returns 401 instead of 401
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
