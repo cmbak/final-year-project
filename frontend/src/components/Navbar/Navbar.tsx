@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { fetchUser } from "../utils/fetchUser";
-import { isEmpty } from "../utils/isEmpty";
-import { instance } from "../axiosConfig";
+import { fetchUser } from "../../utils/fetchUser";
+import { isEmpty } from "../../utils/isEmpty";
+import { instance } from "../../axiosConfig";
 
 export default function Navbar() {
   const queryClient = useQueryClient();
