@@ -10,6 +10,7 @@ export default function Navbar() {
     queryKey: ["user"],
     queryFn: fetchUser,
   });
+
   return (
     <nav>
       <Link to="/">Name</Link>
