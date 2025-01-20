@@ -1,15 +1,18 @@
-import { Routes, Route, BrowserRouter } from "react-router";
+import { Routes, Route } from "react-router";
 import Dashboard from "./components/Dashboard";
-import Home from "./Home";
+import Home from "./components/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
+      <Navbar />
+
       <QueryClientProvider client={queryClient}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -19,7 +22,7 @@ function App() {
         </Routes>
         <ReactQueryDevtools />
       </QueryClientProvider>
-    </BrowserRouter>
+    </>
   );
 }
 
