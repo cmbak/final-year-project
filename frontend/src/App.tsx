@@ -15,7 +15,6 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <Navbar />
-        <h1>Hi</h1>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route element={<ProtectedRoute />}>
