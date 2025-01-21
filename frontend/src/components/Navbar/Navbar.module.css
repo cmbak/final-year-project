@@ -1,0 +1,5 @@
+.nav {
+  display: flex;
+  padding: 5rem;
+  border: 3px solid black;
+}
