@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem; /* Until hamburger menu */
   padding: 0.75rem 1.5rem;
   border: 1px solid black; /* Remove after */
   font-size: 1rem;
@@ -15,7 +16,7 @@
 .links {
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 1.5rem;
 
   & a {
     /* So border can be positioned underneath */

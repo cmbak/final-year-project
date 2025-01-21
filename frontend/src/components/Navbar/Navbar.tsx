@@ -20,9 +20,7 @@ export default function Navbar() {
       <div className={styles.links}>
         {/* If user hasn't logged in, only show login */}
         {isEmpty(data) ? (
-          <Link to="login" className="btn btn-primary">
-            login
-          </Link>
+          <button className="btn btn-primary">login</button>
         ) : (
           <>
             <Link to="dashboard">dashboard</Link>
