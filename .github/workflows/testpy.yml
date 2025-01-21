@@ -77,6 +77,3 @@ jobs:
 
         working-directory: ./project
         run: pytest --cov=api -v
-
-      - name: Generate coverage report
-        run: coverage report -m
