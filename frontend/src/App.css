@@ -1,6 +1,7 @@
 :root {
   font-family: "Inter", Arial, Helvetica, sans-serif;
   --colour-primary: #f86464;
+  --colour-primary-dark: #de5151;
   --colour-background: #ffffff;
   --colour-card-background: #fbfbfb;
   --colour-btn-submit: #2595e5;
@@ -9,6 +10,7 @@
   --color-correct: #23ae27;
   --color-incorrect: #ae2323;
   --border-radius-rounded: 99px;
+  --speed-medium: 450ms;
 }
 
 body {
@@ -16,11 +18,17 @@ body {
 }
 
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 0.4rem 1.5rem;
   border-radius: var(--border-radius-rounded);
 }
 
 .btn-primary {
   background-color: var(--colour-primary);
   color: var(--color-btn-text);
+  transition: all var(--speed-medium) ease;
+
+  &:hover {
+    background-color: var(--colour-primary-dark);
+    color: white;
+  }
 }

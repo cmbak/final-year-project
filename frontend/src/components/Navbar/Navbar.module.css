@@ -28,7 +28,7 @@
       position: absolute;
       bottom: 0;
       width: 0%;
-      transition: width 450ms ease;
+      transition: width var(--speed-medium) ease;
     }
 
     &:hover::before {
