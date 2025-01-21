@@ -17,11 +17,22 @@
   align-items: center;
   gap: 3rem;
 
-  /* & a {
-    transition: border-bottom 5s ease;
-  } */
+  & a {
+    /* So border can be positioned underneath */
+    position: relative;
 
-  & a:hover {
-    border-bottom: 1px solid black;
+    /* Border animation effect */
+    &::before {
+      content: "";
+      border-bottom: 1px solid black;
+      position: absolute;
+      bottom: 0;
+      width: 0%;
+      transition: width 450ms ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
   }
 }
