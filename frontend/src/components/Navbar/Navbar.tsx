@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { fetchUser } from "../../utils/fetchUser";
 import { isEmpty } from "../../utils/isEmpty";
 import { instance } from "../../axiosConfig";
+import styles from "./Navbar.module.css";
 
 export default function Navbar() {
   const queryClient = useQueryClient();
@@ -12,7 +13,7 @@ export default function Navbar() {
   });
 
   return (
-    <nav>
+    <nav className={styles.nav}>
       <Link to="/">Name</Link>
       {/* If user hasn't logged in, only show login */}
       {isEmpty(data) ? (
