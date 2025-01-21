@@ -14,24 +14,31 @@ export default function Navbar() {
 
   return (
     <nav className={styles.nav}>
-      <Link to="/">Name</Link>
-      {/* If user hasn't logged in, only show login */}
-      {isEmpty(data) ? (
-        <Link to="login">Login</Link>
-      ) : (
-        <>
-          <Link to="dashboard">Dashboard</Link>
-          <button
-            onClick={async () => {
-              await instance.post("/logout/", {}, { withXSRFToken: true });
-              // Query data out of date since user now logged out
-              queryClient.invalidateQueries({ queryKey: ["user"] });
-            }}
-          >
-            Logout
-          </button>
-        </>
-      )}
+      <Link to="/" className={styles.name}>
+        Name
+      </Link>
+      <div className={styles.links}>
+        {/* If user hasn't logged in, only show login */}
+        {isEmpty(data) ? (
+          <Link to="login" className="btn btn-primary">
+            login
+          </Link>
+        ) : (
+          <>
+            <Link to="dashboard">dashboard</Link>
+            <button
+              className="btn btn-primary"
+              onClick={async () => {
+                await instance.post("/logout/", {}, { withXSRFToken: true });
+                // Query data out of date since user now logged out
+                queryClient.invalidateQueries({ queryKey: ["user"] });
+              }}
+            >
+              logout
+            </button>
+          </>
+        )}
+      </div>
     </nav>
   );
 }

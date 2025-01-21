@@ -73,3 +73,15 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+/* Remove underline and colour */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Remove border */
+button {
+  border: none;
+  cursor: pointer;
+}
