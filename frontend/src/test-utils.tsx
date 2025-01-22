@@ -21,7 +21,9 @@ const wrapProviders = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const providerRenderer = (
+const providerRenderer = (
   ui: ReactElement,
   options?: Omit<RenderOptions, "wrapper">, // Remove wrapper property from type since it's being defined here
 ) => render(ui, { wrapper: wrapProviders, ...options });
+
+export { providerRenderer as render };
