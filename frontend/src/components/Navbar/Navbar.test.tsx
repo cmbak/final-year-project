@@ -25,8 +25,10 @@ describe("Navbar", async () => {
   it("should show login text after logout button pressed", async () => {
     const user = userEvent.setup();
     render(<Navbar />);
+    screen.debug();
 
     const logoutButton = await screen.findByText("logout");
+    screen.debug();
     await user.click(logoutButton);
 
     expect(screen.getByText("login")).to.exist;

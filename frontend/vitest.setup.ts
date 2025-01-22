@@ -2,7 +2,7 @@
 
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { beforeAll, afterEach, afterAll } from "vitest";
+import { beforeAll, afterEach, afterAll, beforeEach } from "vitest";
 import { AnonymousUser, User } from "./src/types";
 
 // User to be used in responses
@@ -26,9 +26,13 @@ export const handlers = [
       status: 200,
     });
   }),
+
+  http.get(`${import.meta.env.BACKEND_URL}/login/`, () => {
+    return HttpResponse.json({ user: user });
+  }),
 ];
 
-const server = setupServer(...handlers);
+export const server = setupServer(...handlers);
 
 // Start msw server before all tests
 beforeAll(() => server.listen());
