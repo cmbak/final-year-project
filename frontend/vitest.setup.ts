@@ -1,11 +1,30 @@
+/// <reference types="vite/types/importMeta.d.ts" />
+
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { beforeAll, afterEach, afterAll } from "vitest";
+import { AnonymousUser, User } from "./src/types";
 
+// User to be used in responses
+let user: User | AnonymousUser = {
+  id: 1,
+  email: "test.user@gmail.com",
+  username: "testuser",
+};
+
+// Handlers for signed in user
 export const handlers = [
-  // Intercept GET /api/users requests
   http.get(`${import.meta.env.BACKEND_URL}/api/current-user/`, () => {
-    return HttpResponse.json({ user: {} });
+    return HttpResponse.json({ user: user });
+  }),
+
+  http.post(`${import.meta.env.BACKEND_URL}/logout/`, ({ request }) => {
+    // After logging out, /api/current-user/ will return an empty object
+    // since there would be no signed in user
+    user = {};
+    return new HttpResponse(null, {
+      status: 200,
+    });
   }),
 ];
 
