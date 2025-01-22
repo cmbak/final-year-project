@@ -16,5 +16,6 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text"],
     },
+    setupFiles: "./vitest.setup.ts",
   },
 });
