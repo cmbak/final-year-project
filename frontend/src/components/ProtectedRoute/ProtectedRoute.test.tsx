@@ -4,11 +4,8 @@ import { screen } from "@testing-library/dom";
 import ProtectedRoute from "./ProtectedRoute";
 import { server } from "../../../vitest.setup";
 import { http, HttpResponse } from "msw";
-
-Object.defineProperty(window, "location", {
-  writable: true,
-  value: { assign: vi.fn() }, // Prevents actual implementation from being called (can't navigate in jsdom)
-});
+import Home from "../Home/Home";
+import { Route, Routes } from "react-router";
 
 describe("ProtectedRoute", () => {
   it("should redirect to login page if no user signed in", () => {
@@ -17,6 +14,11 @@ describe("ProtectedRoute", () => {
     // And assert its new value
     // https://stackoverflow.com/questions/59954101/jest-error-when-setting-or-assigning-window-location
     // https://www.joshmcarthur.com/til/2022/01/19/assert-windowlocation-properties-with-jest.html
+
+    Object.defineProperty(window, "location", {
+      writable: true,
+      value: { assign: vi.fn() }, // Prevents actual implementation from being called (can't navigate in jsdom)
+    });
 
     // Needs to return empty user object for there to be no logged in user
     server.use(
@@ -32,14 +34,16 @@ describe("ProtectedRoute", () => {
   });
 
   it("should show home page if user signed in", async () => {
-    const res = await fetch("http://localhost:8000/api/current-user/");
-    // Fix redirecting to login instead of showing dashboard
-    // Maybe increase retries?
-    const response = await res.json();
-    console.log(response);
+    render(
+      <Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+      </Routes>,
+    );
 
-    render(<ProtectedRoute />);
+    const homeText = await screen.findByText("Home");
 
-    screen.debug();
+    expect(homeText).to.exist;
   });
 });

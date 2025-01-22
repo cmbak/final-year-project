@@ -33,10 +33,16 @@ export const handlers = [
 ];
 
 export const server = setupServer(...handlers);
+const { location } = window;
 
 // Start msw server before all tests
 beforeAll(() => server.listen());
+
 // Clost msw server after all tests finished
 afterAll(() => server.close());
+
 // Reset request handlers after each test
 afterEach(() => server.resetHandlers());
+
+// Need to reassign default location property just in case it has been modified by a test (see ProtecteRoute.test.tsx)
+beforeEach(() => (window.location = location));
