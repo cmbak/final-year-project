@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   test: {
+    globals: true, // Enables auto cleanup of DOM after each test
     environment: "jsdom",
     coverage: {
       provider: "v8",
