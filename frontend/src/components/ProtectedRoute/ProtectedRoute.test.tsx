@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render } from "../../test-utils";
 import { screen } from "@testing-library/dom";
 import ProtectedRoute from "./ProtectedRoute";
