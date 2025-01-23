@@ -10,7 +10,7 @@ describe("Navbar", async () => {
 
     const nameText = screen.getByText("Name");
 
-    expect(nameText).to.exist;
+    expect(nameText).toBeVisible;
   });
 
   it("should display logout button", async () => {
@@ -19,7 +19,7 @@ describe("Navbar", async () => {
     // Need to wait for user data to be fetched and cause a rerender
     const logoutButton = await screen.findByText("logout");
 
-    expect(logoutButton).to.exist;
+    expect(logoutButton).toBeVisible;
   });
 
   it("should show login text after logout button pressed", async () => {
@@ -29,6 +29,6 @@ describe("Navbar", async () => {
     const logoutButton = await screen.findByText("logout");
     await user.click(logoutButton);
 
-    expect(screen.getByText("login")).to.exist;
+    expect(screen.getByText("login")).toBeVisible;
   });
 });

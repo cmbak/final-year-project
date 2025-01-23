@@ -8,6 +8,6 @@ describe("Home", () => {
 
     const homeText = screen.getByText("Home");
 
-    expect(homeText).to.exist;
+    expect(homeText).toBeVisible;
   });
 });

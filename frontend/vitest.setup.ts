@@ -1,5 +1,6 @@
 /// <reference types="vite/types/importMeta.d.ts" />
 
+import "@testing-library/jest-dom/vitest";
 import { setupServer } from "msw/node";
 import { beforeAll, afterEach, afterAll, beforeEach } from "vitest";
 import { handlers } from "./src/mocks/handlers";

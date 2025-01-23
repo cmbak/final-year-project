@@ -40,7 +40,7 @@ describe("ProtectedRoute", () => {
 
     const homeText = await screen.findByText("Home");
 
-    expect(homeText).to.exist;
+    expect(homeText).toBeVisible;
   });
 
   it("should show error message if query throws error", async () => {
@@ -60,6 +60,6 @@ describe("ProtectedRoute", () => {
 
     const errorMsg = await screen.findByText(/Error:/); // Match substring 'Error:'
 
-    expect(errorMsg).to.exist;
+    expect(errorMsg).toBeVisible;
   });
 });
