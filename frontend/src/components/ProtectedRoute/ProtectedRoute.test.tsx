@@ -11,7 +11,7 @@ describe("ProtectedRoute", () => {
   it("should redirect to login page if no user signed in", async () => {
     // Needs to return empty user object for there to be no logged in user
     server.use(
-      http.get(`${import.meta.env.BACKEND_URL}/api/current-user/`, () => {
+      http.get(`${import.meta.env.VITE_BACKEND_URL}/api/current-user/`, () => {
         return HttpResponse.json({ user: {} });
       }),
     );
@@ -25,7 +25,7 @@ describe("ProtectedRoute", () => {
     );
 
     expect(window.location.href).toStrictEqual(
-      `${import.meta.env.BACKEND_URL}/login/`,
+      `${import.meta.env.VITE_BACKEND_URL}/login/`,
     );
   });
 
@@ -45,7 +45,7 @@ describe("ProtectedRoute", () => {
 
   it("should show error message if query throws error", async () => {
     server.use(
-      http.get(`${import.meta.env.BACKEND_URL}/api/current-user/`, () => {
+      http.get(`${import.meta.env.VITE_BACKEND_URL}/api/current-user/`, () => {
         return HttpResponse.error();
       }),
     );

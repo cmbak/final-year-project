@@ -10,11 +10,11 @@ let user: User | AnonymousUser = {
 
 // Handlers for signed in user
 export const handlers = [
-  http.get(`${import.meta.env.BACKEND_URL}/api/current-user/`, () => {
+  http.get(`${import.meta.env.VITE_BACKEND_URL}/api/current-user/`, () => {
     return HttpResponse.json({ user: user });
   }),
 
-  http.post(`${import.meta.env.BACKEND_URL}/logout/`, () => {
+  http.post(`${import.meta.env.VITE_BACKEND_URL}/logout/`, () => {
     // After logging out, /api/current-user/ will return an empty object
     // since there would be no signed in user
     user = {};
