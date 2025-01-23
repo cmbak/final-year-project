@@ -7,6 +7,8 @@ import { http, HttpResponse } from "msw";
 import Home from "../Home/Home";
 import { Route, Routes } from "react-router";
 
+// TODO create wrapper function for routes in test-utils
+
 describe("ProtectedRoute", () => {
   it("should redirect to login page if no user signed in", () => {
     // Can't navigate from ProtectedRoute component to login url
@@ -22,9 +24,9 @@ describe("ProtectedRoute", () => {
 
     // Needs to return empty user object for there to be no logged in user
     server.use(
-      http.get(`${import.meta.env.BACKEND_URL}/api/current-user/`, () =>
-        HttpResponse.json({ user: {} }),
-      ),
+      http.get(`${import.meta.env.BACKEND_URL}/api/current-user/`, () => {
+        return HttpResponse.json({ user: {} });
+      }),
     );
     render(<ProtectedRoute />);
 
@@ -45,5 +47,26 @@ describe("ProtectedRoute", () => {
     const homeText = await screen.findByText("Home");
 
     expect(homeText).to.exist;
+  });
+
+  it("should show error message if query throws error", async () => {
+    server.use(
+      http.get(`${import.meta.env.BACKEND_URL}/api/current-user/`, () => {
+        return HttpResponse.error();
+      }),
+    );
+
+    render(
+      <Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+      </Routes>,
+    );
+
+    const errorMsg = await screen.findByText(/Error:/); // Match substring 'Error:'
+
+    expect(errorMsg).to.exist;
+    screen.debug();
   });
 });
