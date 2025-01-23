@@ -18,17 +18,13 @@ export const handlers = [
     return HttpResponse.json({ user: user });
   }),
 
-  http.post(`${import.meta.env.BACKEND_URL}/logout/`, ({ request }) => {
+  http.post(`${import.meta.env.BACKEND_URL}/logout/`, () => {
     // After logging out, /api/current-user/ will return an empty object
     // since there would be no signed in user
     user = {};
     return new HttpResponse(null, {
       status: 200,
     });
-  }),
-
-  http.get(`${import.meta.env.BACKEND_URL}/login/`, () => {
-    return HttpResponse.json({ user: user });
   }),
 ];
 
@@ -41,8 +37,21 @@ beforeAll(() => server.listen());
 // Clost msw server after all tests finished
 afterAll(() => server.close());
 
-// Reset request handlers after each test
-afterEach(() => server.resetHandlers());
+beforeEach(() =>
+  // jsdom (used to emulate browser for tests) can't actually implement navigation between urls etc.
+  // So the following code allows things such as window.location(.href) = ... to work without throwing any errors
+  // https://stackoverflow.com/questions/59954101/jest-error-when-setting-or-assigning-window-location
+  // https://www.joshmcarthur.com/til/2022/01/19/assert-windowlocation-properties-with-jest.html
 
-// Need to reassign default location property just in case it has been modified by a test (see ProtecteRoute.test.tsx)
-beforeEach(() => (window.location = location));
+  Object.defineProperty(window, "location", {
+    value: new URL("http://localhost:3000"),
+    writable: true, // Normal location property is read-only
+  }),
+);
+
+afterEach(() => {
+  // Reset request handlers after each test
+  server.resetHandlers();
+  // Need to reassign default location property just in case it has been modified by a test (e.g. by ProtecteRoute.test.tsx)
+  window.location = location;
+});
