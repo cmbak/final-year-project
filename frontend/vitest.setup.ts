@@ -21,7 +21,7 @@ beforeEach(() =>
   // https://www.joshmcarthur.com/til/2022/01/19/assert-windowlocation-properties-with-jest.html
 
   Object.defineProperty(window, "location", {
-    value: new URL("http://localhost:3000"),
+    value: new URL("http://localhost:3000"), // default node.js port number
     writable: true, // Normal location property is read-only
   }),
 );
