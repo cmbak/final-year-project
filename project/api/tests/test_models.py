@@ -1,11 +1,14 @@
 import pytest
+from api.models import User
 from django.db.utils import IntegrityError
 
 from .conftest import custom_user
 
 
 @pytest.mark.django_db(True)
-def test_create_user(standard_user, username, email, password):
+def test_create_user(
+    standard_user: User, username: str, email: str, password: str
+) -> None:
     """Test user creation functionality with valid user details"""
     user = standard_user
     assert user.username == username
@@ -14,7 +17,7 @@ def test_create_user(standard_user, username, email, password):
 
 
 @pytest.mark.django_db(True)
-def test_unique_user_username(standard_user):
+def test_unique_user_username(standard_user: User) -> None:
     """
     Test that creating a user with the same username as an existing user is not allowed
     """
@@ -23,7 +26,7 @@ def test_unique_user_username(standard_user):
 
 
 @pytest.mark.django_db(True)
-def test_unique_user_email(standard_user):
+def test_unique_user_email(standard_user: User) -> None:
     """
     Test that creating a user with the same email as an exisiting user is not allowed
     """
@@ -32,7 +35,7 @@ def test_unique_user_email(standard_user):
 
 
 @pytest.mark.django_db(True)
-def test_user_string(standard_user):
+def test_user_string(standard_user: User) -> None:
     """
     Test that string method of User returns the correctly formatted string:
     ``` username (email) ```
