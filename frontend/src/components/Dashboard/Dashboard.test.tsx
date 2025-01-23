@@ -8,6 +8,6 @@ describe("Dashboard", () => {
 
     const dashboardText = screen.getByText("Dashboard");
 
-    expect(dashboardText).to.exist;
+    expect(dashboardText).toBeVisible;
   });
 });
