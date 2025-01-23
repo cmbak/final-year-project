@@ -4,7 +4,7 @@ import { isEmpty } from "../../utils/isEmpty";
 import { fetchUser } from "../../utils/fetchUser";
 
 export default function ProtectedRoute() {
-  const { data, isError, error, isFetched } = useQuery({
+  const { data, isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
   });
