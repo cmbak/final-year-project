@@ -63,3 +63,21 @@ class Label(models.Model):
     def __str__(self):
         """Return string representation of label"""
         return self.name
+
+
+class Quiz(models.Model):
+    """Model representing a quiz"""
+
+    title = models.CharField(max_length=50, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    labels = models.ManyToManyField(Label, related_name="quiz")
+
+    class Meta:
+        """Metadata for Quiz model"""
+
+        constraints = [
+            models.UniqueConstraint(
+                models.functions.Lower("title"), name="unique quiz title"
+            )
+        ]
