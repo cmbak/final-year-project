@@ -1,5 +1,5 @@
 import pytest
-from api.models import User
+from api.models import User, Category
 from django.db.utils import IntegrityError
 
 from .conftest import custom_user
@@ -44,8 +44,11 @@ def test_user_string(standard_user: User) -> None:
 
 
 @pytest.mark.django_db(True)
-def test_category_name_unique() -> None:
+def test_category_name_unique(standard_user: User) -> None:
     """Test that the name of a category should be unique irrespective of case"""
-    cat_one = Category.objects.create(name="category")
+    Category.objects.create(name="category", user=standard_user)
     with pytest.raises(IntegrityError):
-        Category.objects.create(name="Category")
+        Category.objects.create(name="Category", user=standard_user)
+
+
+# TODO what happens to related model instances when category is deleted?
