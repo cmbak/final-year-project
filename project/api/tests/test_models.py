@@ -85,3 +85,25 @@ def test_category_string(standard_user: User) -> None:
 
 
 # TODO what happens to related model instances when category is deleted?
+
+
+@pytest.mark.django_db(True)
+def test_label_valid_fields() -> None:
+    """Test label creation functionality with valid label name"""
+    label = Label.objects.create(name="label")
+    assert label.name == "label"
+
+
+@pytest.mark.django_db(True)
+def test_label_name_unique() -> None:
+    """Test that the name of a label should be unique irrespective of case"""
+    Label.objects.create(name="label")
+    with pytest.raises(IntegrityError):
+        Label.objects.create(name="LABEL")
+
+
+@pytest.mark.django_db(True)
+def test_label_string() -> None:
+    """Test that the Label string method returns the label name"""
+    label = Label.objects.create(name="label")
+    assert str(label) == label.name
