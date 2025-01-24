@@ -23,3 +23,20 @@ class User(AbstractUser):
             "username": self.username,
             "email": self.email,
         }
+
+
+class Category(models.Model):
+    """Model representing a quiz category"""
+
+    name = models.CharField(max_length=30, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        """Metadata for Category model"""
+
+        constraints = [
+            models.UniqueConstraint(
+                models.functions.Lower("name"),  # Irrespective of case
+                name="unique category name",
+            )
+        ]
