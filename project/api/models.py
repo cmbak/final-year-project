@@ -40,3 +40,7 @@ class Category(models.Model):
                 name="unique category name",
             )
         ]
+
+    def __str__(self):
+        "Return string representation of category"
+        return f"{self.name}"

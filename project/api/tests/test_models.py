@@ -44,6 +44,14 @@ def test_user_string(standard_user: User) -> None:
 
 
 @pytest.mark.django_db(True)
+def test_category_valid_fields(standard_user: None) -> None:
+    """Test category creation functionality with valid name and user"""
+    category = Category.objects.create(name="category", user=standard_user)
+    assert category.name == "category"
+    assert category.user == standard_user
+
+
+@pytest.mark.django_db(True)
 def test_category_name_unique(standard_user: User) -> None:
     """Test that the name of a category should be unique irrespective of case"""
     Category.objects.create(name="category", user=standard_user)
@@ -65,6 +73,15 @@ def test_category_cascade_on_user_deletion() -> None:
     assert not User.objects.filter(username="john_due").exists()
     assert not Category.objects.filter(name="Fun Category").exists()
     assert Category.objects.count() == 0
+
+
+@pytest.mark.django_db(True)
+def test_category_string(standard_user: User) -> None:
+    """
+    Test that the Category string method returns the name of the category
+    """
+    category = Category.objects.create(name="Fun Category", user=standard_user)
+    assert str(category) == category.name
 
 
 # TODO what happens to related model instances when category is deleted?
