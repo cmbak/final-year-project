@@ -51,4 +51,20 @@ def test_category_name_unique(standard_user: User) -> None:
         Category.objects.create(name="Category", user=standard_user)
 
 
+@pytest.mark.django_db(True)
+def test_category_cascade_on_user_deletion() -> None:
+    """
+    Test that a category gets deleted when the user its foreign key
+    references also gets deleted
+    """
+    user = custom_user(username="john_doe")
+    Category.objects.create(name="Fun Category", user=user)
+
+    user.delete()
+
+    assert not User.objects.filter(username="john_due").exists()
+    assert not Category.objects.filter(name="Fun Category").exists()
+    assert Category.objects.count() == 0
+
+
 # TODO what happens to related model instances when category is deleted?
