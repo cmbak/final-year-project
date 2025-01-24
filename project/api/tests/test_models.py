@@ -1,5 +1,5 @@
 import pytest
-from api.models import User, Category
+from api.models import User, Category, Label
 from django.db.utils import IntegrityError
 
 from .conftest import custom_user

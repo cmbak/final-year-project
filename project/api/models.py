@@ -42,5 +42,24 @@ class Category(models.Model):
         ]
 
     def __str__(self):
-        "Return string representation of category"
-        return f"{self.name}"
+        """Return string representation of category"""
+        return self.name
+
+
+class Label(models.Model):
+    """Model representing a quiz label"""
+
+    name = models.CharField(max_length=15, unique=True)
+
+    class Meta:
+        """Metadata for Label model"""
+
+        constraints = [
+            models.UniqueConstraint(
+                models.functions.Lower("name"), name="unique label name"
+            )
+        ]
+
+    def __str__(self):
+        """Return string representation of label"""
+        return self.name
