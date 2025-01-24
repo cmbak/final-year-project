@@ -41,3 +41,11 @@ def test_user_string(standard_user: User) -> None:
     ``` username (email) ```
     """
     assert str(standard_user) == f"{standard_user.username} ({standard_user.email})"
+
+
+@pytest.mark.django_db(True)
+def test_category_name_unique() -> None:
+    """Test that the name of a category should be unique irrespective of case"""
+    cat_one = Category.objects.create(name="category")
+    with pytest.raises(IntegrityError):
+        Category.objects.create(name="Category")
