@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./Modal.module.css";
 
 type ModalProps = {
   children: React.JSX.Element;
@@ -13,9 +14,9 @@ export default function Modal({ children, title, onClick }: ModalProps) {
     <>
       <button onClick={() => setIsOpen(true)}>{title}</button>
       {isOpen && (
-        <div>
-          <h2>{title}</h2>
-          <div>{children}</div>
+        <div className={styles.modal}>
+          <h2 className={styles.header}>{title}</h2>
+          <div className={styles.content}>{children}</div>
           <button
             onClick={() => {
               onClick();
