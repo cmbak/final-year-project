@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import User
+from .models import User, Category
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for user model - maps JSON to User object"""
+    """Serializer for user model - convert User to JSON and vice versa"""
 
     # Need to set input type to password and validate
     password = serializers.RegexField(
@@ -51,3 +51,13 @@ class LoginSerializer(serializers.Serializer):
             error = "Invalid username or password"
             raise serializers.ValidationError({"username": error, "password": error})
         return data
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    """Serializer for Category model - convert Category to JSON and vice versa"""
+
+    class Meta:
+        """Metadata for Category serializer"""
+
+        model = Category
+        fields = ["id", "name", "user"]
