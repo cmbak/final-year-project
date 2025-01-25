@@ -10,6 +10,7 @@
   --color-correct: #23ae27;
   --color-incorrect: #ae2323;
   --border-radius-rounded: 99px;
+  --border-radius-small: 10px;
   --speed-medium: 450ms;
 }
 
@@ -20,15 +21,25 @@ body {
 .btn {
   padding: 0.4rem 1.5rem;
   border-radius: var(--border-radius-rounded);
+  transition: all var(--speed-medium) ease;
 }
 
 .btn-primary {
   background-color: var(--colour-primary);
   color: var(--color-btn-text);
-  transition: all var(--speed-medium) ease;
 
   &:hover {
     background-color: var(--colour-primary-dark);
+    color: white;
+  }
+}
+
+.btn-secondary {
+  background-color: var(--color-btn-secondary);
+  color: var(--color-btn-text);
+
+  &:hover {
+    background-color: black;
     color: white;
   }
 }

@@ -16,6 +16,7 @@
 
 .modal {
   background-color: var(--colour-card-background);
+  border-radius: var(--border-radius-small);
   display: grid;
   grid-template-rows: 1fr 3fr 1fr;
   gap: 1rem;
@@ -26,10 +27,15 @@
   position: relative; /* Allows modal to be placed on top of fixed bg */
 }
 
+.header {
+  font-size: 1.5rem;
+}
+
 .content {
   margin-inline: auto;
 }
 
-.header {
-  font-size: 1.5rem;
+.mainBtn {
+  width: 50%;
+  margin-inline: auto;
 }

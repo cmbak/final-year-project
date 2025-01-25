@@ -12,7 +12,9 @@ export default function Modal({ children, title, onClick }: ModalProps) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>{title}</button>
+      <button className="btn btn-secondary" onClick={() => setIsOpen(true)}>
+        {title}
+      </button>
       {isOpen && (
         <>
           <div className={styles.modalBackground}></div>
@@ -26,6 +28,7 @@ export default function Modal({ children, title, onClick }: ModalProps) {
             <h2 className={styles.header}>{title}</h2>
             <div className={styles.content}>{children}</div>
             <button
+              className={`btn btn-secondary ${styles.mainBtn}`}
               onClick={() => {
                 onClick();
                 setIsOpen(false);
