@@ -209,3 +209,6 @@ sketch
 
 # Vitest
 coverage
+
+# Vscode settings
+.vscode

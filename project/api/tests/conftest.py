@@ -1,5 +1,5 @@
 import pytest
-from api.models import User
+from api.models import Category, Label, Quiz, User
 from rest_framework.test import APIClient
 
 USER_USERNAME = "bob"
@@ -55,3 +55,18 @@ def password() -> str:
 def api_client() -> APIClient:
     """Return an API client instance"""
     return APIClient()
+
+
+@pytest.fixture
+def quiz() -> Quiz:
+    """Returns a quiz instance"""
+    user = custom_user()
+    quiz = Quiz.objects.create(
+        title="quiz",
+        user=user,
+        category=Category.objects.create(name="category", user=user),
+    )
+
+    quiz.labels.add(Label.objects.create(name="label"))
+    quiz.save()
+    return quiz
