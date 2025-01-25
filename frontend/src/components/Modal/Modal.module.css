@@ -1,11 +1,21 @@
+.modalBackground {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0%;
+}
+
 .modal {
-  background-color: red;
+  background-color: var(--colour-card-background);
   display: grid;
   grid-template-rows: 1fr 3fr 1fr;
   gap: 1rem;
-  justify-content: center;
   padding-block: 4rem;
-  z-index: 1;
+  width: 25rem;
+  text-align: center;
+  place-self: center;
+  position: relative; /* Allows modal to be placed on top of fixed bg */
 }
 
 .content {
