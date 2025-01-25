@@ -1,7 +1,23 @@
 import pytest
-from api.models import User, Category
+from api.models import Category, User
 from rest_framework.test import APIClient
+
 from .conftest import get_response_errors
+
+# @pytest.mark.django_db(True)
+# def test_get_category_auth(api_client: APIClient, standard_user: User) -> None:
+#     """
+#     Test that a GET request from an authenticated user with a valid category name
+#     returns a 200 response and lists all the categories
+#     """
+#     data = {"name": "New Category", "user": standard_user.id}
+#     api_client.force_authenticate(user=standard_user)
+
+#     response = api_client.post("/api/categories/", data)
+#     print(Category.objects.all())
+
+#     assert response.status_code == 201
+#     assert Category.objects.filter(name=data["name"]).exists()
 
 
 @pytest.mark.django_db(True)
@@ -14,7 +30,6 @@ def test_post_category_auth(api_client: APIClient, standard_user: User) -> None:
     api_client.force_authenticate(user=standard_user)
 
     response = api_client.post("/api/categories/", data)
-    print(Category.objects.all())
 
     assert response.status_code == 201
     assert Category.objects.filter(name=data["name"]).exists()
@@ -45,7 +60,7 @@ def test_post_category_not_auth(api_client: APIClient, standard_user: User) -> N
         ),
     ],
 )
-def test_post_invalid_signup(
+def test_post_invalid_category(
     api_client: APIClient, standard_user: User, name: str, expected: str
 ) -> None:
     """
@@ -53,6 +68,7 @@ def test_post_invalid_signup(
     returns a 400 response and shows the correct error messages
     """
     data = {"name": name, "user": standard_user.id}
+    api_client.force_authenticate(user=standard_user)
 
     response = api_client.post("/api/categories/", data)
     errors = get_response_errors(response)

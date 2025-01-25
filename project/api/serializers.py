@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import User, Category
+from .models import Category, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -55,6 +55,8 @@ class LoginSerializer(serializers.Serializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     """Serializer for Category model - convert Category to JSON and vice versa"""
+
+    # user = UserSerializer()
 
     class Meta:
         """Metadata for Category serializer"""
