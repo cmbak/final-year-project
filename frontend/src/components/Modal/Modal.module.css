@@ -1,0 +1,17 @@
+.modal {
+  background-color: red;
+  display: grid;
+  grid-template-rows: 1fr 3fr 1fr;
+  gap: 1rem;
+  justify-content: center;
+  padding-block: 4rem;
+  z-index: 1;
+}
+
+.content {
+  margin-inline: auto;
+}
+
+.header {
+  font-size: 1.5rem;
+}
