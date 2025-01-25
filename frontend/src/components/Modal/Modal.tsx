@@ -25,7 +25,9 @@ export default function Modal({
       {active && (
         <>
           <div className={styles.modalBackground}></div>
-          <div className={styles.modal}>
+          <div
+            className={`${styles.modal} ${type === "form" && styles.form_modal}`}
+          >
             <button
               className={styles.closeBtn}
               onClick={() => setActive(false)}
@@ -36,7 +38,7 @@ export default function Modal({
             {/* If modal is for a form, main close button is inside form and of type submit */}
             {type === "form" ? (
               <div className={styles.content}>
-                <form action={action}>
+                <form action={action} className={styles.form}>
                   {children}
                   <button
                     type="submit"
