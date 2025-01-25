@@ -5,9 +5,10 @@ type ModalProps = {
   children: React.JSX.Element;
   title: string;
   type: "normal" | "form";
-  action?: (formData: FormData) => void;
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
+  action?: (formData: FormData) => void;
+  isPending?: boolean;
 };
 
 export default function Modal({
@@ -17,6 +18,7 @@ export default function Modal({
   action,
   active,
   setActive,
+  isPending,
 }: ModalProps) {
   return (
     <>
@@ -39,6 +41,7 @@ export default function Modal({
                   <button
                     type="submit"
                     className={`btn btn-secondary ${styles.mainBtn}`}
+                    disabled={isPending}
                   >
                     {title}
                   </button>
