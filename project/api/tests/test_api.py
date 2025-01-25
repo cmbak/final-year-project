@@ -1,6 +1,8 @@
 import pytest
-from api.models import User
+from api.models import User, Category
 from rest_framework.test import APIClient
+from .conftest import get_response_errors
+
 
 # Users API Endpoint
 
@@ -9,7 +11,7 @@ from rest_framework.test import APIClient
 def test_get_users_auth(standard_user: User, api_client: APIClient) -> None:
     """
     Test that an authenticated user sending a GET request to the users endpoint
-    receives a 200 response and a list of all users
+    receives a 200 response
     """
     api_client.force_authenticate(user=standard_user)
     response = api_client.get("/api/users/")
@@ -149,3 +151,86 @@ def test_post_user_password_missing_reqs(
         "Your password must contain at least one digit from 0-9 and one character from @+-_!?.".lower()  # noqa E501
         in password_errors
     )
+
+
+# Categories API Endpoint
+@pytest.mark.django_db(True)
+def test_get_category_auth(api_client: APIClient, standard_user: User) -> None:
+    """
+    Test that a GET request from an authenticated user
+    returns a 200 response and lists the categories
+    """
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.get("/api/categories/")
+    categories = response.json()["results"]
+
+    assert response.status_code == 200
+    assert len(categories) == Category.objects.count()
+
+
+@pytest.mark.django_db(True)
+def test_get_category_not_auth(api_client: APIClient, standard_user: User) -> None:
+    """
+    Test that a GET request from an unauthenticated user returns a 401 response
+    """
+    response = api_client.get("/api/categories/")
+
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db(True)
+def test_post_category_auth(api_client: APIClient, standard_user: User) -> None:
+    """
+    Test that a POST request from an authenticated user with a valid category name
+    returns a 201 response and creates a Category with that name
+    """
+    data = {"name": "New Category", "user": standard_user.id}
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.post("/api/categories/", data)
+
+    assert response.status_code == 201
+    assert Category.objects.filter(name=data["name"]).exists()
+
+
+@pytest.mark.django_db(True)
+def test_post_category_not_auth(api_client: APIClient, standard_user: User) -> None:
+    """
+    Test that a POST request from an unauthenticated user with a valid category name
+    returns a 401 response and doesn't create a new Category
+    """
+    data = {"name": "New Category", "user": standard_user.id}
+
+    response = api_client.post("/api/categories/", data)
+
+    assert response.status_code == 401
+    assert not Category.objects.filter(name=data["name"]).exists()
+
+
+@pytest.mark.django_db(True)
+@pytest.mark.parametrize(
+    "name, expected",
+    [
+        ("", "This field may not be blank."),
+        (
+            "a very long and invalid category name",
+            "Ensure this field has no more than 30 characters.",
+        ),
+    ],
+)
+def test_post_invalid_category(
+    api_client: APIClient, standard_user: User, name: str, expected: str
+) -> None:
+    """
+    Test that sending a POST request with an invalid category name
+    returns a 400 response and shows the correct error messages
+    """
+    data = {"name": name, "user": standard_user.id}
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.post("/api/categories/", data)
+    errors = get_response_errors(response)
+
+    assert response.status_code == 400
+    assert expected in errors
