@@ -6,6 +6,14 @@
   top: 0%;
 }
 
+.closeBtn {
+  background-color: transparent;
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  font-size: 1.5rem;
+}
+
 .modal {
   background-color: var(--colour-card-background);
   display: grid;
