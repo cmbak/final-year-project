@@ -1,4 +1,4 @@
-from api.serializers import LoginSerializer, UserSerializer
+from api.serializers import LoginSerializer, UserSerializer, CategorySerializer
 from decouple import config
 from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirectBase, JsonResponse
@@ -6,8 +6,18 @@ from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.serializers import ModelSerializer
 
-from .models import User
+from .models import User, Category
+
+
+def handle_invalid_serializer(serializer: ModelSerializer):
+    """Returns response with code 400 containing serializer and its errors"""
+    # Can be used to show errors on form
+    return Response(
+        {"serializer": serializer, "errors": serializer.errors},
+        status=status.HTTP_400_BAD_REQUEST,
+    )
 
 
 class HttpResponseSeeOther(HttpResponseRedirectBase):
@@ -47,11 +57,7 @@ class SignupView(APIView):
 
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
-            # Show invalid field errors to user
-            return Response(
-                {"serializer": serializer, "errors": serializer.errors},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            return handle_invalid_serializer(serializer)
 
         user = serializer.save()
         login(request, user)
@@ -79,11 +85,7 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
 
         if not serializer.is_valid():
-            # Show errors on form
-            return Response(
-                {"serializer": serializer, "errors": serializer.errors},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            return handle_invalid_serializer(serializer)
 
         login(request, User.objects.get(username=request.data["username"]))
         return HttpResponseSeeOther(config("FRONTEND_URL"))
@@ -119,3 +121,22 @@ class LogoutView(APIView):
 
 
 logout_view = LogoutView.as_view()
+
+
+class CategoryListCreateView(generics.ListCreateAPIView):
+    """API Endpoint for retrieving categories or creating a category"""
+
+    queryset = Category.objects.all().order_by("id")
+    # serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        """Handle POST request for creating category"""
+        serializer = CategorySerializer(data=request.data)
+        if not serializer.is_valid():
+            return handle_invalid_serializer(serializer)
+        category = serializer.save()
+        return JsonResponse({"category": "ok"}, status=status.HTTP_201_CREATED)
+
+
+create_category_view = CategoryListCreateView.as_view()
