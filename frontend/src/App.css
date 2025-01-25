@@ -9,6 +9,7 @@
   --color-btn-text: #f5f5f5;
   --color-correct: #23ae27;
   --color-incorrect: #ae2323;
+  --color-error: #d40000;
   --color-input-border: #959595;
   --border-radius-rounded: 99px;
   --border-radius-medium: 15px;
@@ -57,4 +58,9 @@ input {
   display: flex;
   flex-direction: column;
   text-align: left;
+}
+
+.form-error {
+  font-size: 0.9rem;
+  color: var(--color-error);
 }

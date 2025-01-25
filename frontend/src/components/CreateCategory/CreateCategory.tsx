@@ -49,7 +49,7 @@ export default function CreateCategory() {
       >
         <div className="form-item">
           <label htmlFor="create-category-name">name</label>
-          {error && <span>{error}</span>}
+          {error && <span className="form-error">{error}</span>}
           <input
             name="name"
             id="create-category-name"
