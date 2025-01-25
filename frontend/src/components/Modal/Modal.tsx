@@ -2,17 +2,30 @@ import React, { useState } from "react";
 
 type ModalProps = {
   children: React.JSX.Element;
-  openBtnText: string;
-  header: string;
+  title: string;
+  onClick: () => void;
 };
 
-export default function Modal({ children, openBtnText, header }: ModalProps) {
+export default function Modal({ children, title, onClick }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <button onClick={() => setIsOpen((prev) => !prev)}>{openBtnText}</button>
-      {isOpen && <h2>{header}</h2>}
+      <button onClick={() => setIsOpen(true)}>{title}</button>
+      {isOpen && (
+        <div>
+          <h2>{title}</h2>
+          <div>{children}</div>
+          <button
+            onClick={() => {
+              onClick();
+              setIsOpen(false);
+            }}
+          >
+            {title}
+          </button>
+        </div>
+      )}
     </>
   );
 }
