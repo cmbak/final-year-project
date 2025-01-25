@@ -6,14 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function CreateCategory() {
   const [modalActive, setModalActive] = useState(false);
-  const [error, formAction, isPending] = useActionState(
-    createCategory,
-    undefined,
-  );
+  const [state, formAction, isPending] = useActionState(createCategory, null);
   const { data } = useQuery({ queryKey: ["user"], queryFn: fetchUser });
 
   async function createCategory(prevState: unknown, formData: FormData) {
-    const name = formData.get("name");
+    const name = formData.get("name") as string; // Stop input default value warning type mismatch
 
     try {
       await instance.post(
@@ -22,8 +19,10 @@ export default function CreateCategory() {
         { withXSRFToken: true },
       );
       setModalActive(false);
+      return { name };
     } catch (error: any) {
-      if (error.response !== undefined) return error.response.data.errors.name;
+      if (error.response !== undefined)
+        return { name, error: error.response.data.errors.name };
       else {
         alert(error);
       }
@@ -49,8 +48,11 @@ export default function CreateCategory() {
       >
         <div className="form-item">
           <label htmlFor="create-category-name">name</label>
-          {error && <span className="form-error">{error}</span>}
+          {state?.error && <span className="form-error">{state.error}</span>}
           <input
+            defaultValue={
+              state?.name
+            } /* Old/Invalid name stays on form after error */
             name="name"
             id="create-category-name"
             maxLength={30}

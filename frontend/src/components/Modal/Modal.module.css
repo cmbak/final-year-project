@@ -25,6 +25,7 @@
   text-align: center;
   place-self: center;
   position: relative; /* Allows modal to be placed on top of fixed bg */
+  max-width: 80%;
 }
 
 .form_modal {
