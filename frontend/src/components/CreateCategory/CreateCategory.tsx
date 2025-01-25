@@ -6,26 +6,28 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function CreateCategory() {
   const [modalActive, setModalActive] = useState(false);
-  const [state, formAction, isPending] = useActionState(createCategory, null);
+  const [error, formAction, isPending] = useActionState(
+    createCategory,
+    undefined,
+  );
   const { data } = useQuery({ queryKey: ["user"], queryFn: fetchUser });
 
-  function createCategory(prevState: unknown, formData: FormData) {
+  async function createCategory(prevState: unknown, formData: FormData) {
     const name = formData.get("name");
-    instance
-      .post(
+
+    try {
+      await instance.post(
         "/api/categories/",
         { name, user: data.id },
         { withXSRFToken: true },
-      )
-      .then((response) => {
-        console.log(response);
-        setModalActive(false);
-        return name;
-      })
-      .catch((error) => {
-        console.log(error);
-        return error;
-      });
+      );
+      setModalActive(false);
+    } catch (error: any) {
+      if (error.response !== undefined) return error.response.data.errors.name;
+      else {
+        alert(error);
+      }
+    }
   }
 
   return (
@@ -47,7 +49,13 @@ export default function CreateCategory() {
       >
         <div className="form-item">
           <label htmlFor="create-category-name">name</label>
-          <input name="name" id="create-category-name" required />
+          {error && <span>{error}</span>}
+          <input
+            name="name"
+            id="create-category-name"
+            maxLength={30}
+            required
+          />
         </div>
       </Modal>
     </>
