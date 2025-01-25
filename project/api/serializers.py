@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
@@ -29,9 +27,9 @@ class UserSerializer(serializers.ModelSerializer):
         """Metadata options for UserSerializer - based on User"""
 
         model: User = User
-        fields: List[str] = ["id", "username", "email", "password"]
-        field_kw_args: Dict[str, bool] = {"required": True, "allow_blank": False}
-        extra_kwargs: Dict[str, dict] = {
+        fields: list[str] = ["id", "username", "email", "password"]
+        field_kw_args: dict[str, bool] = {"required": True, "allow_blank": False}
+        extra_kwargs: dict[str, dict] = {
             "username": {"required": True, "allow_blank": False, "help_text": ""},
             "email": field_kw_args,
             "password": field_kw_args,

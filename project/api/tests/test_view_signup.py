@@ -1,5 +1,3 @@
-from typing import List
-
 import pytest
 from api.models import User
 from decouple import config
@@ -43,7 +41,7 @@ invalid_signup_data = [
 ]
 
 
-def get_response_errors(response) -> List[str]:
+def get_response_errors(response) -> list[str]:
     """Return a list of the errors in found in the response data"""
     errors = []
 

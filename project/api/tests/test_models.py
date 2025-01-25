@@ -1,5 +1,5 @@
 import pytest
-from api.models import User, Category, Label
+from api.models import Category, Label, Quiz, User
 from django.db.utils import IntegrityError
 
 from .conftest import custom_user
@@ -60,7 +60,7 @@ def test_category_name_unique(standard_user: User) -> None:
 
 
 @pytest.mark.django_db(True)
-def test_category_cascade_on_user_deletion() -> None:
+def test_category_deleted_on_user_deletion() -> None:
     """
     Test that a category gets deleted when the user its foreign key
     references also gets deleted
@@ -107,3 +107,71 @@ def test_label_string() -> None:
     """Test that the Label string method returns the label name"""
     label = Label.objects.create(name="label")
     assert str(label) == label.name
+
+
+@pytest.mark.django_db(True)
+def test_quiz_valid_fields(quiz: Quiz, username: str) -> None:
+    """Test quiz creation functionality with valid quiz fields"""
+    assert quiz.title == "quiz"
+    assert quiz.user.username == username
+    assert quiz.category.name == "category"
+    assert quiz.labels.filter(name="label").exists()
+
+
+@pytest.mark.django_db(True)
+def test_quiz_string(quiz: Quiz, username: str) -> None:
+    """Test quiz string method returns the details of the quiz"""
+    assert str(quiz) == f"quiz | category | label | {username}"
+
+
+@pytest.mark.django_db(True)
+def test_quiz_unique_title(quiz: Quiz) -> None:
+    """Test that title of a quiz should be unique irrespective of case"""
+    user = custom_user("new_user", "new_user@gmail.com")
+
+    with pytest.raises(IntegrityError):
+        Quiz.objects.create(
+            title="quiz",
+            user=user,
+            category=Category.objects.create(name="category two"),
+        )
+
+
+@pytest.mark.django_db(True)
+def test_quiz_label_deletion(quiz: Quiz) -> None:
+    """
+    Test that after a label is deleted,
+    it's been removed from its (previously) associated quizzes
+    """
+    label = Label.objects.get(name="label")  # Created in fixture
+
+    label.delete()
+
+    assert quiz.labels.count() == 0
+
+
+@pytest.mark.django_db(True)
+def test_quiz_deleted_on_user_deletion(quiz: Quiz) -> None:
+    """Test that after a user is deleted, their quizzes should also be deleted"""
+    user = quiz.user
+
+    user.delete()
+
+    assert not Quiz.objects.filter(title="quiz").exists()
+    assert Quiz.objects.count() == 0
+
+
+@pytest.mark.django_db(True)
+def test_quiz_category_null_on_category_deletion(quiz: Quiz) -> None:
+    """
+    Test that after a category is deleted, their quizzes should also be deleted
+    """
+    category = quiz.category
+
+    category.delete()
+
+    assert not Quiz.objects.filter(title="quiz").exists()
+    assert Quiz.objects.count() == 0
+
+
+# TODO after mvp maybe allow null categories?

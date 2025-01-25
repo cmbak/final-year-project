@@ -81,3 +81,16 @@ class Quiz(models.Model):
                 models.functions.Lower("title"), name="unique quiz title"
             )
         ]
+
+    def __str__(self):
+        """Returns string representation of quiz"""
+        label_names = ""
+        all_labels: list[Label] = self.labels.all()
+
+        # Format as label | label2 | label3 etc.
+        for i, l in enumerate(all_labels):
+            label_names += l.name
+            if i != len(all_labels) - 1:
+                label_names += ", "
+
+        return f"{self.title} | {self.category.name} | {label_names} | {self.user.username}"  # noqa e501
