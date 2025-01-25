@@ -13,8 +13,10 @@ export default function CreateCategory() {
   return (
     <Modal title="create category" onClick={() => console.log("clicked")}>
       <form action={createCategory}>
-        <label htmlFor="name">name</label>
-        <input name="name" required />
+        <div className="form-item">
+          <label htmlFor="name">name</label>
+          <input name="name" required />
+        </div>
       </form>
     </Modal>
   );
