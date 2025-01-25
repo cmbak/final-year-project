@@ -17,6 +17,12 @@ export default function Modal({ children, title, onClick }: ModalProps) {
         <>
           <div className={styles.modalBackground}></div>
           <div className={styles.modal}>
+            <button
+              className={styles.closeBtn}
+              onClick={() => setIsOpen(false)}
+            >
+              <i className="bi bi-x"></i>
+            </button>
             <h2 className={styles.header}>{title}</h2>
             <div className={styles.content}>{children}</div>
             <button

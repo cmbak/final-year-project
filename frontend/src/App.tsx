@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Navbar from "./components/Navbar/Navbar";
 import "./reset.css";
 import "./App.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const queryClient = new QueryClient();
 
