@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
@@ -6,23 +6,27 @@ type ModalProps = {
   title: string;
   type: "normal" | "form";
   action?: (formData: FormData) => void;
+  active: boolean;
+  setActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Modal({ children, title, type, action }: ModalProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
+export default function Modal({
+  children,
+  title,
+  type,
+  action,
+  active,
+  setActive,
+}: ModalProps) {
   return (
     <>
-      <button className="btn btn-secondary" onClick={() => setIsOpen(true)}>
-        {title}
-      </button>
-      {isOpen && (
+      {active && (
         <>
           <div className={styles.modalBackground}></div>
           <div className={styles.modal}>
             <button
               className={styles.closeBtn}
-              onClick={() => setIsOpen(false)}
+              onClick={() => setActive(false)}
             >
               <i className="bi bi-x"></i>
             </button>
@@ -35,7 +39,6 @@ export default function Modal({ children, title, type, action }: ModalProps) {
                   <button
                     type="submit"
                     className={`btn btn-secondary ${styles.mainBtn}`}
-                    // onClick={() => setIsOpen(false)}
                   >
                     {title}
                   </button>
@@ -46,7 +49,7 @@ export default function Modal({ children, title, type, action }: ModalProps) {
                 <div className={styles.content}>{children}</div>
                 <button
                   className={`btn btn-secondary ${styles.mainBtn}`}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setActive(false)}
                 >
                   {title}
                 </button>
