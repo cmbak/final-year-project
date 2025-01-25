@@ -4,20 +4,29 @@ from rest_framework.test import APIClient
 
 from .conftest import get_response_errors
 
-# @pytest.mark.django_db(True)
-# def test_get_category_auth(api_client: APIClient, standard_user: User) -> None:
-#     """
-#     Test that a GET request from an authenticated user with a valid category name
-#     returns a 200 response and lists all the categories
-#     """
-#     data = {"name": "New Category", "user": standard_user.id}
-#     api_client.force_authenticate(user=standard_user)
 
-#     response = api_client.post("/api/categories/", data)
-#     print(Category.objects.all())
+@pytest.mark.django_db(True)
+def test_get_category_auth(api_client: APIClient, standard_user: User) -> None:
+    """
+    Test that a GET request from an authenticated user
+    returns a 200 response and lists all the categories
+    """
+    api_client.force_authenticate(user=standard_user)
 
-#     assert response.status_code == 201
-#     assert Category.objects.filter(name=data["name"]).exists()
+    response = api_client.get("/api/categories/")
+
+    assert response.status_code == 200
+    assert not True
+
+
+@pytest.mark.django_db(True)
+def test_get_category_not_auth(api_client: APIClient, standard_user: User) -> None:
+    """
+    Test that a GET request from an unauthenticated user returns a 401 response
+    """
+    response = api_client.get("/api/categories/")
+
+    assert response.status_code == 401
 
 
 @pytest.mark.django_db(True)
