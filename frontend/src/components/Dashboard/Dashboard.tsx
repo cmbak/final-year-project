@@ -1,12 +1,10 @@
-import Modal from "../Modal/Modal";
+import CreateCategory from "../CreateCategory/CreateCategory";
 
 export default function Dashboard() {
   return (
     <div>
       <h1>Dashboard</h1>
-      <Modal title="create category" onClick={() => console.log("clicked")}>
-        <p>category name</p>
-      </Modal>
+      <CreateCategory />
     </div>
   );
 }
