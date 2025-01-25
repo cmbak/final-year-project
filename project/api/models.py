@@ -45,6 +45,11 @@ class Category(models.Model):
         """Return string representation of category"""
         return self.name
 
+    def as_dict(self):
+        """Return dictionary representation of category"""
+        # user = User.objects.get(id=self.user)
+        return {"id": self.id, "name": self.name, "user": self.user}
+
 
 class Label(models.Model):
     """Model representing a quiz label"""
