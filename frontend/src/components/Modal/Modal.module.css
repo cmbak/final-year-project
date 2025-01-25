@@ -27,12 +27,25 @@
   position: relative; /* Allows modal to be placed on top of fixed bg */
 }
 
+.form_modal {
+  grid-template-rows: 1fr 4fr;
+}
+
 .header {
   font-size: 1.5rem;
 }
 
 .content {
   margin-inline: auto;
+}
+
+.form {
+  display: grid;
+  gap: 2rem;
+
+  & .mainBtn {
+    width: 75%;
+  }
 }
 
 .mainBtn {
