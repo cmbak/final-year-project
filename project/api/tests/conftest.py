@@ -70,3 +70,14 @@ def quiz() -> Quiz:
     quiz.labels.add(Label.objects.create(name="label"))
     quiz.save()
     return quiz
+
+
+def get_response_errors(response) -> list[str]:
+    """Return a list of the errors in found in the response data"""
+    errors = []
+
+    for field_errors in response.data["errors"]:
+        for error in response.data["errors"][field_errors]:
+            errors.append(str(error))
+
+    return errors
