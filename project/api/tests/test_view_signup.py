@@ -2,6 +2,7 @@ import pytest
 from api.models import User
 from decouple import config
 from rest_framework.test import APIClient
+
 from .conftest import get_response_errors
 
 invalid_signup_data = [
