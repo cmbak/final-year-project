@@ -2,6 +2,7 @@ import pytest
 from api.models import User
 from decouple import config
 from rest_framework.test import APIClient
+from .conftest import get_response_errors
 
 invalid_signup_data = [
     (
@@ -39,17 +40,6 @@ invalid_signup_data = [
         "Ensure this field has no more than 16 characters.",
     ),
 ]
-
-
-def get_response_errors(response) -> list[str]:
-    """Return a list of the errors in found in the response data"""
-    errors = []
-
-    for field_errors in response.data["errors"]:
-        for error in response.data["errors"][field_errors]:
-            errors.append(str(error))
-
-    return errors
 
 
 @pytest.mark.parametrize("path", [("/signup/"), ("/login/")])
