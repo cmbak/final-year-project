@@ -14,18 +14,21 @@ export default function Modal({ children, title, onClick }: ModalProps) {
     <>
       <button onClick={() => setIsOpen(true)}>{title}</button>
       {isOpen && (
-        <div className={styles.modal}>
-          <h2 className={styles.header}>{title}</h2>
-          <div className={styles.content}>{children}</div>
-          <button
-            onClick={() => {
-              onClick();
-              setIsOpen(false);
-            }}
-          >
-            {title}
-          </button>
-        </div>
+        <>
+          <div className={styles.modalBackground}></div>
+          <div className={styles.modal}>
+            <h2 className={styles.header}>{title}</h2>
+            <div className={styles.content}>{children}</div>
+            <button
+              onClick={() => {
+                onClick();
+                setIsOpen(false);
+              }}
+            >
+              {title}
+            </button>
+          </div>
+        </>
       )}
     </>
   );
