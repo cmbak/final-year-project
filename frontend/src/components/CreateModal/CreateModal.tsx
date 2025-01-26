@@ -4,17 +4,30 @@ import Modal from "../Modal/Modal";
 import { fetchUser } from "../../utils/fetchUser";
 import { useQuery } from "@tanstack/react-query";
 
-export default function CreateCategory() {
+// Modal which sends POST request to endpoint
+// With name entered in form and id of current user
+
+type CreateModalProps = {
+  endpoint: string;
+  inputId: string;
+  title: string;
+};
+
+export default function CreateModal({
+  endpoint,
+  inputId,
+  title,
+}: CreateModalProps) {
   const [modalActive, setModalActive] = useState(false);
-  const [state, formAction, isPending] = useActionState(createCategory, null);
+  const [state, formAction, isPending] = useActionState(createInstance, null);
   const { data } = useQuery({ queryKey: ["user"], queryFn: fetchUser });
 
-  async function createCategory(prevState: unknown, formData: FormData) {
+  async function createInstance(prevState: unknown, formData: FormData) {
     const name = formData.get("name") as string; // Stop input default value warning type mismatch
 
     try {
       await instance.post(
-        "/api/categories/",
+        endpoint,
         { name, user: data.id },
         { withXSRFToken: true },
       );
@@ -36,10 +49,11 @@ export default function CreateCategory() {
         onClick={() => setModalActive(true)}
         type="button"
       >
-        create category
+        {title}
       </button>
+
       <Modal
-        title="create category"
+        title={title}
         type="form"
         action={formAction}
         active={modalActive}
@@ -47,14 +61,14 @@ export default function CreateCategory() {
         isPending={isPending}
       >
         <div className="form-item">
-          <label htmlFor="create-category-name">name</label>
+          <label htmlFor={inputId}>name</label>
           {state?.error && <span className="form-error">{state.error}</span>}
           <input
             defaultValue={
               state?.name
             } /* Old/Invalid name stays on form after error */
             name="name"
-            id="create-category-name"
+            id={inputId}
             maxLength={30}
             required
           />
