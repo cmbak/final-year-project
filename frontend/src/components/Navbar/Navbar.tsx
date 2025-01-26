@@ -13,11 +13,11 @@ export default function Navbar() {
   });
 
   return (
-    <nav className={styles.nav}>
+    <nav className={`flex ${styles.nav}`}>
       <Link to="/" className={styles.name}>
         Name
       </Link>
-      <div className={styles.links}>
+      <div className={`flex ${styles.links}`}>
         {/* If user hasn't logged in, only show login */}
         {isEmpty(data) ? (
           <button className="btn btn-primary">login</button>
