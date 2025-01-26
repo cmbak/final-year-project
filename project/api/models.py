@@ -55,6 +55,7 @@ class Label(models.Model):
     """Model representing a quiz label"""
 
     name = models.CharField(max_length=15, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         """Metadata for Label model"""

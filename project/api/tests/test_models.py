@@ -88,34 +88,35 @@ def test_category_string(standard_user: User) -> None:
 
 
 @pytest.mark.django_db(True)
-def test_label_valid_fields() -> None:
-    """Test label creation functionality with valid label name"""
-    label = Label.objects.create(name="label")
+def test_label_valid_fields(standard_user: User) -> None:
+    """Test label creation functionality with valid label name and user"""
+    label = Label.objects.create(name="label", user=standard_user)
     assert label.name == "label"
+    assert label.user == standard_user
 
 
 @pytest.mark.django_db(True)
-def test_label_name_unique() -> None:
+def test_label_name_unique(standard_user: User) -> None:
     """Test that the name of a label should be unique irrespective of case"""
-    Label.objects.create(name="label")
+    Label.objects.create(name="label", user=standard_user)
     with pytest.raises(IntegrityError):
-        Label.objects.create(name="LABEL")
+        Label.objects.create(name="LABEL", user=standard_user)
 
 
 @pytest.mark.django_db(True)
-def test_label_string() -> None:
+def test_label_string(standard_user: User) -> None:
     """Test that the Label string method returns the label name"""
-    label = Label.objects.create(name="label")
+    label = Label.objects.create(name="label", user=standard_user)
     assert str(label) == label.name
 
 
 @pytest.mark.django_db(True)
-def test_quiz_valid_fields(quiz: Quiz, username: str) -> None:
+def test_quiz_valid_fields(quiz: Quiz, username: str, standard_user: User) -> None:
     """Test quiz creation functionality with valid quiz fields"""
     assert quiz.title == "quiz"
     assert quiz.user.username == username
     assert quiz.category.name == "category"
-    assert quiz.labels.filter(name="label").exists()
+    assert quiz.labels.filter(name="label", user=standard_user).exists()
 
 
 @pytest.mark.django_db(True)
@@ -138,12 +139,12 @@ def test_quiz_unique_title(quiz: Quiz) -> None:
 
 
 @pytest.mark.django_db(True)
-def test_quiz_label_deletion(quiz: Quiz) -> None:
+def test_quiz_label_deletion(quiz: Quiz, standard_user: User) -> None:
     """
     Test that after a label is deleted,
     it's been removed from its (previously) associated quizzes
     """
-    label = Label.objects.get(name="label")  # Created in fixture
+    label = Label.objects.get(name="label", user=standard_user)  # Created in fixture
 
     label.delete()
 
