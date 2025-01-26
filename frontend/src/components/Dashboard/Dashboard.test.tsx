@@ -7,7 +7,7 @@ describe("Dashboard", () => {
   it("should have the dashboard text", () => {
     render(<Dashboard />);
 
-    const dashboardText = screen.getByText("Dashboard");
+    const dashboardText = screen.getByText("my quizzes");
 
     expect(dashboardText).toBeVisible;
   });
