@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import Category, User, Label
+from .models import Category, Label, User
 
 
 class UserSerializer(serializers.ModelSerializer):
