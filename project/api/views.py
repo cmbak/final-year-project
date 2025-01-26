@@ -3,6 +3,7 @@ from api.serializers import (
     LabelSerializer,
     LoginSerializer,
     UserSerializer,
+    QuizSerializer,
 )
 from decouple import config
 from django.contrib.auth import login, logout
@@ -204,15 +205,18 @@ class UserCategoryView(UsersModelsMixins, generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-# class UserQuizView(TestMixin, generics.ListAPIView):
-#     """
-#     API Endpoint which returns the quizzes a user has created
-#     given that they're trying to fetch their own quizzes
-#     """
-
-#     queryset = Quiz.objects.all().order_by("id")
-#     serializer_class = CategorySerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-
 user_categories_view = UserCategoryView.as_view()
+
+
+class UserQuizView(UsersModelsMixins, generics.ListAPIView):
+    """
+    API Endpoint which returns the quizzes a user has created
+    given that they're trying to fetch their own quizzes
+    """
+
+    queryset = Quiz.objects.all().order_by("id")
+    serializer_class = QuizSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+user_quizzes_view = UserQuizView.as_view()
