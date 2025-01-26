@@ -1,8 +1,8 @@
 import pytest
-from api.models import User, Category
+from api.models import Category, User
 from rest_framework.test import APIClient
-from .conftest import get_response_errors
 
+from .conftest import get_response_errors
 
 # Users API Endpoint
 

@@ -1,4 +1,9 @@
-from api.serializers import CategorySerializer, LoginSerializer, UserSerializer
+from api.serializers import (
+    CategorySerializer,
+    LabelSerializer,
+    LoginSerializer,
+    UserSerializer,
+)
 from decouple import config
 from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirectBase, JsonResponse
@@ -7,8 +12,8 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
-from rest_framework.exceptions import ValidationError
-from .models import Category, User
+
+from .models import Category, Label, User
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -156,4 +161,15 @@ class CategoryListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIVie
     permission_classes = [permissions.IsAuthenticated]
 
 
-create_category_view = CategoryListCreateView.as_view()
+category_list_create_view = CategoryListCreateView.as_view()
+
+
+class LabelListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
+    """API Endpoint for retrieving labels or creating a label"""
+
+    queryset = Label.objects.all().order_by("id")
+    serializer_class = LabelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+label_list_create_view = LabelListCreateView.as_view()
