@@ -307,3 +307,31 @@ def test_get_user_quiz_by_category_auth(api_client: APIClient, quiz: Quiz) -> No
     assert len(response.json()) == 1
     assert response_quiz["id"] == quiz.id
     assert response_quiz["category"] == quiz.category.id
+
+
+@pytest.mark.django_db(True)
+def test_get_user_quiz_by_category_not_auth(api_client: APIClient, quiz: Quiz) -> None:
+    """Test that a GET request to the user quiz-by-categories endpoint
+    with an unauthenticated user returns 401"""
+    response = api_client.get(
+        f"/api/users/{quiz.user.id}/categories/{quiz.category.id}/"
+    )
+
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db(True)
+def test_get_user_quiz_by_category_other_user(
+    api_client: APIClient, quiz: Quiz
+) -> None:
+    """Test that a GET request to the user quiz-by-categories endpoint
+    with an authenticated user returns 403 and no quizzes"""
+    api_client.force_authenticate(user=quiz.user)
+
+    response = api_client.get(
+        f"/api/users/{quiz.user.id+1}/categories/{quiz.category.id}/"
+    )
+
+    assert response.status_code == 403
+    assert len(response.json()) == 1
+    assert response.json()["error"] == "You cannot access this"
