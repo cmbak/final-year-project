@@ -17,6 +17,14 @@ export default function Dashboard() {
     queryFn: () => fetchCategories(user.data.id),
   });
 
+  if (isPending) {
+    return <h1>TEMP Loading...</h1>;
+  }
+
+  if (isError) {
+    return <h1>TEMP Error...</h1>;
+  }
+
   return (
     <main className={`flex flex-col ${styles.container}`}>
       <h1 className={styles.heading}>my quizzes</h1>
