@@ -64,3 +64,12 @@ input {
   font-size: 0.9rem;
   color: var(--color-error);
 }
+
+/* utility classes */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
