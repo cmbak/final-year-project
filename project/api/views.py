@@ -6,7 +6,11 @@ from api.serializers import (
 )
 from decouple import config
 from django.contrib.auth import login, logout
-from django.http.response import HttpResponseRedirectBase, JsonResponse
+from django.http.response import (
+    HttpResponseRedirectBase,
+    JsonResponse,
+    HttpResponseForbidden,
+)
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -173,3 +177,27 @@ class LabelListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
 
 
 label_list_create_view = LabelListCreateView.as_view()
+
+
+class UserCategoryView(generics.ListAPIView):
+    """
+    API Endpoint which returns the categories a user has created
+    given that they're trying to fetch their own categories
+    """
+
+    queryset = Category.objects.all().order_by("id")
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id):
+        # Check that id of user requesting categories is requesting their own categories
+        if user_id != request.user.id:
+            return HttpResponseForbidden("test")
+
+        # Get categories where user id is same as the one requesting
+        queryset = Category.objects.filter(user=user_id)
+        serializer = CategorySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+user_categories_view = UserCategoryView.as_view()
