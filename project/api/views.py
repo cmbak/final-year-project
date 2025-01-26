@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 
-from .models import Category, Label, User
+from .models import Category, Label, User, Quiz
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -179,7 +179,21 @@ class LabelListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
 label_list_create_view = LabelListCreateView.as_view()
 
 
-class UserCategoryView(generics.ListAPIView):
+class UsersModelsMixins:
+    """Mixin which returns the model instances which belong to the requested user"""
+
+    def get(self, request, user_id):
+        # Check that id of user sending request is requesting their own data
+        if user_id != request.user.id:
+            return HttpResponseForbidden("test")
+
+        # Get models where user id is same as the one requesting
+        queryset = self.queryset.filter(user=user_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class UserCategoryView(UsersModelsMixins, generics.ListAPIView):
     """
     API Endpoint which returns the categories a user has created
     given that they're trying to fetch their own categories
@@ -189,15 +203,16 @@ class UserCategoryView(generics.ListAPIView):
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, user_id):
-        # Check that id of user requesting categories is requesting their own categories
-        if user_id != request.user.id:
-            return HttpResponseForbidden("test")
 
-        # Get categories where user id is same as the one requesting
-        queryset = Category.objects.filter(user=user_id)
-        serializer = CategorySerializer(queryset, many=True)
-        return Response(serializer.data)
+# class UserQuizView(TestMixin, generics.ListAPIView):
+#     """
+#     API Endpoint which returns the quizzes a user has created
+#     given that they're trying to fetch their own quizzes
+#     """
+
+#     queryset = Quiz.objects.all().order_by("id")
+#     serializer_class = CategorySerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
 
 user_categories_view = UserCategoryView.as_view()
