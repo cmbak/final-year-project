@@ -2,23 +2,19 @@ from api.serializers import (
     CategorySerializer,
     LabelSerializer,
     LoginSerializer,
-    UserSerializer,
     QuizSerializer,
+    UserSerializer,
 )
 from decouple import config
 from django.contrib.auth import login, logout
-from django.http.response import (
-    HttpResponseForbidden,
-    HttpResponseRedirectBase,
-    JsonResponse,
-)
+from django.http.response import HttpResponseRedirectBase, JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 
-from .models import Category, Label, User, Quiz
+from .models import Category, Label, Quiz, User
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -180,13 +176,16 @@ class LabelListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
 label_list_create_view = LabelListCreateView.as_view()
 
 
+# TODO if not used by > 1 serializer, delete
 class UsersModelsMixins:
     """Mixin which returns the model instances which belong to the requested user"""
 
     def get(self, request, user_id):
         # Check that id of user sending request is requesting their own data
         if user_id != request.user.id:
-            return HttpResponseForbidden("test")
+            return JsonResponse(
+                {"error": "You cannot access this"}, status=status.HTTP_403_FORBIDDEN
+            )  # TODO change message
 
         # Get models where user id is same as the one requesting
         queryset = self.queryset.filter(user=user_id)
@@ -208,15 +207,27 @@ class UserCategoryView(UsersModelsMixins, generics.ListAPIView):
 user_categories_view = UserCategoryView.as_view()
 
 
-class UserQuizView(UsersModelsMixins, generics.ListAPIView):
+class UserQuizView(generics.ListAPIView):
     """
-    API Endpoint which returns the quizzes a user has created
+    API Endpoint which returns the quizzes of a specific category a user has created
     given that they're trying to fetch their own quizzes
     """
 
     queryset = Quiz.objects.all().order_by("id")
     serializer_class = QuizSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id, cat_id):
+        # check user getting their own things
+        if user_id != request.user.id:
+            return JsonResponse(
+                {"error": "You cannot access this"}, status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Filter quizzes by category
+        queryset = self.get_queryset().filter(category=cat_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 user_quizzes_view = UserQuizView.as_view()
