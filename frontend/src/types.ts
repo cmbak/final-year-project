@@ -5,3 +5,9 @@ export type User = {
 };
 
 export type AnonymousUser = {};
+
+export type Category = {
+  id: number;
+  name: string;
+  user: number;
+};

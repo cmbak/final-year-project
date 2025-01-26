@@ -1,13 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategories } from "../../utils/fetchCategories";
 import { fetchUser } from "../../utils/fetchUser";
+import { Category } from "../../types";
 import styles from "./Categories.module.css";
-
-type Category = {
-  id: number;
-  name: string;
-  user: number;
-};
 
 export default function Categories() {
   const user = useQuery({ queryKey: ["user"], queryFn: fetchUser });
