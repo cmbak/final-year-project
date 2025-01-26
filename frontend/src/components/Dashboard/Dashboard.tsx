@@ -29,7 +29,7 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
-      <div className={styles.modalBtnContainers}>
+      <div className={`flex ${styles.modalBtnContainers}`}>
         <CreateModal
           endpoint="/api/categories/"
           inputId="create-category-name"

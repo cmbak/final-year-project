@@ -1,5 +1,4 @@
 .nav {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 2rem; /* Until hamburger menu */
@@ -14,7 +13,6 @@
 }
 
 .links {
-  display: flex;
   align-items: center;
   gap: 1.5rem;
 
