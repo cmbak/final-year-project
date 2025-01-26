@@ -8,17 +8,6 @@
   text-align: center;
 }
 
-.categories {
-  width: 85%;
-}
-
-.category {
-  & h2 {
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
-}
-
 .modalBtnContainers {
   gap: 1rem;
 }
