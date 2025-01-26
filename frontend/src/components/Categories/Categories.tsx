@@ -6,9 +6,12 @@ import styles from "./Categories.module.css";
 
 export default function Categories() {
   const user = useQuery({ queryKey: ["user"], queryFn: fetchUser });
+  const userId = user.data?.id;
+
   const { isPending, isError, data } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => fetchCategories(user.data.id),
+    queryKey: ["categories", userId], // Depends on userId
+    queryFn: () => fetchCategories(userId),
+    enabled: Boolean(userId), // Only calls queryfn in userId not undefined/null
   });
 
   if (isPending) {
