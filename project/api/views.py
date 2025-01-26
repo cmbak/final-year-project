@@ -7,7 +7,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
-
+from rest_framework.exceptions import ValidationError
 from .models import Category, User
 
 
@@ -123,16 +123,16 @@ class LogoutView(APIView):
 logout_view = LogoutView.as_view()
 
 
-class CategoryListCreateView(generics.ListCreateAPIView):
-    """API Endpoint for retrieving categories or creating a category"""
+class CreateSpecifyErrorsMixin:
+    """
+    Mixin similar to the CreateModelMixin, but the 'errors' key
+    contains the serializer fields and their errors.
+    This is instead of there just being the field names as keys,
+    and the array of their error messages as the values.
+    """
 
-    queryset = Category.objects.all().order_by("id")
-    serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request):
-        """Handle POST request for creating category"""
-        serializer = CategorySerializer(data=request.data)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
 
         if not serializer.is_valid():
             return Response(
@@ -140,8 +140,20 @@ class CategoryListCreateView(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        serializer.save()
-        return JsonResponse({"temp": "add dict method"}, status=status.HTTP_201_CREATED)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        return JsonResponse(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+
+class CategoryListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
+    """API Endpoint for retrieving categories or creating a category"""
+
+    queryset = Category.objects.all().order_by("id")
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 create_category_view = CategoryListCreateView.as_view()
