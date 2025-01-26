@@ -67,7 +67,7 @@ def quiz() -> Quiz:
         category=Category.objects.create(name="category", user=user),
     )
 
-    quiz.labels.add(Label.objects.create(name="label", user=custom_user))
+    quiz.labels.add(Label.objects.create(name="label", user=user))
     quiz.save()
     return quiz
 
