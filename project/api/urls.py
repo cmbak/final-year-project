@@ -14,7 +14,11 @@ urlpatterns = [
         user_categories_view,
         name="user-categories",
     ),
-    path("users/<int:user_id>/quizzes/", user_quizzes_view, name="user-quizzes"),
+    path(
+        "users/<int:user_id>/categories/<int:cat_id>/",
+        user_quizzes_view,
+        name="user-quizzes",
+    ),
     path("users/", user_list_create_view, name="user-list-create"),
     path("current-user/", current_user_view, name="current-user"),
     path("categories/", category_list_create_view, name="create-categories"),
