@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import Category, User
+from .models import Category, User, Label
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,10 +56,18 @@ class LoginSerializer(serializers.Serializer):
 class CategorySerializer(serializers.ModelSerializer):
     """Serializer for Category model - convert Category to JSON and vice versa"""
 
-    # user = UserSerializer()
-
     class Meta:
         """Metadata for Category serializer"""
 
         model = Category
+        fields = ["id", "name", "user"]
+
+
+class LabelSerializer(serializers.ModelSerializer):
+    """Serializer for Label model - convert Label to JSON and vice versa"""
+
+    class Meta:
+        """Metadata for Label serializer"""
+
+        model = Label
         fields = ["id", "name", "user"]
