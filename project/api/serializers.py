@@ -76,6 +76,8 @@ class LabelSerializer(serializers.ModelSerializer):
 class QuizSerializer(serializers.ModelSerializer):
     """Serializer for Quiz model - convert Quiz to JSON and vice versa"""
 
+    labels = LabelSerializer(many=True)  # Nested list of list items
+
     class Meta:
         """Metadata for Quiz serializer"""
 
