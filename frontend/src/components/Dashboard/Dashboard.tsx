@@ -18,11 +18,11 @@ export default function Dashboard() {
   });
 
   return (
-    <main className={styles.container}>
+    <main className={`flex flex-col ${styles.container}`}>
       <h1 className={styles.heading}>my quizzes</h1>
-      {/* Search bar, create quiz button here */}
-      <div>
-        {/* Categories */}
+      {/* TODO Search bar, create quiz button here */}
+      {/* TODO sep component? */}
+      <div className={styles.categories}>
         {data.map(({ id, name }: Category) => (
           <div key={id} className={styles.category}>
             <h2>{name}</h2>
