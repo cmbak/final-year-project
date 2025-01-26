@@ -234,3 +234,57 @@ def test_post_invalid_category(
 
     assert response.status_code == 400
     assert expected in errors
+
+
+# Users/id/categories/ endpoint
+
+
+@pytest.mark.django_db(True)
+def test_get_user_catgories_auth(api_client: APIClient, standard_user: User) -> None:
+    """
+    Test that a GET request to the user categories endpoint with an authenticated user
+    returns 200 and their categories
+    """
+    Category.objects.create(name="standard category", user=standard_user)
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.get(f"/api/users/{standard_user.id}/categories/")
+    cat_user_ids = {
+        category["user"] for category in response.json()
+    }  # Set of all the categories user ids
+
+    assert response.status_code == 200
+    assert (
+        len(response.json()) == Category.objects.filter(user=standard_user.id).count()
+    )
+    assert len(cat_user_ids) == 1  # Only one id...
+    assert standard_user.id in cat_user_ids  # ... which is user's id
+
+
+@pytest.mark.django_db(True)
+def test_get_user_catgories_not_auth(
+    api_client: APIClient, standard_user: User
+) -> None:
+    """
+    Test that a GET request to the user categories endpoint with an unauthorised
+    returns 401
+    """
+    response = api_client.get(f"/api/users/{standard_user.id}/categories/")
+
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db(True)
+def test_get_user_catgories_other_user(
+    api_client: APIClient, standard_user: User
+) -> None:
+    """
+    Test that a GET request to the endpoint for A DIFFERENT user's categories
+    with an authorised user returns 403
+    """
+    other_id = standard_user.id + 1  # different id to standard_user's id
+    api_client.force_authenticate(user=standard_user)
+    response = api_client.get(f"/api/users/{other_id}/categories/")
+
+    assert standard_user.id != other_id
+    assert response.status_code == 403

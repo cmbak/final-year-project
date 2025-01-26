@@ -7,9 +7,9 @@ from api.serializers import (
 from decouple import config
 from django.contrib.auth import login, logout
 from django.http.response import (
+    HttpResponseForbidden,
     HttpResponseRedirectBase,
     JsonResponse,
-    HttpResponseForbidden,
 )
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
