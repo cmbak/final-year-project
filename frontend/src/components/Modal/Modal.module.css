@@ -24,8 +24,13 @@
   width: 25rem;
   text-align: center;
   place-self: center;
-  position: relative; /* Allows modal to be placed on top of fixed bg */
   max-width: 80%;
+  /* Allows modal to be placed on top of fixed bg and in middle of screen 
+  https://stackoverflow.com/questions/8508275/how-to-center-a-position-absolute-element */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .form_modal {
