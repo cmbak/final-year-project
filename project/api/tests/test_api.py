@@ -1,5 +1,5 @@
 import pytest
-from api.models import Category, User
+from api.models import Category, User, Quiz
 from rest_framework.test import APIClient
 
 from .conftest import get_response_errors
@@ -288,3 +288,22 @@ def test_get_user_catgories_other_user(
 
     assert standard_user.id != other_id
     assert response.status_code == 403
+
+
+# User's quizzes in specified category
+
+
+@pytest.mark.django_db(True)
+def test_get_user_quiz_by_category_auth(api_client: APIClient, quiz: Quiz) -> None:
+    """Test that a GET request to the user quiz-by-categories endpoint
+    with an authenticated user returns 200 and their quizzes"""
+    user = quiz.user
+    api_client.force_authenticate(user=user)
+
+    response = api_client.get(f"/api/users/{user.id}/categories/{quiz.category.id}/")
+    response_quiz = response.json()[0]
+
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+    assert response_quiz["id"] == quiz.id
+    assert response_quiz["category"] == quiz.category.id
