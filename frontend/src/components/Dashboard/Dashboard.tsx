@@ -9,6 +9,11 @@ export default function Dashboard() {
         inputId="create-category-name"
         title="create category"
       />
+      <CreateModal
+        endpoint="/api/labels/"
+        inputId="create-label-name"
+        title="create label"
+      />
     </div>
   );
 }

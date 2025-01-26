@@ -34,10 +34,13 @@ export default function CreateModal({
       setModalActive(false);
       return { name };
     } catch (error: any) {
-      if (error.response !== undefined)
-        return { name, error: error.response.data.errors.name };
-      else {
-        alert(error);
+      if (
+        error.response !== undefined &&
+        error.response.data.errors !== undefined // How django will return form errors
+      ) {
+        return { name, error: error.response.data.errors?.name };
+      } else {
+        alert(error); // Debug purposes
       }
     }
   }
