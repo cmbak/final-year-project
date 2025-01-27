@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./LabelSelect.module.css";
 
 export default function LabelSelect() {
   const [selectedLabels, setSelectedLabels] = useState([""]);
@@ -12,9 +13,11 @@ export default function LabelSelect() {
 
   return (
     <>
-      <ul className="flex">
+      <ul className={`flex ${styles.labelList}`}>
         {selectedLabels.map((label) => (
-          <li key={label}>{label}</li>
+          <li key={label} className={styles.label}>
+            {label}
+          </li>
         ))}
       </ul>
       <select name="labels" id="labels" multiple onChange={handleChange}>
