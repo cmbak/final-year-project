@@ -1,12 +1,14 @@
 import CreateModal from "../CreateModal/CreateModal";
 import styles from "./Dashboard.module.css";
 import Categories from "../Categories/Categories";
+import { Link } from "react-router";
 
 export default function Dashboard() {
   return (
     <main className={`flex flex-col ${styles.container}`}>
       <h1 className={styles.heading}>my quizzes</h1>
-      {/* TODO Search bar, create quiz button here */}
+      {/* TODO Search bar here */}
+      <Link to="../create-quiz">create quiz</Link>
       <Categories />
       <div className={`flex ${styles.modalBtnContainers}`}>
         <CreateModal

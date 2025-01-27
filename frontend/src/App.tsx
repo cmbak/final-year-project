@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar/Navbar";
 import "./reset.css";
 import "./App.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import CreateQuiz from "./components/CreateQuiz/CreateQuiz";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route element={<ProtectedRoute />}>
             <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="create-quiz" element={<CreateQuiz />} />
           </Route>
         </Routes>
         <ReactQueryDevtools />

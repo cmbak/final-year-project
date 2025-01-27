@@ -8,6 +8,5 @@ export const fetchQuizzes = async (
   const response = await instance.get(
     `/api/users/${userId}/categories/${categoryId}/`,
   );
-  console.log(response.data);
   return response.data;
 };
