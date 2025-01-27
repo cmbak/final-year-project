@@ -1,3 +1,10 @@
+import BackButton from "../BackButton/BackButton";
+
 export default function CreateQuiz() {
-  return <div>CreateQuiz</div>;
+  return (
+    <div>
+      <BackButton />
+      CreateQuiz
+    </div>
+  );
 }
