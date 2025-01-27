@@ -6,8 +6,19 @@ export type User = {
 
 export type AnonymousUser = {};
 
-export type Category = {
+type HasIdNameUser = {
   id: number;
   name: string;
   user: number;
+};
+
+export type Category = HasIdNameUser;
+type Label = HasIdNameUser;
+
+export type Quiz = {
+  id: number;
+  title: string;
+  user: number;
+  category: number;
+  labels: Label[];
 };
