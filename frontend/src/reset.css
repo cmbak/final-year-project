@@ -85,3 +85,8 @@ button {
   border: none;
   cursor: pointer;
 }
+
+/* Remove bullet points */
+li {
+  list-style-type: none;
+}

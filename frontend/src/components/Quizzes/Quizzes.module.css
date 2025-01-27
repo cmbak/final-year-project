@@ -1,0 +1,14 @@
+.quizzes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  & li {
+    padding-block: 0.5rem;
+    font-size: 1.1rem;
+  }
+}
+
+.noQuizzes {
+  color: rgb(61, 61, 61);
+  font-weight: 350;
+}

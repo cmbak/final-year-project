@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuizzes } from "../../utils/fetchQuizzes";
+import styles from "./Quizzes.module.css";
 
 type QuizzesProps = {
   userId: number | undefined; // See Categories component
@@ -23,10 +24,14 @@ export default function Quizzes({ userId, categoryId }: QuizzesProps) {
   }
 
   return (
-    <ul>
-      {data.map(({ id, title }) => (
-        <li key={id}>{title}</li> // TODO show labels here?
-      ))}
+    <ul className={styles.quizzes}>
+      {data.length == 0 ? (
+        <p className={styles.noQuizzes}>No Quizzes</p>
+      ) : (
+        data.map(({ id, title }) => (
+          <li key={id}>{title}</li> // TODO show labels here?
+        ))
+      )}
     </ul>
   );
 }
