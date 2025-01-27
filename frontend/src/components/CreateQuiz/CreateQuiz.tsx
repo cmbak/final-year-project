@@ -1,7 +1,10 @@
+import useCategories from "../../hooks/useCategories";
 import BackButton from "../BackButton/BackButton";
 import styles from "./CreateQuiz.module.css";
 
 export default function CreateQuiz() {
+  const { isPending, isError, data, error } = useCategories();
+
   return (
     <>
       <div className={styles.header}>
@@ -13,14 +16,21 @@ export default function CreateQuiz() {
         <label className="form-item" htmlFor="category">
           category
         </label>
-        <select name="category" id="category"></select>
+        <select name="category" id="category">
+          <option disabled>Please select a category</option>
+          {data?.map(({ id, name }) => (
+            <option value={name} key={id}>
+              {name}
+            </option>
+          ))}
+        </select>
         <label className="form-item" htmlFor="labels">
           labels
         </label>
         <select name="labels" id="labels"></select>
         <label className="form-item">
           quiz name
-          <input required />
+          <input type="text" name="quiz-name" required maxLength={50} />
         </label>
         <input
           type="submit"
