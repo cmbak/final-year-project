@@ -1,0 +1,10 @@
+.header {
+  align-items: center;
+  justify-items: center;
+  display: grid;
+  grid-template-columns: 10% 90%;
+  & > h2 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
