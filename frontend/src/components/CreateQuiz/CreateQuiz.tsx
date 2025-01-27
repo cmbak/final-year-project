@@ -1,5 +1,6 @@
 import useCategories from "../../hooks/useCategories";
 import BackButton from "../BackButton/BackButton";
+import LabelSelect from "../LabelSelect/LabelSelect";
 import styles from "./CreateQuiz.module.css";
 
 export default function CreateQuiz() {
@@ -27,12 +28,12 @@ export default function CreateQuiz() {
         <label className="form-item" htmlFor="labels">
           labels
         </label>
-        <select name="labels" id="labels"></select>
+        <LabelSelect />
         <label className="form-item">
           quiz name
           <input type="text" name="quiz-name" required maxLength={50} />
         </label>
-        <input
+        <input /* Change to button? */
           type="submit"
           className="btn btn-secondary"
           value="Create Quiz"
