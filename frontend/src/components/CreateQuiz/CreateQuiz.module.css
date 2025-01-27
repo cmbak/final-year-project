@@ -8,3 +8,9 @@
     font-weight: bold;
   }
 }
+
+.form {
+  max-width: 30%;
+  margin-inline: auto;
+  gap: 0.8rem;
+}
