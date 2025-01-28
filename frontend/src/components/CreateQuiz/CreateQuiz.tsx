@@ -25,10 +25,12 @@ export default function CreateQuiz() {
             </option>
           ))}
         </select>
-        <label className="form-item" htmlFor="labels">
+        <label className="form-item">
+          {" "}
+          {/* TODO should this be a label? or a p*/}
           labels
+          <LabelSelect userId={userId} />
         </label>
-        <LabelSelect userId={userId} />
         <label className="form-item">
           quiz name
           <input type="text" name="quiz-name" required maxLength={50} />

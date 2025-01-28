@@ -16,6 +16,7 @@
   --border-radius-medium: 15px;
   --border-radius-small: 10px;
   --speed-medium: 450ms;
+  --speed-quick: 250ms;
 }
 
 body {

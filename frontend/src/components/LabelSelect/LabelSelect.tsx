@@ -23,7 +23,7 @@ export default function LabelSelect({ userId }: LabelSelectProps) {
       {/* 
       - When they press on label, toggle selected/deselected
       */}
-      <ul>
+      <ul className={`flex ${styles.labelList}`}>
         {data.map(({ id, name }) => (
           <li key={id} className={styles.label}>
             {name}
