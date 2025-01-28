@@ -1,5 +1,5 @@
 import pytest
-from api.models import Category, User, Quiz
+from api.models import Category, User, Quiz, Label
 from rest_framework.test import APIClient
 
 from .conftest import get_response_errors
@@ -287,6 +287,55 @@ def test_get_user_catgories_other_user(
     response = api_client.get(f"/api/users/{other_id}/categories/")
 
     assert standard_user.id != other_id
+    assert response.status_code == 403
+
+
+# User's labels
+
+
+@pytest.mark.django_db(True)
+def test_get_user_labels_auth(standard_user: User, api_client: APIClient) -> None:
+    """
+    Test that a GET request to the user labels endpoint with an authenticated user
+    returns 200 and their labels
+    """
+    Label.objects.create(name="new label", user=standard_user)
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.get(f"/api/users/{standard_user.id}/labels/")
+    labels = response.json()
+    labels_user_ids = {label["user"] for label in labels}  # unique
+
+    assert response.status_code == 200
+    assert len(labels) == Label.objects.filter(user=standard_user).count()
+    assert len(labels_user_ids) == 1  # only one id
+    assert standard_user.id in labels_user_ids  # user's id
+
+
+@pytest.mark.django_db(True)
+def test_get_user_labels_not_auth(standard_user: User, api_client: APIClient) -> None:
+    """
+    Test that a GET request to the user labels endpoint with an unauthenticated user
+    returns 401
+    """
+    Label.objects.create(name="new label", user=standard_user)
+
+    response = api_client.get(f"/api/users/{standard_user.id}/labels/")
+
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db(True)
+def test_get_user_labels_other_user(standard_user: User, api_client: APIClient) -> None:
+    """
+    Test that a GET request to the user labels endpoint with an authenticated user
+    for a different user's labels with an authorised user returns 403
+    """
+    Label.objects.create(name="new label", user=standard_user)
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.get(f"/api/users/{standard_user.id+1}/labels/")
+
     assert response.status_code == 403
 
 
