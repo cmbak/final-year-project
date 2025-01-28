@@ -3,6 +3,7 @@ import { instance } from "../../axiosConfig";
 import Modal from "../Modal/Modal";
 import { fetchUser } from "../../utils/fetchUser";
 import { useQuery } from "@tanstack/react-query";
+import useUser from "../../hooks/useUser";
 
 // Modal which sends POST request to endpoint
 // With name entered in form and id of current user
@@ -20,7 +21,7 @@ export default function CreateModal({
 }: CreateModalProps) {
   const [modalActive, setModalActive] = useState(false);
   const [state, formAction, isPending] = useActionState(createInstance, null);
-  const { data } = useQuery({ queryKey: ["user"], queryFn: fetchUser });
+  const { data } = useUser();
 
   async function createInstance(prevState: unknown, formData: FormData) {
     const name = formData.get("name") as string; // Stop input default value warning type mismatch
@@ -28,7 +29,7 @@ export default function CreateModal({
     try {
       await instance.post(
         endpoint,
-        { name, user: data.id },
+        { name, user: data?.id },
         { withXSRFToken: true },
       );
       setModalActive(false);
