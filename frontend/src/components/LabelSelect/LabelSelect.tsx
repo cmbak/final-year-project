@@ -1,53 +1,35 @@
-import React, { useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLabels } from "../../utils/fetchLabels";
 import styles from "./LabelSelect.module.css";
 
-export default function LabelSelect() {
-  const [selectedLabels, setSelectedLabels] = useState([""]);
-  const selectedRef = useRef<HTMLSelectElement>(null); // TODO type
+type LabelSelectProps = {
+  userId: number | undefined; // TODO how to ensure that userid is defined
+};
 
-  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    // Add selected label to list
-    // https://react.dev/reference/react-dom/components/select
-    const options = [...e.target.selectedOptions]; // Actual option elements
-    const values = options.map((option) => option.value); // Option strings
-    setSelectedLabels(values);
-  }
+export default function LabelSelect({ userId }: LabelSelectProps) {
+  // const data = useUser();
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["labels", userId],
+    queryFn: () => fetchLabels(userId),
+    enabled: Boolean(userId),
+  });
 
-  function handleClick(label: string) {
-    // Remove clicked label from list
-    setSelectedLabels((prevSelectedLabels) =>
-      prevSelectedLabels.filter((l) => l !== label),
-    );
-    console.log(selectedRef.current?.selectedOptions);
-    // TODO ^ returns HTML collection of option see mdn
-    // TODO how to edit selected options?
-  }
+  // TODO pending and error messages
+  if (isPending) return <h1>Loading...</h1>;
+  if (isError) return <h1>Error {error.message}</h1>;
 
   return (
     <>
-      <ul className={`flex ${styles.labelList}`}>
-        {selectedLabels.map((label) => (
-          <li
-            key={label}
-            className={styles.label}
-            onClick={() => handleClick(label)}
-          >
-            {label}
+      {/* 
+      - When they press on label, toggle selected/deselected
+      */}
+      <ul>
+        {data.map(({ id, name }) => (
+          <li key={id} className={styles.label}>
+            {name}
           </li>
         ))}
       </ul>
-      <select
-        name="labels"
-        id="labels"
-        multiple
-        onChange={handleChange}
-        ref={selectedRef}
-      >
-        <option>test one</option>
-        <option>test two</option>
-        <option>test three</option>
-        <option>test four</option>
-      </select>
     </>
   );
 }
