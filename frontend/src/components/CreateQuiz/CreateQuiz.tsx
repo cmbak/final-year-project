@@ -26,7 +26,6 @@ export default function CreateQuiz() {
           ))}
         </select>
         <label className="form-item">
-          {" "}
           {/* TODO should this be a label? or a p*/}
           labels
           <LabelSelect userId={userId} />
