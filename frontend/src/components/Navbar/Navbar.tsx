@@ -1,16 +1,13 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { fetchUser } from "../../utils/fetchUser";
 import { isEmpty } from "../../utils/isEmpty";
 import { instance } from "../../axiosConfig";
 import styles from "./Navbar.module.css";
+import useUser from "../../hooks/useUser";
 
 export default function Navbar() {
   const queryClient = useQueryClient();
-  let { data } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const { data } = useUser();
 
   return (
     <nav className={`flex ${styles.nav}`}>
@@ -19,7 +16,7 @@ export default function Navbar() {
       </Link>
       <div className={`flex ${styles.links}`}>
         {/* If user hasn't logged in, only show login */}
-        {isEmpty(data) ? (
+        {data !== undefined && isEmpty(data) ? (
           <button className="btn btn-primary">login</button>
         ) : (
           <>

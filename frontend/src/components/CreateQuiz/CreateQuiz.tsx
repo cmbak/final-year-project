@@ -4,7 +4,7 @@ import LabelSelect from "../LabelSelect/LabelSelect";
 import styles from "./CreateQuiz.module.css";
 
 export default function CreateQuiz() {
-  const { isPending, isError, data, error } = useCategories();
+  const { isPending, isError, data, error, userId } = useCategories();
 
   return (
     <>
@@ -28,7 +28,7 @@ export default function CreateQuiz() {
         <label className="form-item" htmlFor="labels">
           labels
         </label>
-        <LabelSelect />
+        <LabelSelect userId={userId} />
         <label className="form-item">
           quiz name
           <input type="text" name="quiz-name" required maxLength={50} />

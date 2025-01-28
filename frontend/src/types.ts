@@ -13,7 +13,7 @@ type HasIdNameUser = {
 };
 
 export type Category = HasIdNameUser;
-type Label = HasIdNameUser;
+export type Label = HasIdNameUser;
 
 export type Quiz = {
   id: number;
