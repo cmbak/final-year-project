@@ -165,7 +165,7 @@ class CategoryListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIVie
 category_list_create_view = CategoryListCreateView.as_view()
 
 
-class LabelListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
+class LabelCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     """API Endpoint for retrieving labels or creating a label"""
 
     queryset = Label.objects.all().order_by("id")
@@ -173,7 +173,7 @@ class LabelListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-label_list_create_view = LabelListCreateView.as_view()
+label_create_view = LabelCreateView.as_view()
 
 
 # TODO if not used by > 1 serializer, delete
