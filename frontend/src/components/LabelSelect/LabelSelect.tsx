@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchLabels } from "../../utils/fetchLabels";
-import styles from "./LabelSelect.module.css";
 import { useState } from "react";
 import Label from "../Label/Label";
 
@@ -9,7 +8,7 @@ type LabelSelectProps = {
 };
 
 export default function LabelSelect({ userId }: LabelSelectProps) {
-  const [selectedLabelIds, setSelectedLabelIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["labels", userId],
     queryFn: () => fetchLabels(userId),
@@ -21,9 +20,9 @@ export default function LabelSelect({ userId }: LabelSelectProps) {
   if (isError) return <h1>Error {error.message}</h1>;
 
   return (
-    <ul className={`flex ${styles.labelList}`}>
+    <ul className="flex" style={{ gap: "0.2rem" }}>
       {data.map(({ id, name }) => (
-        <Label key={id} name={name} id={id} />
+        <Label key={id} name={name} id={id} setSelectedIds={setSelectedIds} />
       ))}
     </ul>
   );
