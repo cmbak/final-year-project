@@ -36,6 +36,7 @@ svg {
 
 /* 6. Inherit fonts for form controls */
 input,
+input::file-selector-button,
 button,
 textarea,
 select {

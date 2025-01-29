@@ -14,3 +14,14 @@
   margin-inline: auto;
   gap: 0.8rem;
 }
+
+input[type="file"] {
+  cursor: pointer;
+
+  /* Get rid of default styling for 'choose file'/'browse' */
+  &::file-selector-button {
+    color: var(--colour-primary);
+    background-color: inherit;
+    border: none;
+  }
+}
