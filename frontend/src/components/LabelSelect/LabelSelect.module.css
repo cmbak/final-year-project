@@ -14,3 +14,8 @@
     background-color: var(--color-label-background);
   }
 }
+
+.selected {
+  border: 1px solid black;
+  background-color: var(--color-label-background);
+}
