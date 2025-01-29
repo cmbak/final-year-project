@@ -21,16 +21,10 @@ export default function LabelSelect({ userId }: LabelSelectProps) {
   if (isError) return <h1>Error {error.message}</h1>;
 
   return (
-    <>
-      {/* 
-      - When
-       they press on label, toggle selected/deselected
-      */}
-      <ul className={`flex ${styles.labelList}`}>
-        {data.map(({ id, name }) => (
-          <Label key={id} name={name} id={id} className={styles.label} />
-        ))}
-      </ul>
-    </>
+    <ul className={`flex ${styles.labelList}`}>
+      {data.map(({ id, name }) => (
+        <Label key={id} name={name} id={id} />
+      ))}
+    </ul>
   );
 }

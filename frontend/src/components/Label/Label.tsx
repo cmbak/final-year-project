@@ -1,9 +1,18 @@
+import clsx from "clsx";
 import { Label as LabelType } from "../../types";
+import { useState } from "react";
+import styles from "./Label.module.css";
 
-type LabelProps = {
-  className: string;
-} & Omit<LabelType, "user">;
+type LabelProps = Omit<LabelType, "user">;
 
-export default function Label({ id, name, className }: LabelProps) {
-  return <li className={className}>{name}</li>;
+export default function Label({ id, name }: LabelProps) {
+  const [selected, setSelected] = useState(false);
+  return (
+    <li
+      className={clsx(styles.label, selected && styles.selected)}
+      onClick={() => setSelected((prevSelected) => !prevSelected)}
+    >
+      {name}
+    </li>
+  );
 }
