@@ -2,7 +2,7 @@ import pytest
 from api.models import Category, User, Quiz, Label
 from rest_framework.test import APIClient
 
-from .conftest import get_response_errors
+from .conftest import get_response_errors, custom_user
 
 # Users API Endpoint
 
@@ -240,12 +240,30 @@ def test_post_invalid_category(
 
 
 @pytest.mark.django_db(True)
-def test_post_quiz_auth(standard_user: User, api_client: APIClient) -> None:
+def test_post_quiz_auth(
+    standard_user: User,
+    api_client: APIClient,
+) -> None:
     """
     Test that a POST request from an authenticated user with valid quiz details
     returns 201 and creates a quiz with those details
     """
-    pass
+    label_one = Label.objects.create(name="Label One", user=standard_user)
+    label_two = Label.objects.create(name="Label Two", user=standard_user)
+    category = Category.objects.create(name="Category", user=standard_user)
+
+    data = {
+        "title": "Test Quiz",
+        "labels": [label_one.id, label_two.id],
+        "category": category.id,
+        "user": standard_user.id,
+    }
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.post("/api/quizzes/", data)
+
+    assert response.status_code == 201
+    assert Quiz.objects.count() == 1
 
 
 @pytest.mark.django_db(True)
@@ -253,7 +271,8 @@ def test_post_quiz_not_auth(standard_user: User, api_client: APIClient) -> None:
     """
     Test that a POST request from an unauthenticated user with returns 401
     """
-    pass
+    response = api_client.post("/api/quizzes/", {})
+    assert response.status_code == 401
 
 
 @pytest.mark.django_db(True)
@@ -264,7 +283,21 @@ def test_post_quiz_other_user_labels(
     Test that a POST request from an authenticated user with a quiz containing
     labels created by another user returns 400 and doesn't create the quiz
     """
-    pass
+    other_user = custom_user(username="other_user", email="other.user@gmail.com")
+    category = Category.objects.create(name="Category", user=standard_user)
+    label = Label.objects.create(name="other label", user=other_user)
+    data = {
+        "title": "Title",
+        "labels": [label.id],
+        "category": category.id,
+        "user": standard_user.id,
+    }
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.post("/api/quizzes/", data)
+
+    assert response.status_code == 400
+    assert Quiz.objects.count() == 0
 
 
 @pytest.mark.django_db(True)
@@ -275,7 +308,20 @@ def test_post_quiz_other_user_categories(
     Test that a POST request from an authenticated user with a quiz containing
     a category created by another user returns 400 and doesn't create the quiz
     """
-    pass
+    other_user = custom_user(username="other_user", email="other.user@gmail.com")
+    category = Category.objects.create(name="Other Category", user=other_user)
+    data = {
+        "title": "Title",
+        "labels": [],
+        "category": category.id,
+        "user": standard_user.id,
+    }
+    api_client.force_authenticate(user=standard_user)
+
+    response = api_client.post("/api/quizzes/", data)
+
+    assert response.status_code == 400
+    assert Quiz.objects.count() == 0
 
 
 # Users/id/categories/ endpoint
