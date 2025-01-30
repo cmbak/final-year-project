@@ -22,10 +22,14 @@ export default function CreateQuiz() {
   });
 
   async function createQuiz(prevState: unknown, formData: FormData) {
+    const category = formData.get("category");
+    const title = formData.get("quiz-title");
+    const user = userId;
+
     try {
       const response = await instance.post(
         "/api/quizzes/",
-        {},
+        { category, title, user },
         { withXSRFToken: true },
       );
     } catch (error: any) {
@@ -55,7 +59,7 @@ export default function CreateQuiz() {
           <select name="category" id="category" className="input">
             <option disabled>Please select a category</option>
             {data?.map(({ id, name }) => (
-              <option value={name} key={id}>
+              <option value={id} key={id}>
                 {name}
               </option>
             ))}
@@ -68,9 +72,9 @@ export default function CreateQuiz() {
           <LabelSelect userId={userId} />
         </label>
         <label className="form-item">
-          quiz name
+          quiz title
           <FormError error={state?.errors.title} />
-          <input type="text" name="quiz-name" required maxLength={50} />
+          <input type="text" name="quiz-title" required maxLength={50} />
         </label>
         <input /* Change to button? */
           type="submit"
