@@ -6,6 +6,7 @@ from api.views import (
     user_list_create_view,
     user_quizzes_view,
     user_labels_view,
+    quiz_create_view,
 )
 from django.urls import path
 
@@ -25,4 +26,5 @@ urlpatterns = [
     path("current-user/", current_user_view, name="current-user"),
     path("categories/", category_list_create_view, name="create-categories"),
     path("labels/", label_create_view, name="label-create"),
+    path("quizzes/", quiz_create_view, name="quiz-create"),
 ]

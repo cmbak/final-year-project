@@ -176,7 +176,16 @@ class LabelCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
 label_create_view = LabelCreateView.as_view()
 
 
-# TODO if not used by > 1 serializer, delete
+class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
+    """API Endpoint for creating a quiz"""
+
+    serializer_class = QuizSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+quiz_create_view = QuizCreateView.as_view()
+
+
 class UsersModelsMixins:
     """Mixin which returns the model instances which belong to the requested user"""
 
