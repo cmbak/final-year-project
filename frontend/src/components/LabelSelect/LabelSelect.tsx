@@ -5,10 +5,13 @@ import Label from "../Label/Label";
 
 type LabelSelectProps = {
   userId: number | undefined; // TODO how to ensure that userid is defined
+  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
-export default function LabelSelect({ userId }: LabelSelectProps) {
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+export default function LabelSelect({
+  userId,
+  setSelectedIds,
+}: LabelSelectProps) {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["labels", userId],
     queryFn: () => fetchLabels(userId),

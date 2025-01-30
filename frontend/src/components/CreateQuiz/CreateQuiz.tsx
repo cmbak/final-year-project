@@ -1,4 +1,4 @@
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import useCategories from "../../hooks/useCategories";
 import BackButton from "../BackButton/BackButton";
 import LabelSelect from "../LabelSelect/LabelSelect";
@@ -16,6 +16,7 @@ type FormErrors = {
 };
 
 export default function CreateQuiz() {
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const { isPending, isError, data, error, userId } = useCategories(); // TODO pending error
   const [state, formAction, formPending] = useActionState(createQuiz, {
     errors: {} as FormErrors,
@@ -29,7 +30,7 @@ export default function CreateQuiz() {
     try {
       const response = await instance.post(
         "/api/quizzes/",
-        { category, title, user },
+        { category, title, user, labels: selectedIds },
         { withXSRFToken: true },
       );
     } catch (error: any) {
@@ -69,7 +70,7 @@ export default function CreateQuiz() {
           {/* TODO should this be a label? or a p*/}
           labels
           <FormError error={state?.errors.labels} />
-          <LabelSelect userId={userId} />
+          <LabelSelect userId={userId} setSelectedIds={setSelectedIds} />
         </label>
         <label className="form-item">
           quiz title
