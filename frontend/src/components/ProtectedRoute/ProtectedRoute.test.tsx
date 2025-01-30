@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { render } from "../../test-utils";
-import { screen } from "@testing-library/dom";
+import { screen, waitForElementToBeRemoved } from "@testing-library/dom";
 import ProtectedRoute from "./ProtectedRoute";
 import { server } from "../../../vitest.setup";
 import { http, HttpResponse } from "msw";
@@ -23,6 +23,10 @@ describe("ProtectedRoute", () => {
         </Route>
       </Routes>,
     );
+
+    // Wait for page to load...
+    const loadingText = await screen.findAllByText("Loading...");
+    await waitForElementToBeRemoved(loadingText);
 
     expect(window.location.href).toStrictEqual(
       `${import.meta.env.VITE_BACKEND_URL}/login/`,
