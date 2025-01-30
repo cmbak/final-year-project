@@ -236,6 +236,48 @@ def test_post_invalid_category(
     assert expected in errors
 
 
+# Creating Quiz
+
+
+@pytest.mark.django_db(True)
+def test_post_quiz_auth(standard_user: User, api_client: APIClient) -> None:
+    """
+    Test that a POST request from an authenticated user with valid quiz details
+    returns 201 and creates a quiz with those details
+    """
+    pass
+
+
+@pytest.mark.django_db(True)
+def test_post_quiz_not_auth(standard_user: User, api_client: APIClient) -> None:
+    """
+    Test that a POST request from an unauthenticated user with returns 401
+    """
+    pass
+
+
+@pytest.mark.django_db(True)
+def test_post_quiz_other_user_labels(
+    standard_user: User, api_client: APIClient
+) -> None:
+    """
+    Test that a POST request from an authenticated user with a quiz containing
+    labels created by another user returns 400 and doesn't create the quiz
+    """
+    pass
+
+
+@pytest.mark.django_db(True)
+def test_post_quiz_other_user_categories(
+    standard_user: User, api_client: APIClient
+) -> None:
+    """
+    Test that a POST request from an authenticated user with a quiz containing
+    a category created by another user returns 400 and doesn't create the quiz
+    """
+    pass
+
+
 # Users/id/categories/ endpoint
 
 

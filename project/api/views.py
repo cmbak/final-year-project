@@ -179,6 +179,7 @@ label_create_view = LabelCreateView.as_view()
 class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     """API Endpoint for creating a quiz"""
 
+    queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
     permission_classes = [permissions.IsAuthenticated]
 
