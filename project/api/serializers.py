@@ -83,3 +83,16 @@ class QuizSerializer(serializers.ModelSerializer):
 
         model = Quiz
         fields = ["id", "title", "user", "category", "labels"]
+
+    def to_internal_value(self, data):
+        """
+        Allow list of Label pks (i.e. foreign keys to labels) to be passed
+        into labels field - e.g. by User when creating Quiz -
+        whilst returning dict representation of Labels
+        https://www.andreas.earth/blog/2022/09/19/drf-serializer-read-nested-data-and-write-primary-key/
+        """
+        self.fields["labels"] = serializers.PrimaryKeyRelatedField(
+            queryset=Label.objects.all(), many=True
+        )  # TODO Filter only request users labels?
+
+        return super().to_internal_value(data)
