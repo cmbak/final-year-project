@@ -267,7 +267,7 @@ def test_post_quiz_auth(
 
 
 @pytest.mark.django_db(True)
-def test_post_quiz_not_auth(standard_user: User, api_client: APIClient) -> None:
+def test_post_quiz_not_auth(api_client: APIClient) -> None:
     """
     Test that a POST request from an unauthenticated user with returns 401
     """
@@ -295,9 +295,11 @@ def test_post_quiz_other_user_labels(
     api_client.force_authenticate(user=standard_user)
 
     response = api_client.post("/api/quizzes/", data)
+    errors = get_response_errors(response)
 
     assert response.status_code == 400
     assert Quiz.objects.count() == 0
+    assert "You must use labels which you have created." in errors
 
 
 @pytest.mark.django_db(True)
@@ -319,9 +321,11 @@ def test_post_quiz_other_user_categories(
     api_client.force_authenticate(user=standard_user)
 
     response = api_client.post("/api/quizzes/", data)
+    errors = get_response_errors(response)
 
     assert response.status_code == 400
     assert Quiz.objects.count() == 0
+    assert "You must use a category which you have created." in errors
 
 
 # Users/id/categories/ endpoint
