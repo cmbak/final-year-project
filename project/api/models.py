@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Q
 
 
 class User(AbstractUser):
@@ -37,7 +38,7 @@ class Category(models.Model):
         constraints = [
             models.UniqueConstraint(
                 models.functions.Lower("name"),  # Irrespective of case
-                name="unique category name",
+                name="unique_category_name",
             )
         ]
 
@@ -62,7 +63,7 @@ class Label(models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                models.functions.Lower("name"), name="unique label name"
+                models.functions.Lower("name"), name="unique_label_name"
             )
         ]
 
@@ -77,15 +78,19 @@ class Quiz(models.Model):
     title = models.CharField(max_length=50, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    labels = models.ManyToManyField(Label, related_name="quiz")
+    labels = models.ManyToManyField(Label, related_name="quiz", through="QuizLabels")
 
     class Meta:
         """Metadata for Quiz model"""
 
         constraints = [
             models.UniqueConstraint(
-                models.functions.Lower("title"), name="unique quiz title"
-            )
+                models.functions.Lower("title"), name="unique_quiz_title"
+            ),
+            # models.CheckConstraint(
+            #     condition=Q(user_id=),
+            #     name='check_using_own_category'
+            # )
         ]
 
     def __str__(self):
@@ -100,3 +105,20 @@ class Quiz(models.Model):
                 label_names += ", "
 
         return f"{self.title} | {self.category.name} | {label_names} | {self.user.username}"  # noqa e501
+
+
+class QuizLabels(models.Model):
+    """Intermediate model between Quiz and Labels"""
+
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    label = models.ForeignKey(Label, on_delete=models.CASCADE)
+
+    # class Meta:
+    #     """Metadata for QuizLabels model"""
+
+    #     constraints = [
+    #         models.CheckConstraint(
+    #             condition=Q(user),
+    #             name='check_using_own_category'
+    #         )
+    #     ]
