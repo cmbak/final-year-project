@@ -110,7 +110,7 @@ class QuizSerializer(serializers.ModelSerializer):
         # Check quiz user has made category
         if data["category"].user != data["user"]:
             raise serializers.ValidationError(
-                {"category": "You must use a category which you have created"}
+                {"category": "You must use a category which you have created."}
             )
 
         return data
