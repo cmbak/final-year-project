@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
 
 
 class User(AbstractUser):
@@ -86,12 +86,23 @@ class Quiz(models.Model):
         constraints = [
             models.UniqueConstraint(
                 models.functions.Lower("title"), name="unique_quiz_title"
-            ),
-            # models.CheckConstraint(
-            #     condition=Q(user_id=),
-            #     name='check_using_own_category'
-            # )
+            )
         ]
+
+    def clean(self, *args, **kwargs):
+        """
+        Validate that quiz and label/category user are the same
+        (i.e. user using own labels/category)
+        """
+        if self.user != self.category.user:
+            raise ValidationError(
+                {"category": ["You must use a category that you have created."]}
+            )
+
+    def save(self, *args, **kwargs):
+        """Override save method so full_clean() (and thefore clean()) can be called"""
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         """Returns string representation of quiz"""
@@ -112,13 +123,3 @@ class QuizLabels(models.Model):
 
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     label = models.ForeignKey(Label, on_delete=models.CASCADE)
-
-    # class Meta:
-    #     """Metadata for QuizLabels model"""
-
-    #     constraints = [
-    #         models.CheckConstraint(
-    #             condition=Q(user),
-    #             name='check_using_own_category'
-    #         )
-    #     ]

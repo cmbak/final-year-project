@@ -96,3 +96,21 @@ class QuizSerializer(serializers.ModelSerializer):
         )  # TODO Filter only request users labels?
 
         return super().to_internal_value(data)
+
+    def validate(self, data):
+        """Check that user of labels and category match against user creating quiz"""
+        if len(data["labels"]) > 0:
+            user_labels: set[User] = {label.user for label in data["labels"]}
+            # Check quiz user has made chosen labels
+            if data["user"] not in user_labels:
+                raise serializers.ValidationError(
+                    {"labels": "You must use labels which you have created."}
+                )
+
+        # Check quiz user has made category
+        if data["category"].user != data["user"]:
+            raise serializers.ValidationError(
+                {"category": "You must use a category which you have created"}
+            )
+
+        return data
