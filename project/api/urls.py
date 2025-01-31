@@ -2,11 +2,11 @@ from api.views import (
     category_list_create_view,
     current_user_view,
     label_create_view,
+    quiz_create_view,
     user_categories_view,
+    user_labels_view,
     user_list_create_view,
     user_quizzes_view,
-    user_labels_view,
-    quiz_create_view,
 )
 from django.urls import path
 
