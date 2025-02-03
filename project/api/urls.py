@@ -6,6 +6,7 @@ from api.views import (
     user_categories_view,
     user_labels_view,
     user_list_create_view,
+    user_quiz_questions,
     user_quizzes_by_cat_view,
     user_quizzes_view,
 )
@@ -13,6 +14,11 @@ from django.urls import path
 
 urlpatterns = [
     path("users/<int:user_id>/quizzes/", user_quizzes_view, name="user_quizzes"),
+    path(
+        "users/<int:user_id>/quizzes/<int:quiz_id>/questions/",
+        user_quiz_questions,
+        name="user_quiz_questions",
+    ),
     path(
         "users/<int:user_id>/categories/",
         user_categories_view,

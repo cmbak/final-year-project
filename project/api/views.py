@@ -1,12 +1,15 @@
 from api.serializers import (
+    AnswerSerializer,
     CategorySerializer,
     LabelSerializer,
     LoginSerializer,
+    QuestionSerializer,
     QuizSerializer,
     UserSerializer,
 )
 from decouple import config
 from django.contrib.auth import login, logout
+from django.core.exceptions import FieldError
 from django.http.response import HttpResponseRedirectBase, JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -14,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 
-from .models import Category, Label, Quiz, User
+from .models import Answer, Category, Label, Question, Quiz, User
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -190,15 +193,22 @@ quiz_create_view = QuizCreateView.as_view()
 class UsersModelsMixins:
     """Mixin which returns the model instances which belong to the requested user"""
 
-    def get(self, request, user_id):
+    def get(self, request, user_id, **field_names):
         # Check that id of user sending request is requesting their own data
         if user_id != request.user.id:
             return JsonResponse(
                 {"error": "You cannot access this"}, status=status.HTTP_403_FORBIDDEN
             )  # TODO change message
 
-        # Get models where user id is same as the one requesting
-        queryset = self.queryset.filter(user=user_id)
+        # Try getting models where user id is same as the one requesting
+        try:
+            queryset = self.queryset.filter(user=user_id, **field_names)
+        except FieldError as e:
+            # If model has no user field, then just filter by kwargs
+            print(
+                f"Error: {e}\nModel does not have a user field. Trying to filter without including user..."  # noqa e501
+            )
+            queryset = self.queryset.filter(**field_names)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -245,7 +255,7 @@ class UserQuizView(UsersModelsMixins, generics.ListAPIView):
 user_quizzes_view = UserQuizView.as_view()
 
 
-class UserQuizByCatView(generics.ListAPIView):
+class UserQuizByCatView(UsersModelsMixins, generics.ListAPIView):
     """
     API Endpoint which returns the quizzes of a specific category a user has created
     given that they're trying to fetch their own quizzes
@@ -256,16 +266,21 @@ class UserQuizByCatView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, user_id, cat_id):
-        # check user getting their own things
-        if user_id != request.user.id:
-            return JsonResponse(
-                {"error": "You cannot access this"}, status=status.HTTP_403_FORBIDDEN
-            )
-
-        # Filter quizzes by category
-        queryset = self.get_queryset().filter(category=cat_id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return super().get(request, user_id, category=cat_id)
 
 
 user_quizzes_by_cat_view = UserQuizByCatView.as_view()
+
+
+class UserQuizQuestions(UsersModelsMixins, generics.ListAPIView):
+    """API Endpoint which returns the questions for a specified quiz"""
+
+    queryset = Question.objects.all().order_by("id")
+    serializer_class = QuestionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id, quiz_id):
+        return super().get(request, user_id, quiz_id=quiz_id)
+
+
+user_quiz_questions = UserQuizQuestions.as_view()
