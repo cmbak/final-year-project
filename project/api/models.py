@@ -123,3 +123,24 @@ class QuizLabels(models.Model):
 
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     label = models.ForeignKey(Label, on_delete=models.CASCADE)
+
+
+class Question(models.Model):
+    """Model representing a quiz's questions"""
+
+    question = models.CharField(max_length=255)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    correct_answer = models.OneToOneField(
+        "Answer",  # Have to put in quotes otherwise throws undefined
+        on_delete=models.CASCADE,
+        related_name="correct_answer",
+    )
+
+
+class Answer(models.Model):
+    """Model representing a question answer"""
+
+    answer = models.CharField(max_length=128)
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name="answer_to_question"
+    )
