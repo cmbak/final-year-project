@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuizzes } from "../../utils/fetchQuizzes";
 import styles from "./Quizzes.module.css";
+import { Quiz } from "../../types";
 
 type QuizzesProps = {
   userId: number | undefined; // See Categories component
@@ -10,10 +11,18 @@ type QuizzesProps = {
 
 export default function Quizzes({ userId, categoryId }: QuizzesProps) {
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ["quizzes", userId, categoryId],
-    queryFn: () => fetchQuizzes(userId, categoryId),
-    enabled: Boolean(userId) && Boolean(categoryId),
+    queryKey: ["quizzes", userId],
+    queryFn: () => fetchQuizzes(userId),
+    enabled: Boolean(userId),
   });
+
+  function filterByCategory(): Quiz[] {
+    if (data === undefined) {
+      return [];
+    } else {
+      return data.filter((quiz) => quiz.category === categoryId);
+    }
+  }
 
   if (isPending) {
     return <h1>TEMP Loading...</h1>;
@@ -25,10 +34,10 @@ export default function Quizzes({ userId, categoryId }: QuizzesProps) {
 
   return (
     <ul className={styles.quizzes}>
-      {data.length == 0 ? (
+      {data.length == 0 || filterByCategory().length === 0 ? (
         <p className={styles.noQuizzes}>No Quizzes</p>
       ) : (
-        data.map(({ id, title }) => (
+        filterByCategory().map(({ id, title }) => (
           <li key={id}>{title}</li> // TODO show labels here?
         ))
       )}

@@ -231,7 +231,21 @@ class UserLabelsView(UsersModelsMixins, generics.ListAPIView):
 user_labels_view = UserLabelsView.as_view()
 
 
-class UserQuizView(generics.ListAPIView):
+class UserQuizView(UsersModelsMixins, generics.ListAPIView):
+    """
+    API Endpoint which returns all of the quizzes a user has created
+    Given that they're trying to fetch their own quizzes
+    """
+
+    queryset = Quiz.objects.all().order_by("id")
+    serializer_class = QuizSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+user_quizzes_view = UserQuizView.as_view()
+
+
+class UserQuizByCatView(generics.ListAPIView):
     """
     API Endpoint which returns the quizzes of a specific category a user has created
     given that they're trying to fetch their own quizzes
@@ -254,4 +268,4 @@ class UserQuizView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-user_quizzes_view = UserQuizView.as_view()
+user_quizzes_by_cat_view = UserQuizByCatView.as_view()
