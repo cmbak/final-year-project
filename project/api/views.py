@@ -1,5 +1,4 @@
 from api.serializers import (
-    AnswerSerializer,
     CategorySerializer,
     LabelSerializer,
     LoginSerializer,
@@ -241,15 +240,51 @@ class UserLabelsView(UsersModelsMixins, generics.ListAPIView):
 user_labels_view = UserLabelsView.as_view()
 
 
-class UserQuizView(UsersModelsMixins, generics.ListAPIView):
+class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
     """
     API Endpoint which returns all of the quizzes a user has created
+    And allows them to create a quiz
     Given that they're trying to fetch their own quizzes
     """
 
     queryset = Quiz.objects.all().order_by("id")
     serializer_class = QuizSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id, quiz_id, **field_names):
+        return super().get(request, user_id, id=quiz_id, **field_names)
+
+    # TODO more of a put request?
+    # TODO is endpoint rest?
+    def create(self, request, user_id, quiz_id, *args, **kwargs):
+        # Add questions to Quiz only if there's data!
+        if len(request.data["questions"]) == 0:
+            return JsonResponse(
+                {"error": "No questions provided."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        quiz = Quiz.objects.get(id=quiz_id, user_id=user_id)
+
+        # TODO try catch with specified error?
+        # try:
+        for question_data in request.data["questions"]:
+            # Create Question
+            question = Question.objects.create(
+                question=question_data["question"], quiz=quiz
+            )
+
+            # Create Answers
+            for answer in question_data["answers"]:
+                a = Answer.objects.create(answer=answer, question=question)
+                # Add correct answer to Question
+                if answer == question_data["correct_answer"]:
+                    question.correct_answer = a
+                    question.save()
+                a.save()
+            question.save()
+        quiz.save()
+        return JsonResponse({"hi": "hello"})
+        # return JsonResponse({"quiz": quiz.as_dict()}) TODO implement as_dict()
 
 
 user_quizzes_view = UserQuizView.as_view()

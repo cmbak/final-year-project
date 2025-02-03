@@ -13,11 +13,15 @@ from api.views import (
 from django.urls import path
 
 urlpatterns = [
-    path("users/<int:user_id>/quizzes/", user_quizzes_view, name="user_quizzes"),
     path(
         "users/<int:user_id>/quizzes/<int:quiz_id>/questions/",
         user_quiz_questions,
         name="user_quiz_questions",
+    ),
+    path(
+        "users/<int:user_id>/quizzes/<int:quiz_id>/",
+        user_quizzes_view,
+        name="user_quizzes",
     ),
     path(
         "users/<int:user_id>/categories/",
