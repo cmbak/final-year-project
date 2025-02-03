@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import Category, Label, Quiz, User
+from .models import Category, Label, Quiz, User, Question, Answer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -114,3 +114,23 @@ class QuizSerializer(serializers.ModelSerializer):
             )
 
         return data
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    """Serializer for Question model - convert Question to JSON and vice versa"""
+
+    class Meta:
+        """Metadata for question serializer"""
+
+        model = Question
+        fields = ["id", "quiz", "correct_answer"]
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    """Serializer for Answer model - convert Answer to JSON and vice versa"""
+
+    class Meta:
+        """Metadata for answer serializer"""
+
+        model = Answer
+        fields = ["id", "answer", "question"]
