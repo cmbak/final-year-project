@@ -123,7 +123,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         """Metadata for question serializer"""
 
         model = Question
-        fields = ["id", "quiz", "correct_answer"]
+        fields = ["id", "quiz", "question", "correct_answer"]
 
 
 class AnswerSerializer(serializers.ModelSerializer):

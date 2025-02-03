@@ -134,6 +134,7 @@ class Question(models.Model):
         "Answer",  # Have to put in quotes otherwise throws undefined
         on_delete=models.CASCADE,
         related_name="correct_answer",
+        null=True,  # noqa E501 So that questions and answer instance can be made simult; See views.py
     )
 
 
