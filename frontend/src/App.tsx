@@ -9,6 +9,7 @@ import "./reset.css";
 import "./App.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import CreateQuiz from "./components/CreateQuiz/CreateQuiz";
+import TakeQuiz from "./components/TakeQuiz/TakeQuiz";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,9 @@ function App() {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="create-quiz" element={<CreateQuiz />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="take-quiz/:quizId" element={<TakeQuiz />} />
           </Route>
         </Routes>
         <ReactQueryDevtools />
