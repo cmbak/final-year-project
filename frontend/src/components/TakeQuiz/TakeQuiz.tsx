@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchQuizQuestions } from "../../utils/fetchQuizQuestions";
 import useUser from "../../hooks/useUser";
 import { fetchQuiz } from "../../utils/fetchQuiz";
+import Question from "../Question/Question";
 
 export default function TakeQuiz() {
   let { quizId } = useParams();
@@ -43,5 +44,12 @@ export default function TakeQuiz() {
     return <h2>Uh oh, Quiz data is undefined</h2>;
   }
 
-  return <div>{quizData.data.title}</div>;
+  return (
+    <div>
+      {quizData.data.title}
+      {data.map((question, index) => (
+        <Question key={index} {...question} />
+      ))}
+    </div>
+  );
 }
