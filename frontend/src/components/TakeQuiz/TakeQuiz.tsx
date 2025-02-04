@@ -46,7 +46,7 @@ export default function TakeQuiz() {
 
   return (
     <div>
-      {quizData.data.title}
+      <h1>{quizData.data.title}</h1>
       {data.map((question, index) => (
         <Question key={index} {...question} />
       ))}
