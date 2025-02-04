@@ -8,7 +8,7 @@ export default function TakeQuiz() {
   let { quizId } = useParams();
   const { data } = useUser();
   const questionData = useQuery({
-    queryKey: ["quiz-questions"],
+    queryKey: ["quiz-questions", data?.id, quizId],
     queryFn: () => fetchQuizQuestions(data?.id, quizId),
     enabled: Boolean(quizId) && Boolean(data?.id),
   });
