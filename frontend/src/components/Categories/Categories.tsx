@@ -4,7 +4,7 @@ import Quizzes from "../Quizzes/Quizzes";
 import useCategories from "../../hooks/useCategories";
 
 export default function Categories() {
-  const { isPending, isError, data, error, userId } = useCategories();
+  const { isPending, isError, data, error } = useCategories();
 
   if (isPending) {
     return <h1>TEMP Loading...</h1>;
@@ -19,7 +19,7 @@ export default function Categories() {
       {data?.map(({ id, name }: Category) => (
         <div key={id} className={styles.category}>
           <h2>{name}</h2>
-          <Quizzes userId={userId} categoryId={id} />
+          <Quizzes categoryId={id} />
         </div>
       ))}
     </div>

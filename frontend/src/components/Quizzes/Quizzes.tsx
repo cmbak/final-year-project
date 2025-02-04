@@ -1,19 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchQuizzes } from "../../utils/fetchQuizzes";
 import styles from "./Quizzes.module.css";
 import { Quiz } from "../../types";
+import { useQuery } from "@tanstack/react-query";
+import { fetchQuizzes } from "../../utils/fetchQuizzes";
+import useUser from "../../hooks/useUser";
 
 type QuizzesProps = {
-  userId: number | undefined; // See Categories component
   // TODO better way of doing
   categoryId: number;
 };
 
-export default function Quizzes({ userId, categoryId }: QuizzesProps) {
+export default function Quizzes({ categoryId }: QuizzesProps) {
+  const userData = useUser();
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ["quizzes", userId],
-    queryFn: () => fetchQuizzes(userId),
-    enabled: Boolean(userId),
+    queryKey: ["quizzes", userData.data?.id],
+    queryFn: () => fetchQuizzes(userData.data?.id),
+    enabled: Boolean(userData.data?.id),
   });
 
   function filterByCategory(): Quiz[] {
@@ -29,12 +30,12 @@ export default function Quizzes({ userId, categoryId }: QuizzesProps) {
   }
 
   if (isError) {
-    return <h1>TEMP Error {error.message}</h1>;
+    return <h1>TEMP Error {error && error.message}</h1>;
   }
 
   return (
     <ul className={styles.quizzes}>
-      {data.length == 0 || filterByCategory().length === 0 ? (
+      {(data && data.length == 0) || filterByCategory().length === 0 ? (
         <p className={styles.noQuizzes}>No Quizzes</p>
       ) : (
         filterByCategory().map(({ id, title }) => (
