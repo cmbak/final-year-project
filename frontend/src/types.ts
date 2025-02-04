@@ -24,3 +24,10 @@ export type Quiz = {
   category: number;
   labels: Label[];
 };
+
+export type Question = {
+  id: number;
+  quizId: number;
+  question: string;
+  correctAnswerId: number;
+};
