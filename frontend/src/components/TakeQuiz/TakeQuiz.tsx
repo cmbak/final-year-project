@@ -2,14 +2,20 @@ import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuizQuestions } from "../../utils/fetchQuizQuestions";
 import useUser from "../../hooks/useUser";
+import { fetchQuiz } from "../../utils/fetchQuiz";
 
 export default function TakeQuiz() {
   let { quizId } = useParams();
-  const userData = useUser();
+  const user = useUser();
+  const quizData = useQuery({
+    queryKey: ["individual-quiz", quizId, user.data?.id],
+    queryFn: () => fetchQuiz(user.data?.id, quizId),
+    enabled: Boolean(quizId) && Boolean(user.data?.id),
+  });
   const { isError, isPending, data } = useQuery({
-    queryKey: ["quiz-questions", userData.data?.id, quizId],
-    queryFn: () => fetchQuizQuestions(userData.data?.id, quizId),
-    enabled: Boolean(quizId) && Boolean(userData.data?.id),
+    queryKey: ["quiz-questions", user.data?.id, quizId],
+    queryFn: () => fetchQuizQuestions(user.data?.id, quizId),
+    enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
 
   // TODO look nice
@@ -32,17 +38,10 @@ export default function TakeQuiz() {
     );
   }
 
-  return <div>TakeQuiz: {quizId}</div>;
+  if (quizData.data === undefined) {
+    // FIXME see fetch quiz - accesses first item in array?
+    return <h2>Uh oh, Quiz data is undefined</h2>;
+  }
+
+  return <div>{quizData.data.title}</div>;
 }
-
-/*
-
-query which fetches quiz questions for this page
-
-If there's an error
-- Alert that no quiz found or gen error
-- Redirect?
-
-If no errors then show questions
-
-*/
