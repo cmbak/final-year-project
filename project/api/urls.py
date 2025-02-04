@@ -9,19 +9,23 @@ from api.views import (
     user_quiz_questions,
     user_quizzes_by_cat_view,
     user_quizzes_view,
+    user_all_quizzes_view,
 )
 from django.urls import path
 
 urlpatterns = [
     path(
-        "users/<int:user_id>/quizzes/<int:quiz_id>/questions/",
-        user_quiz_questions,
-        name="user_quiz_questions",
+        "users/<int:user_id>/quizzes/", user_all_quizzes_view, name="user_all_quizzes"
     ),
     path(
         "users/<int:user_id>/quizzes/<int:quiz_id>/",
         user_quizzes_view,
         name="user_quizzes",
+    ),
+    path(
+        "users/<int:user_id>/quizzes/<int:quiz_id>/questions/",
+        user_quiz_questions,
+        name="user_quiz_questions",
     ),
     path(
         "users/<int:user_id>/categories/",

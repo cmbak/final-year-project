@@ -240,9 +240,23 @@ class UserLabelsView(UsersModelsMixins, generics.ListAPIView):
 user_labels_view = UserLabelsView.as_view()
 
 
+class UserAllQuizzesView(UsersModelsMixins, generics.ListAPIView):
+    """
+    API Endpoint which returns all of the quizzes they have created
+    Given that they're trying to fetch their own quizzes
+    """
+
+    queryset = Quiz.objects.all().order_by("id")
+    serializer_class = QuizSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+user_all_quizzes_view = UserAllQuizzesView.as_view()
+
+
 class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
     """
-    API Endpoint which returns all of the quizzes a user has created
+    API Endpoint which returns the quiz a user has created (given the id)
     And allows them to create a quiz
     Given that they're trying to fetch their own quizzes
     """
