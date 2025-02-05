@@ -1,5 +1,5 @@
 import time
-from typing import TypedDict  # vs typing_extenstions.TypedDict?
+import typing_extensions as typing  # vs typing.TypedDict?
 
 import google.generativeai as genai
 from decouple import config
@@ -12,7 +12,7 @@ model = genai.GenerativeModel("gemini-1.5-flash")
 # TODO move prompts etc. here
 
 
-class Question(TypedDict):
+class Question(typing.TypedDict):
     """Type for Question"""
 
     question: str
@@ -21,16 +21,20 @@ class Question(TypedDict):
 
 
 def upload_video(file_path: str) -> File:
+    print(f"./media/{file_path}")
     """Upload video from path to File API"""
-    video_file = genai.upload_file(file_path)
+    print("Uploading file...")
+    video_file = genai.upload_file(f"./media/{file_path}")
 
     # Check that video is ready to be used
     while video_file.state.name == "PROCESSING":
         time.sleep(10)
-        video_file = genai.get_file(video_file.state.name)
+        print("Processing Video...")
+        video_file = genai.get_file(video_file.name)
 
     if video_file.state.name == "FAILED":
         raise ValueError(video_file.state.name)
+    return video_file
 
 
 def summarise_video(file_path: str):
