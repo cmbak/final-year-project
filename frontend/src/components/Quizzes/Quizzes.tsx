@@ -3,6 +3,7 @@ import { Quiz } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuizzes } from "../../utils/fetchQuizzes";
 import useUser from "../../hooks/useUser";
+import { Link } from "react-router";
 
 type QuizzesProps = {
   // TODO better way of doing
@@ -39,7 +40,9 @@ export default function Quizzes({ categoryId }: QuizzesProps) {
         <p className={styles.noQuizzes}>No Quizzes</p>
       ) : (
         filterByCategory().map(({ id, title }) => (
-          <li key={id}>{title}</li> // TODO show labels here?
+          <li key={id}>
+            <Link to={`../take-quiz/${id}`}>{title}</Link>
+          </li> // TODO show labels here?
         ))
       )}
     </ul>
