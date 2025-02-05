@@ -3,14 +3,13 @@ from api.views import (
     current_user_view,
     label_create_view,
     quiz_create_view,
+    user_all_quizzes_view,
     user_categories_view,
     user_labels_view,
     user_list_create_view,
     user_quiz_questions,
     user_quizzes_by_cat_view,
     user_quizzes_view,
-    user_all_quizzes_view,
-    user_question_answers,
 )
 from django.urls import path
 
@@ -27,11 +26,6 @@ urlpatterns = [
         "users/<int:user_id>/quizzes/<int:quiz_id>/questions/",
         user_quiz_questions,
         name="user_quiz_questions",
-    ),
-    path(
-        "users/<int:user_id>/questions/<int:question_id>/answers/",  # noqa e501
-        user_question_answers,
-        name="user_question_answers",
     ),
     path(
         "users/<int:user_id>/categories/",
