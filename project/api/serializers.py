@@ -116,16 +116,6 @@ class QuizSerializer(serializers.ModelSerializer):
         return data
 
 
-class QuestionSerializer(serializers.ModelSerializer):
-    """Serializer for Question model - convert Question to JSON and vice versa"""
-
-    class Meta:
-        """Metadata for question serializer"""
-
-        model = Question
-        fields = ["id", "quiz", "question", "correct_answer"]
-
-
 class AnswerSerializer(serializers.ModelSerializer):
     """Serializer for Answer model - convert Answer to JSON and vice versa"""
 
@@ -134,3 +124,25 @@ class AnswerSerializer(serializers.ModelSerializer):
 
         model = Answer
         fields = ["id", "answer", "question"]
+
+
+class AnswerOnlySerializer(AnswerSerializer):
+    """Serializer for Answer model which only has answer field"""
+
+    class Meta:
+        """Metadata for AnswerOnly serializer"""
+
+        model = Answer
+        fields = ["answer"]
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    """Serializer for Question model - convert Question to JSON and vice versa"""
+
+    correct_answer = AnswerOnlySerializer()
+
+    class Meta:
+        """Metadata for question serializer"""
+
+        model = Question
+        fields = ["id", "quiz", "question", "correct_answer"]
