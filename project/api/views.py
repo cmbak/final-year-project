@@ -10,6 +10,7 @@ from api.serializers import (
 from decouple import config
 from django.contrib.auth import login, logout
 from django.core.exceptions import FieldError
+from django.core.files.storage import default_storage
 from django.http.response import HttpResponseRedirectBase, JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -18,8 +19,6 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 
 from .models import Answer, Category, Label, Question, Quiz, User
-
-from django.core.files.storage import default_storage
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -194,6 +193,8 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
         # https://stackoverflow.com/questions/26274021/simply-save-file-to-folder-in-django
 
         file_name = default_storage.save(file.name, file)
+        file_url = default_storage.url(file_name)
+        print(file_url)
 
         # CHECK REQUEST.DATA AS JSON VS FORM
         # TODO create quiz again from data
