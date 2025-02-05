@@ -20,6 +20,7 @@ from rest_framework.views import APIView
 from summarise import summarise_video
 
 from .models import Answer, Category, Label, Question, Quiz, User
+import json
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -189,20 +190,34 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
         file = request.FILES["video"]
+        request_data = request.data
+        # TODO labels!
+        request_data = request_data.pop(
+            "video", None
+        )  # Don't want to pass video to serializer
+        print(request.data)
         # https://stackoverflow.com/questions/26274021/simply-save-file-to-folder-in-django
 
-        file_name = default_storage.save(file.name, file)
-        file_url = default_storage.url(file_name)
-        print(file_url)
-        summarised_questions = summarise_video(file)
-        print(summarised_questions)
+        serializer = self.get_serializer(data=request.data)
 
-        # CHECK REQUEST.DATA AS JSON VS FORM
-        # TODO create quiz again from data
-        # after quiz created summarise
-        return JsonResponse({"hi": "hello"})
+        if not serializer.is_valid():
+            return Response(
+                {"errors": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Create Quiz instance
+        self.perform_create(serializer)
+
+        # Summarise video
+        summarised_questions = summarise_video(file)
+        summarised_questions = json.loads(summarised_questions)
+
+        return JsonResponse(
+            {"id": serializer.data["id"], "questions": summarised_questions},
+            status=status.HTTP_201_CREATED,
+        )
 
 
 quiz_create_view = QuizCreateView.as_view()
