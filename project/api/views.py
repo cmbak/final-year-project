@@ -1,11 +1,11 @@
 from api.serializers import (
+    AnswerSerializer,
     CategorySerializer,
     LabelSerializer,
     LoginSerializer,
     QuestionSerializer,
     QuizSerializer,
     UserSerializer,
-    AnswerSerializer,
 )
 from decouple import config
 from django.contrib.auth import login, logout
@@ -354,17 +354,3 @@ class UserQuizQuestions(generics.ListAPIView):
 
 
 user_quiz_questions = UserQuizQuestions.as_view()
-
-
-class UserQuestionAnswers(UsersModelsMixins, generics.ListAPIView):
-    """API Endpoint which returns the answers and corrcect answer for a quiz question"""
-
-    queryset = Answer.objects.all().order_by("id")
-    serializer_class = AnswerSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, user_id, question_id, **field_names):
-        return super().get(request, user_id, question_id=question_id, **field_names)
-
-
-user_question_answers = UserQuestionAnswers.as_view()
