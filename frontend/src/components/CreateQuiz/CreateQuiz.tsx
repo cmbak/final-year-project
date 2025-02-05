@@ -25,14 +25,17 @@ export default function CreateQuiz() {
   async function createQuiz(prevState: unknown, formData: FormData) {
     const category = formData.get("category");
     const title = formData.get("quiz-title");
+    const video = formData.get("video");
     const user = userId;
-
     try {
-      const response = await instance.post(
-        "/api/quizzes/",
-        { category, title, user, labels: selectedIds },
-        { withXSRFToken: true },
-      );
+      // const response = await instance.post(
+      //   "/api/quizzes/",
+      //   { category, title, user, labels: selectedIds, video },
+      //   { withXSRFToken: true },
+      // );
+      const response = await instance.post("/api/quizzes/", formData, {
+        withXSRFToken: true,
+      });
     } catch (error: any) {
       return {
         errors: error.response.data.errors,
@@ -46,11 +49,16 @@ export default function CreateQuiz() {
         <BackButton />
         <h2>create quiz</h2>
       </div>
-      <form className={`flex flex-col ${styles.form}`} action={formAction}>
+      <form
+        className={`flex flex-col ${styles.form}`}
+        action={formAction}
+        encType="multipart/form-data"
+      >
         <input
           name="video"
-          id="file"
+          id="video"
           type="file"
+          // accept="" // TODO check on backend
           className="btn btn-secondary"
           required
         />
