@@ -85,3 +85,10 @@ select.input {
 .flex-col {
   flex-direction: column;
 }
+
+/* Center main content horizontally*/
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

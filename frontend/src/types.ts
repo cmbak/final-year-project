@@ -25,9 +25,15 @@ export type Quiz = {
   labels: Label[];
 };
 
+export type Answer = {
+  id: number;
+  answer: string;
+};
+
 export type Question = {
   id: number;
   quizId: number;
   question: string;
-  correctAnswerId: number;
+  correctAnswer: Answer;
+  answers: Answer[];
 };

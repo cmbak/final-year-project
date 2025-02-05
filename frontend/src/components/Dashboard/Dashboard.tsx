@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 export default function Dashboard() {
   return (
-    <main className={`flex flex-col ${styles.container}`}>
+    <main className="center-container">
       <h1 className={styles.heading}>my quizzes</h1>
       {/* TODO Search bar here */}
       <Link to="../create-quiz">create quiz</Link>

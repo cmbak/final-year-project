@@ -1,14 +1,21 @@
 import { Question as QuestionProps } from "../../types";
+import styles from "./Question.module.css";
 
 export default function Question({
   id,
   quizId,
   question,
-  correctAnswerId,
+  correctAnswer,
+  answers,
 }: QuestionProps) {
   return (
     <div>
-      <h3>{question}</h3>
+      <h2 className={styles.question}>{question}</h2>
+      <ul>
+        {answers.map(({ id, answer }) => (
+          <li key={id}>{answer}</li>
+        ))}
+      </ul>
     </div>
   ); // Check heading semantics
 }
