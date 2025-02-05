@@ -202,13 +202,13 @@ class UsersModelsMixins:
 
         # Try getting models where user id is same as the one requesting
         try:
-            queryset = self.queryset.filter(user=user_id, **field_names)
+            queryset = self.get_queryset().filter(user=user_id, **field_names)
         except FieldError as e:
             # If model has no user field, then just filter by kwargs
             print(
                 f"Error: {e}\nModel does not have a user field. Trying to filter without including user..."  # noqa e501
             )
-            queryset = self.queryset.filter(**field_names)
+            queryset = self.get_queryset().filter(**field_names)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -322,15 +322,35 @@ class UserQuizByCatView(UsersModelsMixins, generics.ListAPIView):
 user_quizzes_by_cat_view = UserQuizByCatView.as_view()
 
 
-class UserQuizQuestions(UsersModelsMixins, generics.ListAPIView):
+class UserQuizQuestions(generics.ListAPIView):
     """API Endpoint which returns the questions for a specified quiz"""
 
     queryset = Question.objects.all().order_by("id")
     serializer_class = QuestionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, user_id, quiz_id):
-        return super().get(request, user_id, quiz_id=quiz_id)
+    def get(self, request, user_id, quiz_id):  # From UsersModelsMixin
+        # Check that id of user sending request is requesting their own data
+        if user_id != request.user.id:
+            return JsonResponse(
+                {"error": "You cannot access this"}, status=status.HTTP_403_FORBIDDEN
+            )  # TODO change message
+
+        # Questions with id, quiz id, question and correct answer
+        queryset = self.get_queryset().filter(quiz_id=quiz_id)
+        serializer = self.get_serializer(queryset, many=True)  # TODO type?
+
+        # Need to get answers for each question
+        for question in serializer.data:  # TODO type; question is object
+            answers = Answer.objects.filter(
+                question=question["id"]
+            )  # TODO more efficient way?
+            serialized_answers = AnswerSerializer(answers, many=True)
+            question["answers"] = (
+                serialized_answers.data
+            )  # Add answers array as new key
+
+        return Response(serializer.data)
 
 
 user_quiz_questions = UserQuizQuestions.as_view()
