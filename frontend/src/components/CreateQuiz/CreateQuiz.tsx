@@ -28,14 +28,18 @@ export default function CreateQuiz() {
     const video = formData.get("video");
     const user = userId;
     try {
-      // const response = await instance.post(
-      //   "/api/quizzes/",
-      //   { category, title, user, labels: selectedIds, video },
-      //   { withXSRFToken: true },
-      // );
-      const response = await instance.post("/api/quizzes/", formData, {
-        withXSRFToken: true,
-      });
+      const response = await instance.postForm(
+        "/api/quizzes/",
+        { category, title, user, labels: selectedIds, video },
+        { withXSRFToken: true },
+      );
+
+      // Add questions generated from summarised video to quiz
+      await instance.post(
+        `/api/users/${userId}/quizzes/${response.data.id}/`,
+        { questions: response.data.questions },
+        { withXSRFToken: true },
+      );
     } catch (error: any) {
       return {
         errors: error.response.data.errors,
@@ -58,7 +62,7 @@ export default function CreateQuiz() {
           name="video"
           id="video"
           type="file"
-          // accept="" // TODO check on backend
+          accept=".mp4" // TODO check on backend
           className="btn btn-secondary"
           required
         />

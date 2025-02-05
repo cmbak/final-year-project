@@ -49,15 +49,6 @@ def summarise_video(file_path: str):
     
     You should use the JSON schema as supplied through the model configuration.
     You must make sure that, for each question, the value of the 'correct_answer' is the value of the correct answer within that question's 'answers' list.
-
-    Here is an example of the expected format of one question:
-
-    {
-      question: 'What is the captial of England?',
-      answers: ['Ontario', 'London', 'Lagos'],
-      correct_answer: 'London',        
-    }
-
     """
     print("Creating summary...")
     response = model.generate_content(
@@ -67,5 +58,5 @@ def summarise_video(file_path: str):
         ),
         request_options={"timeout": 600},
     )
-    print(response)
-    return response
+    print(response.text)
+    return response.text
