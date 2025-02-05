@@ -28,6 +28,11 @@ export default function TakeQuiz() {
     return <h2>Error...</h2>;
   }
 
+  if (quizData.data === undefined) {
+    // FIXME see fetch quiz - accesses first item in array?
+    return <h2>Uh oh, Quiz data is undefined</h2>;
+  }
+
   if (data.length === 0) {
     // No quiz or no questions for that quiz
     return (
@@ -37,11 +42,6 @@ export default function TakeQuiz() {
         exist)
       </h2>
     );
-  }
-
-  if (quizData.data === undefined) {
-    // FIXME see fetch quiz - accesses first item in array?
-    return <h2>Uh oh, Quiz data is undefined</h2>;
   }
 
   return (
