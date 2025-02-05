@@ -17,6 +17,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
+from summarise import summarise_video
 
 from .models import Answer, Category, Label, Question, Quiz, User
 
@@ -195,6 +196,8 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
         file_name = default_storage.save(file.name, file)
         file_url = default_storage.url(file_name)
         print(file_url)
+        summarised_questions = summarise_video(file)
+        print(summarised_questions)
 
         # CHECK REQUEST.DATA AS JSON VS FORM
         # TODO create quiz again from data

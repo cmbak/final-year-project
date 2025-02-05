@@ -1,12 +1,15 @@
 import time
+from typing import TypedDict  # vs typing_extenstions.TypedDict?
 
 import google.generativeai as genai
-from typing import TypedDict  # vs typing_extenstions.TypedDict?
 from decouple import config
 from google.generativeai.types import File
 
 genai.configure(api_key=config("API_KEY"))
 model = genai.GenerativeModel("gemini-1.5-flash")
+
+# TODO safety settings
+# TODO move prompts etc. here
 
 
 class Question(TypedDict):
@@ -34,7 +37,24 @@ def summarise_video(file_path: str):
     """Summarises video using Gemini 1.5 Flash"""
     video_file = upload_video(file_path)
 
-    prompt = ""
+    prompt = """
+    You are a video summariser tool which summarises a video into a series of 10 multiple choice questions, each with 3 possible answers with only 1 of these being the correct one.
+    
+    Each question should have a maximum length of 255 characters and each answer should have a maximum length of 128 characters. However try to keep your questions and answers conscise, yet descriptive to ensure that all the content convered in the video.
+    Ideally Each questions should have a length of around 50-75 characters and each answer should ideally have a length of 15-35 characters.
+    
+    You should use the JSON schema as supplied through the model configuration.
+    You must make sure that, for each question, the value of the 'correct_answer' is the value of the correct answer within that question's 'answers' list.
+
+    Here is an example of the expected format of one question:
+
+    {
+      question: 'What is the captial of England?',
+      answers: ['Ontario', 'London', 'Lagos'],
+      correct_answer: 'London',        
+    }
+
+    """
     print("Creating summary...")
     response = model.generate_content(
         [video_file, prompt],
@@ -44,3 +64,4 @@ def summarise_video(file_path: str):
         request_options={"timeout": 600},
     )
     print(response)
+    return response
