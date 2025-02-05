@@ -4,6 +4,7 @@ import { fetchQuizQuestions } from "../../utils/fetchQuizQuestions";
 import useUser from "../../hooks/useUser";
 import { fetchQuiz } from "../../utils/fetchQuiz";
 import Question from "../Question/Question";
+import styles from "./TakeQuiz.module.css";
 
 export default function TakeQuiz() {
   let { quizId } = useParams();
@@ -45,11 +46,13 @@ export default function TakeQuiz() {
   }
 
   return (
-    <div>
-      <h1>{quizData.data.title}</h1>
-      {data.map((question, index) => (
-        <Question key={index} {...question} />
-      ))}
+    <div className="center-container">
+      <h1 className={styles.title}>{quizData.data.title}</h1>
+      <div className={`flex flex-col ${styles.questions}`}>
+        {data.map((question, index) => (
+          <Question key={index} {...question} />
+        ))}
+      </div>
     </div>
   );
 }
