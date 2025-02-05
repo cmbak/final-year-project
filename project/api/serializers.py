@@ -123,23 +123,13 @@ class AnswerSerializer(serializers.ModelSerializer):
         """Metadata for answer serializer"""
 
         model = Answer
-        fields = ["id", "answer", "question"]
-
-
-class AnswerOnlySerializer(AnswerSerializer):
-    """Serializer for Answer model which only has answer field"""
-
-    class Meta:
-        """Metadata for AnswerOnly serializer"""
-
-        model = Answer
-        fields = ["answer"]
+        fields = ["id", "answer"]
 
 
 class QuestionSerializer(serializers.ModelSerializer):
     """Serializer for Question model - convert Question to JSON and vice versa"""
 
-    correct_answer = AnswerOnlySerializer()
+    correct_answer = AnswerSerializer()
 
     class Meta:
         """Metadata for question serializer"""
