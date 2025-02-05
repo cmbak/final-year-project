@@ -19,6 +19,8 @@ from rest_framework.views import APIView
 
 from .models import Answer, Category, Label, Question, Quiz, User
 
+from django.core.files.storage import default_storage
+
 
 def handle_invalid_serializer(serializer: ModelSerializer):
     """Returns response with code 400 containing serializer and its errors"""
@@ -185,6 +187,18 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        file = request.FILES["video"]
+        # https://stackoverflow.com/questions/26274021/simply-save-file-to-folder-in-django
+
+        file_name = default_storage.save(file.name, file)
+
+        # CHECK REQUEST.DATA AS JSON VS FORM
+        # TODO create quiz again from data
+        # after quiz created summarise
+        return JsonResponse({"hi": "hello"})
 
 
 quiz_create_view = QuizCreateView.as_view()
