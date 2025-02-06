@@ -1,12 +1,13 @@
 import React from "react";
 import styles from "./Modal.module.css";
+import { StateSetter } from "../../types";
 
 type ModalProps = {
   children: React.JSX.Element;
   title: string;
   type: "normal" | "form";
   active: boolean;
-  setActive: React.Dispatch<React.SetStateAction<boolean>>;
+  setActive: StateSetter<boolean>;
   action?: (formData: FormData) => void;
   isPending?: boolean;
 };
