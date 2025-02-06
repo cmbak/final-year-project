@@ -4,7 +4,7 @@ import styles from "./Question.module.css";
 
 type QuestionProps = {
   number: number;
-  selected: boolean;
+  selectedAnswer: number;
   setSelectedAnswers: StateSetter<number[]>;
 } & QuestionType;
 
@@ -15,7 +15,7 @@ export default function Question({
   correctAnswer,
   number,
   answers,
-  selected,
+  selectedAnswer,
   setSelectedAnswers,
 }: QuestionProps) {
   function handleClick(answerID: number) {
@@ -36,7 +36,10 @@ export default function Question({
         {answers.map(({ id, answer }) => (
           <li
             key={id}
-            className={clsx(styles.answer, selected && styles.selected)}
+            className={clsx(
+              styles.answer,
+              selectedAnswer === id && styles.selected,
+            )}
             onClick={() => handleClick(id)}
           >
             {answer}
