@@ -1,0 +1,17 @@
+.error {
+  font-size: 6rem;
+  font-weight: 300;
+}
+
+.container {
+  justify-content: center;
+}
+
+.link {
+  text-decoration: none;
+  transition: text-decoration 450ms ease !important;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

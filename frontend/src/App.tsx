@@ -10,6 +10,7 @@ import "./App.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import CreateQuiz from "./components/CreateQuiz/CreateQuiz";
 import TakeQuiz from "./components/TakeQuiz/TakeQuiz";
+import NotFound from "./components/NotFound/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="take-quiz/:quizId" element={<TakeQuiz />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <ReactQueryDevtools />
       </QueryClientProvider>
