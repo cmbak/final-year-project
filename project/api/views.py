@@ -10,7 +10,6 @@ from api.serializers import (
 from decouple import config
 from django.contrib.auth import login, logout
 from django.core.exceptions import FieldError
-from django.core.files.storage import default_storage
 from django.http.response import HttpResponseRedirectBase, JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
