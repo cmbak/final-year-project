@@ -37,3 +37,5 @@ export type Question = {
   correctAnswer: Answer;
   answers: Answer[];
 };
+
+export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;

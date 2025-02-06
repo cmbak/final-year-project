@@ -5,8 +5,16 @@ import useUser from "../../hooks/useUser";
 import { fetchQuiz } from "../../utils/fetchQuiz";
 import Question from "../Question/Question";
 import styles from "./TakeQuiz.module.css";
+import { useState } from "react";
+
+// {
+//   1: false;
+// }
 
 export default function TakeQuiz() {
+  const [selectedAnswers, setSelectedAnswers] = useState(
+    new Array(10).fill(-1), // Array of answer IDs;
+  );
   let { quizId } = useParams();
   const user = useUser();
   const quizData = useQuery({
@@ -19,6 +27,10 @@ export default function TakeQuiz() {
     queryFn: () => fetchQuizQuestions(user.data?.id, quizId),
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
+
+  function checkAnswers() {
+    console.log(selectedAnswers);
+  }
 
   // TODO look nice
   if (isPending) {
@@ -50,9 +62,18 @@ export default function TakeQuiz() {
       <h1 className={styles.title}>{quizData.data.title}</h1>
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
-          <Question key={index} {...question} number={index + 1} />
+          <Question
+            key={index}
+            {...question}
+            number={index + 1}
+            selected={true}
+            setSelectedAnswers={setSelectedAnswers}
+          />
         ))}
       </div>
+      <button type="button" className="btn btn-primary" onClick={checkAnswers}>
+        Check Answers
+      </button>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchLabels } from "../../utils/fetchLabels";
-import { useState } from "react";
 import Label from "../Label/Label";
+import { StateSetter } from "../../types";
 
 type LabelSelectProps = {
   userId: number | undefined; // TODO how to ensure that userid is defined
-  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
+  setSelectedIds: StateSetter<number[]>;
 };
 
 export default function LabelSelect({

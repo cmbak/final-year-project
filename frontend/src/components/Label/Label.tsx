@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { Label as LabelType } from "../../types";
+import { Label as LabelType, StateSetter } from "../../types";
 import { useState } from "react";
 import styles from "./Label.module.css";
 
 type LabelProps = {
-  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
+  setSelectedIds: StateSetter<number[]>;
 } & Omit<LabelType, "user">;
 
 export default function Label({ id, name, setSelectedIds }: LabelProps) {
