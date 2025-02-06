@@ -20,3 +20,13 @@
   font-size: 1.4rem;
   color: black;
 }
+
+.correct {
+  color: var(
+    --color-correct
+  ) !important; /* important temp to prevent hover styling*/
+}
+
+.incorrect {
+  color: var(--color-incorrect) !important;
+}
