@@ -17,7 +17,7 @@ export default function Navbar() {
       <div className={`flex ${styles.links}`}>
         {/* If user hasn't logged in, only show login */}
         {data !== undefined && isEmpty(data) ? (
-          <button className="btn btn-primary">login</button>
+          <a href={`${import.meta.env.VITE_BACKEND_URL}/login/`}>login</a>
         ) : (
           <>
             <Link to="dashboard">dashboard</Link>
