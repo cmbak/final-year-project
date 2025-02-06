@@ -66,7 +66,7 @@ export default function TakeQuiz() {
             key={index}
             {...question}
             number={index + 1}
-            selected={true}
+            selectedAnswer={selectedAnswers[index]}
             setSelectedAnswers={setSelectedAnswers}
           />
         ))}
