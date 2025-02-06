@@ -50,7 +50,7 @@ export default function TakeQuiz() {
       <h1 className={styles.title}>{quizData.data.title}</h1>
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
-          <Question key={index} {...question} />
+          <Question key={index} {...question} number={index + 1} />
         ))}
       </div>
     </div>
