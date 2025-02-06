@@ -7,11 +7,8 @@ import Question from "../Question/Question";
 import styles from "./TakeQuiz.module.css";
 import { useState } from "react";
 
-// {
-//   1: false;
-// }
-
 export default function TakeQuiz() {
+  const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(10).fill(-1), // Array of answer IDs;
   );
@@ -27,10 +24,6 @@ export default function TakeQuiz() {
     queryFn: () => fetchQuizQuestions(user.data?.id, quizId),
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
-
-  function checkAnswers() {
-    console.log(selectedAnswers);
-  }
 
   // TODO look nice
   if (isPending) {
@@ -68,10 +61,16 @@ export default function TakeQuiz() {
             number={index + 1}
             selectedAnswer={selectedAnswers[index]}
             setSelectedAnswers={setSelectedAnswers}
+            showCorrectAnswers={showCorrectAnswers}
+            correctA={question.correct_answer.id}
           />
         ))}
       </div>
-      <button type="button" className="btn btn-primary" onClick={checkAnswers}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => setShowCorrectAnswers(true)}
+      >
         Check Answers
       </button>
     </div>

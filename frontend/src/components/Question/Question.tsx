@@ -6,17 +6,18 @@ type QuestionProps = {
   number: number;
   selectedAnswer: number;
   setSelectedAnswers: StateSetter<number[]>;
+  showCorrectAnswers: boolean;
+  correctA: number;
 } & QuestionType;
 
 export default function Question({
-  id,
-  quizId,
   question,
-  correctAnswer,
   number,
   answers,
   selectedAnswer,
   setSelectedAnswers,
+  showCorrectAnswers,
+  correctA,
 }: QuestionProps) {
   function handleClick(answerID: number) {
     // Change id of selected answer for this question
@@ -36,10 +37,12 @@ export default function Question({
         {answers.map(({ id, answer }) => (
           <li
             key={id}
-            className={clsx(
-              styles.answer,
-              selectedAnswer === id && styles.selected,
-            )}
+            className={clsx({
+              [styles.answer]: true,
+              [styles.selected]: selectedAnswer === id,
+              [styles.correct]: showCorrectAnswers && correctA === id,
+              [styles.incorrect]: showCorrectAnswers && correctA !== id,
+            })}
             onClick={() => handleClick(id)}
           >
             {answer}
