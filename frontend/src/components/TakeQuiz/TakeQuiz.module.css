@@ -15,5 +15,9 @@
 }
 
 .questions > div {
-  margin-bottom: 50vh;
+  margin-bottom: 50vh; /* TODO use different units - see mobile */
+
+  &:first-child {
+    margin-top: 30%;
+  }
 }
