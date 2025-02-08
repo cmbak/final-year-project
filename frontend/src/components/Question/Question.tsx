@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import { Question as QuestionType, StateSetter } from "../../types";
 import styles from "./Question.module.css";
+import { useEffect, useRef, useState } from "react";
+import useIntersection from "../../hooks/useIntersection";
 
 type QuestionProps = {
   number: number;
@@ -19,6 +21,10 @@ export default function Question({
   showCorrect,
   correctId,
 }: QuestionProps) {
+  const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
+    threshold: 1.0,
+  });
+
   function handleClick(answerID: number) {
     // Change id of selected answer for this question
     setSelectedAnswers((prevSelected) => {
@@ -29,7 +35,7 @@ export default function Question({
   }
 
   return (
-    <div>
+    <div ref={elementRef}>
       <h3 className={styles.question}>
         {number}. {question}
       </h3>
@@ -42,6 +48,7 @@ export default function Question({
               [styles.selected]: selectedAnswer === id,
               [styles.correct]: showCorrect && correctId === id,
               [styles.incorrect]: showCorrect && correctId !== id,
+              [styles.intersecting]: isVisible,
             })}
             onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
           >
@@ -52,3 +59,11 @@ export default function Question({
     </div>
   );
 }
+
+/* 
+
+Animate on scroll
+
+- Color goes from transparent black to non transparent
+
+*/
