@@ -1,25 +1,43 @@
+.container {
+  opacity: 0;
+  filter: blur(3px);
+  transition: all var(--speed-medium) ease-in-out;
+}
+
+.visible {
+  opacity: 1;
+  filter: blur(0);
+  scale: 1.1;
+  transform: translateY(-10%);
+}
+
 .question {
   font-size: 1.7rem;
   font-weight: bold;
 }
 
+.answers {
+  gap: 0.5rem;
+  align-items: center;
+}
+
 /* Could create pointer utility class */
 .answer {
-  color: #4d4d4d;
+  width: max-content;
+  color: darkgray;
   transition: all var(--speed-medium) cubic-bezier(0.075, 0.82, 0.165, 1);
-  color: black;
-  font-size: 1rem;
 
   /* if they haven't checked answers - i.e. has (in)correct class */
   &:not(:is(.correct, .incorrect)):hover {
-    font-size: 1.4rem;
     cursor: pointer;
+    color: black;
   }
 }
 
 .selected {
   font-weight: bold;
   font-size: 1.4rem;
+  color: black;
 }
 
 .correct {
@@ -31,17 +49,4 @@
 .incorrect {
   color: var(--color-incorrect);
   font-size: 1rem;
-}
-
-.container {
-  opacity: 0;
-  filter: blur(3px);
-  transition: all var(--speed-medium) ease-in-out;
-}
-
-.visible {
-  opacity: 1;
-  filter: blur(0);
-  scale: 1.1;
-  transform: translateY(0%);
 }

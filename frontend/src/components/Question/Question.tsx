@@ -45,7 +45,7 @@ export default function Question({
         <h3 className={styles.question}>
           {number}. {question}
         </h3>
-        <ul>
+        <ul className={`flex flex-col ${styles.answers}`}>
           {answers.map(({ id, answer }) => (
             <li
               key={id}
@@ -54,6 +54,7 @@ export default function Question({
                 [styles.selected]: selectedAnswer === id,
                 [styles.correct]: showCorrect && correctId === id,
                 [styles.incorrect]: showCorrect && correctId !== id,
+                ["hover-underline"]: selectedAnswer !== id,
               })}
               onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
             >
