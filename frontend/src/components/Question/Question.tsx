@@ -43,7 +43,7 @@ export default function Question({
               [styles.correct]: showCorrect && correctId === id,
               [styles.incorrect]: showCorrect && correctId !== id,
             })}
-            onClick={() => handleClick(id)}
+            onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
           >
             {answer}
           </li>

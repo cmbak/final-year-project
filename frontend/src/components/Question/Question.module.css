@@ -5,28 +5,30 @@
 
 /* Could create pointer utility class */
 .answer {
-  cursor: pointer;
   color: #4d4d4d;
   transition: all var(--speed-medium) cubic-bezier(0.075, 0.82, 0.165, 1);
+  color: black;
+  font-size: 1rem;
 
-  &:hover {
+  /* if they haven't checked answers - i.e. has (in)correct class */
+  &:not(:is(.correct, .incorrect)):hover {
     font-size: 1.4rem;
-    color: black;
+    cursor: pointer;
   }
 }
 
 .selected {
   font-weight: bold;
   font-size: 1.4rem;
-  color: black;
 }
 
 .correct {
-  color: var(
-    --color-correct
-  ) !important; /* important temp to prevent hover styling*/
+  color: var(--color-correct);
+  font-size: 1.5rem;
+  text-decoration: underline;
 }
 
 .incorrect {
-  color: var(--color-incorrect) !important;
+  color: var(--color-incorrect);
+  font-size: 1rem;
 }

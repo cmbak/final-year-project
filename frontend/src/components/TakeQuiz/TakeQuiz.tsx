@@ -33,6 +33,7 @@ export default function TakeQuiz() {
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
 
+  // Show correct answers and number got correct
   function handleClick() {
     setShowCorrect(true);
     // Tally num of correct answers
@@ -41,6 +42,16 @@ export default function TakeQuiz() {
       if (selectedAnswers[index] === num) correct++;
     });
     setNumCorrect(correct);
+  }
+
+  // Disable button if they haven't answered all questions
+  // Or if they've already seen the answers
+  function btnIsDisabled() {
+    const unselected = selectedAnswers.filter((id) => id !== -1);
+    if (unselected.length < 10) {
+      return true;
+    }
+    return showCorrect;
   }
 
   // TODO look nice
@@ -85,7 +96,12 @@ export default function TakeQuiz() {
           />
         ))}
       </div>
-      <button type="button" className="btn btn-primary" onClick={handleClick}>
+      <button
+        type="button"
+        className="btn btn-primary ${styles.checkBtn}"
+        onClick={handleClick}
+        disabled={btnIsDisabled()}
+      >
         Check Answers
       </button>
     </div>
