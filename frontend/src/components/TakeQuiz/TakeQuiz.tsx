@@ -82,7 +82,9 @@ export default function TakeQuiz() {
   return (
     <div className="center-container">
       <h1 className={styles.title}>{quizData.data.title}</h1>
-      {showCorrect && <h2>You got {numCorrect}/10 correct</h2>}
+      {showCorrect && (
+        <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
+      )}
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
           <Question
