@@ -34,7 +34,7 @@ export type Question = {
   id: number;
   quizId: number;
   question: string;
-  correctAnswer: Answer;
+  correct_answer: Answer;
   answers: Answer[];
 };
 

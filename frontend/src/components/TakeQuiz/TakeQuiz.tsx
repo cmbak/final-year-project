@@ -81,7 +81,7 @@ export default function TakeQuiz() {
             selectedAnswer={selectedAnswers[index]}
             setSelectedAnswers={setSelectedAnswers}
             showCorrect={showCorrect}
-            correctA={question.correct_answer.id}
+            correctId={question.correct_answer.id}
           />
         ))}
       </div>
