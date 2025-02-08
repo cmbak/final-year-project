@@ -7,7 +7,7 @@ type QuestionProps = {
   selectedAnswer: number;
   setSelectedAnswers: StateSetter<number[]>;
   showCorrect: boolean;
-  correctA: number;
+  correctId: number;
 } & QuestionType;
 
 export default function Question({
@@ -17,7 +17,7 @@ export default function Question({
   selectedAnswer,
   setSelectedAnswers,
   showCorrect,
-  correctA,
+  correctId,
 }: QuestionProps) {
   function handleClick(answerID: number) {
     // Change id of selected answer for this question
@@ -40,8 +40,8 @@ export default function Question({
             className={clsx({
               [styles.answer]: true,
               [styles.selected]: selectedAnswer === id,
-              [styles.correct]: showCorrect && correctA === id,
-              [styles.incorrect]: showCorrect && correctA !== id,
+              [styles.correct]: showCorrect && correctId === id,
+              [styles.incorrect]: showCorrect && correctId !== id,
             })}
             onClick={() => handleClick(id)}
           >
