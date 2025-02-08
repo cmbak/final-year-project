@@ -28,15 +28,25 @@ body {
   border-radius: var(--border-radius-rounded);
   transition: all var(--speed-medium) ease;
   cursor: pointer;
+
+  &:disabled {
+    cursor: auto;
+  }
 }
 
 .btn-primary {
   background-color: var(--colour-primary);
   color: var(--color-btn-text);
 
-  &:hover {
+  /* Only show hover effects if button not disabled */
+  &:not(:disabled):hover {
     background-color: var(--colour-primary-dark);
     color: white;
+  }
+
+  &:disabled {
+    color: black;
+    background-color: darkgray;
   }
 }
 
@@ -44,7 +54,7 @@ body {
   background-color: var(--color-btn-secondary);
   color: var(--color-btn-text);
 
-  &:hover {
+  &:not(:disabled)hover {
     background-color: black;
     color: white;
   }
