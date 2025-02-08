@@ -13,3 +13,7 @@
   gap: 1rem;
   text-align: center;
 }
+
+.questions > div {
+  margin-bottom: 50vh;
+}
