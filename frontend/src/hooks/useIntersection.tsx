@@ -13,7 +13,6 @@ export default function useIntersection<T extends Element>(
   options: IntersectionObserverOptions,
 ) {
   const [isVisible, setIsVisible] = useState(false);
-  // const elementRef = useRef<T extends Element>(null)
   const elementRef = useRef<T>(null);
 
   useEffect(() => {
@@ -22,7 +21,11 @@ export default function useIntersection<T extends Element>(
       setIsVisible(entry.isIntersecting);
     }, options);
 
-    if (elementRef.current !== null) observer.observe(elementRef.current);
+    if (elementRef.current) observer.observe(elementRef.current);
+
+    return () => {
+      if (elementRef.current) observer.unobserve(elementRef.current);
+    };
   }, []);
 
   return { elementRef, isVisible };
