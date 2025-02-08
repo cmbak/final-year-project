@@ -1,6 +1,12 @@
 .title {
   font-size: 2.5rem;
   font-weight: bold;
+  margin-block: 1rem;
+}
+
+.numCorrect {
+  font-size: 1.7rem;
+  margin-bottom: 2rem;
 }
 
 .questions {
