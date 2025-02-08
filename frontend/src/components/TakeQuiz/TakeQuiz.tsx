@@ -8,22 +8,40 @@ import styles from "./TakeQuiz.module.css";
 import { useState } from "react";
 
 export default function TakeQuiz() {
-  const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
+  const [numCorrect, setNumCorrect] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState<number[]>([]);
+  const [showCorrect, setShowCorrect] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(10).fill(-1), // Array of answer IDs;
   );
-  let { quizId } = useParams();
+  const { quizId } = useParams();
   const user = useUser();
   const quizData = useQuery({
+    // Fetch quiz name
     queryKey: ["individual-quiz", quizId, user.data?.id],
     queryFn: () => fetchQuiz(user.data?.id, quizId),
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
   const { isError, isPending, data } = useQuery({
+    // Fetch quiz questions
     queryKey: ["quiz-questions", user.data?.id, quizId],
-    queryFn: () => fetchQuizQuestions(user.data?.id, quizId),
+    queryFn: async () => {
+      const response = await fetchQuizQuestions(user.data?.id, quizId);
+      setCorrectAnswers(response.map((question) => question.correct_answer.id));
+      return response;
+    },
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
+
+  function handleClick() {
+    setShowCorrect(true);
+    // Tally num of correct answers
+    let correct = 0;
+    correctAnswers.forEach((num, index) => {
+      if (selectedAnswers[index] === num) correct++;
+    });
+    setNumCorrect(correct);
+  }
 
   // TODO look nice
   if (isPending) {
@@ -53,6 +71,7 @@ export default function TakeQuiz() {
   return (
     <div className="center-container">
       <h1 className={styles.title}>{quizData.data.title}</h1>
+      {showCorrect && <h2>You got {numCorrect}/10 correct</h2>}
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
           <Question
@@ -61,16 +80,12 @@ export default function TakeQuiz() {
             number={index + 1}
             selectedAnswer={selectedAnswers[index]}
             setSelectedAnswers={setSelectedAnswers}
-            showCorrectAnswers={showCorrectAnswers}
+            showCorrect={showCorrect}
             correctA={question.correct_answer.id}
           />
         ))}
       </div>
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={() => setShowCorrectAnswers(true)}
-      >
+      <button type="button" className="btn btn-primary" onClick={handleClick}>
         Check Answers
       </button>
     </div>
