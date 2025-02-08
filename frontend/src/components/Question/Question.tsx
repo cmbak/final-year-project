@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { Question as QuestionType, StateSetter } from "../../types";
 import styles from "./Question.module.css";
-import { useEffect, useRef, useState } from "react";
 import useIntersection from "../../hooks/useIntersection";
 
 type QuestionProps = {
@@ -36,26 +35,33 @@ export default function Question({
 
   return (
     <div ref={elementRef}>
-      <h3 className={styles.question}>
-        {number}. {question}
-      </h3>
-      <ul>
-        {answers.map(({ id, answer }) => (
-          <li
-            key={id}
-            className={clsx({
-              [styles.answer]: true,
-              [styles.selected]: selectedAnswer === id,
-              [styles.correct]: showCorrect && correctId === id,
-              [styles.incorrect]: showCorrect && correctId !== id,
-              [styles.intersecting]: isVisible,
-            })}
-            onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
-          >
-            {answer}
-          </li>
-        ))}
-      </ul>
+      {/* container to prevent animation from flickering because of scale anim*/}
+      <div
+        className={clsx({
+          [styles.container]: true,
+          [styles.visible]: isVisible,
+        })}
+      >
+        <h3 className={styles.question}>
+          {number}. {question}
+        </h3>
+        <ul>
+          {answers.map(({ id, answer }) => (
+            <li
+              key={id}
+              className={clsx({
+                [styles.answer]: true,
+                [styles.selected]: selectedAnswer === id,
+                [styles.correct]: showCorrect && correctId === id,
+                [styles.incorrect]: showCorrect && correctId !== id,
+              })}
+              onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
+            >
+              {answer}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
