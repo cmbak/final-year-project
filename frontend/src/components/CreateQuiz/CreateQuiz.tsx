@@ -7,6 +7,7 @@ import FormError from "../FormError/FormError";
 import { useMutation } from "@tanstack/react-query";
 import { createQuiz } from "../../utils/createQuiz";
 import { CreateQuizDetails, FormError as error } from "../../types";
+import Loading from "../Loading/Loading";
 
 type FormErrors = {
   category?: error;
@@ -42,7 +43,7 @@ export default function CreateQuiz() {
 
   // Quiz being made
   if (isPending) {
-    return <h1>Creating Quiz...</h1>;
+    return <Loading text="Creating Quiz..." />;
   }
 
   return (
@@ -50,6 +51,7 @@ export default function CreateQuiz() {
       <div className={styles.header}>
         <BackButton />
       </div>
+      <Loading text="Creating Quiz..." />
       <form className={`flex flex-col ${styles.form}`} action={formAction}>
         <input
           name="video"
