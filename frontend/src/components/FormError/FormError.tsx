@@ -1,6 +1,7 @@
-// TODO does this need to be a separate component
+import { FormError as error } from "../../types";
+
 type FormErrorProps = {
-  error: string;
+  error: string | error;
 };
 
 export default function FormError({ error }: FormErrorProps) {
