@@ -51,7 +51,7 @@ export default function CreateQuiz() {
       <div className={styles.header}>
         <BackButton />
       </div>
-      <Loading text="Creating Quiz..." />
+      <Loading text="creating quiz" bottomText="generating questions" />
       <form className={`flex flex-col ${styles.form}`} action={formAction}>
         <input
           name="video"

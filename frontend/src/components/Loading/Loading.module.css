@@ -1,3 +1,18 @@
+.container {
+  display: grid;
+  justify-items: center;
+  gap: 2rem;
+}
+
+.text {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.bottomText {
+  font-size: 1.5rem;
+}
+
 .spinner {
   height: 150px;
   width: 150px;
