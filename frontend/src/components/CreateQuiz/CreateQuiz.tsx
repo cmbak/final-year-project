@@ -3,10 +3,10 @@ import useCategories from "../../hooks/useCategories";
 import BackButton from "../BackButton/BackButton";
 import LabelSelect from "../LabelSelect/LabelSelect";
 import styles from "./CreateQuiz.module.css";
-import { instance } from "../../axiosConfig";
 import FormError from "../FormError/FormError";
-
-type error = string[];
+import { useMutation } from "@tanstack/react-query";
+import { createQuiz } from "../../utils/createQuiz";
+import { CreateQuizDetails, FormError as error } from "../../types";
 
 type FormErrors = {
   category?: error;
@@ -17,47 +17,40 @@ type FormErrors = {
 
 export default function CreateQuiz() {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const { isPending, isError, data, error, userId } = useCategories(); // TODO pending error
-  const [state, formAction, formPending] = useActionState(createQuiz, {
-    errors: {} as FormErrors,
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const { isError, data, error, userId } = useCategories(); // TODO pending error
+  const { mutate, isPending } = useMutation({
+    mutationFn: (newQuiz: CreateQuizDetails) => createQuiz(newQuiz),
+    onError: (error: any) => {
+      if (error.response) setFormErrors(error.response.data.errors);
+    },
   });
+  const [state, formAction, formPending] = useActionState(onFormSubmit, null);
 
-  async function createQuiz(prevState: unknown, formData: FormData) {
+  async function onFormSubmit(prevState: unknown, formData: FormData) {
     const category = formData.get("category");
     const title = formData.get("quiz-title");
     const video = formData.get("video");
-    const user = userId;
-    try {
-      const response = await instance.postForm(
-        "/api/quizzes/",
-        { category, title, user, labels: selectedIds, video },
-        { withXSRFToken: true },
-      );
+    mutate({
+      category,
+      title,
+      userId,
+      labels: selectedIds,
+      video,
+    });
+  }
 
-      // Add questions generated from summarised video to quiz
-      await instance.post(
-        `/api/users/${userId}/quizzes/${response.data.id}/`,
-        { questions: response.data.questions },
-        { withXSRFToken: true },
-      );
-    } catch (error: any) {
-      return {
-        errors: error.response.data.errors,
-      };
-    }
+  // Quiz being made
+  if (isPending) {
+    return <h1>Creating Quiz...</h1>;
   }
 
   return (
     <>
       <div className={styles.header}>
         <BackButton />
-        <h2>create quiz</h2>
       </div>
-      <form
-        className={`flex flex-col ${styles.form}`}
-        action={formAction}
-        encType="multipart/form-data"
-      >
+      <form className={`flex flex-col ${styles.form}`} action={formAction}>
         <input
           name="video"
           id="video"
@@ -68,7 +61,7 @@ export default function CreateQuiz() {
         />
         <label className="form-item" htmlFor="category">
           category
-          <FormError error={state?.errors.category} />
+          {formErrors.category && <FormError error={formErrors.category} />}
           <select name="category" id="category" className="input">
             <option disabled>Please select a category</option>
             {data?.map(({ id, name }) => (
@@ -80,12 +73,12 @@ export default function CreateQuiz() {
         </label>
         <div className="form-item">
           <p>labels</p>
-          <FormError error={state?.errors.labels} />
+          {formErrors.labels && <FormError error={formErrors.labels} />}
           <LabelSelect userId={userId} setSelectedIds={setSelectedIds} />
         </div>
         <label className="form-item">
           quiz title
-          <FormError error={state?.errors.title} />
+          {formErrors.title && <FormError error={formErrors.title} />}
           <input type="text" name="quiz-title" required maxLength={50} />
         </label>
         <input /* Change to button? */

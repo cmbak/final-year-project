@@ -38,4 +38,15 @@ export type Question = {
   answers: Answer[];
 };
 
+type FormEntry = FormDataEntryValue | null; // Type return when calling FormData.get()
+export type CreateQuizDetails = {
+  category: FormEntry;
+  title: FormEntry;
+  userId: number | undefined;
+  labels: number[];
+  video: FormEntry;
+};
+
+export type FormError = string[];
+
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
