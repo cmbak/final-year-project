@@ -5,7 +5,7 @@ import useUser from "../../hooks/useUser";
 import { fetchQuiz } from "../../utils/fetchQuiz";
 import Question from "../Question/Question";
 import styles from "./TakeQuiz.module.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function TakeQuiz() {
   const [numCorrect, setNumCorrect] = useState(0);
@@ -14,6 +14,7 @@ export default function TakeQuiz() {
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(10).fill(-1), // Array of answer IDs;
   );
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const { quizId } = useParams();
   const user = useUser();
   const quizData = useQuery({
@@ -42,6 +43,10 @@ export default function TakeQuiz() {
       if (selectedAnswers[index] === num) correct++;
     });
     setNumCorrect(correct);
+    // Scroll page up to title (to show number correct)
+    if (titleRef.current) {
+      titleRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   // Disable button if they haven't answered all questions
@@ -81,7 +86,9 @@ export default function TakeQuiz() {
 
   return (
     <div className="center-container">
-      <h1 className={styles.title}>{quizData.data.title}</h1>
+      <h1 className={styles.title} ref={titleRef}>
+        {quizData.data.title}
+      </h1>
       {showCorrect && (
         <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
       )}
@@ -104,7 +111,7 @@ export default function TakeQuiz() {
         onClick={handleClick}
         disabled={btnIsDisabled()}
       >
-        Check Answers
+        <a href="#title">Check Answers</a>
       </button>
     </div>
   );
