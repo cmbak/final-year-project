@@ -54,7 +54,7 @@ body {
   background-color: var(--color-btn-secondary);
   color: var(--color-btn-text);
 
-  &:not(:disabled)hover {
+  &:not(:disabled):hover {
     background-color: black;
     color: white;
   }
