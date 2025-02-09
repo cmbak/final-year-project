@@ -78,12 +78,11 @@ export default function CreateQuiz() {
             ))}
           </select>
         </label>
-        <label className="form-item">
-          {/* TODO should this be a label? or a p*/}
-          labels
+        <div className="form-item">
+          <p>labels</p>
           <FormError error={state?.errors.labels} />
           <LabelSelect userId={userId} setSelectedIds={setSelectedIds} />
-        </label>
+        </div>
         <label className="form-item">
           quiz title
           <FormError error={state?.errors.title} />

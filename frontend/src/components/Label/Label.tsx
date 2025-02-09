@@ -26,12 +26,22 @@ export default function Label({ id, name, setSelectedIds }: LabelProps) {
     });
   }
 
+  // Replace whitespace in string with underscore for correct html label
+  function stringToId(str: string) {
+    return str.replace(/\s/g, "_");
+  }
+
   return (
-    <li
-      className={clsx(styles.label, selected && styles.selected)}
-      onClick={handleClick}
-    >
-      {name}
-    </li>
+    <>
+      <input
+        type="checkbox"
+        name={name}
+        id={stringToId(name)}
+        className={clsx(styles.label, selected && styles.selected)}
+        onClick={handleClick}
+        value={id}
+      />
+      <label htmlFor={stringToId(name)}>{name}</label>
+    </>
   );
 }

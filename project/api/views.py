@@ -191,7 +191,6 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         file = request.FILES["video"]
         request_data = request.data
-        # TODO labels!
         request_data = request_data.pop(
             "video", None
         )  # Don't want to pass video to serializer
@@ -217,6 +216,7 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
             {"id": serializer.data["id"], "questions": summarised_questions},
             status=status.HTTP_201_CREATED,
         )
+        return JsonResponse({"hi": "hi"})
 
 
 quiz_create_view = QuizCreateView.as_view()

@@ -23,10 +23,10 @@ export default function LabelSelect({
   if (isError) return <h1>Error {error.message}</h1>;
 
   return (
-    <ul className="flex" style={{ gap: "0.2rem" }}>
+    <div className="flex" style={{ gap: "0.2rem" }}>
       {data.map(({ id, name }) => (
         <Label key={id} name={name} id={id} setSelectedIds={setSelectedIds} />
       ))}
-    </ul>
+    </div>
   );
 }
