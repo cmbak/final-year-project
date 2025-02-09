@@ -54,7 +54,7 @@ export default function Question({
                 [styles.selected]: selectedAnswer === id,
                 [styles.correct]: showCorrect && correctId === id,
                 [styles.incorrect]: showCorrect && correctId !== id,
-                ["hover-underline"]: selectedAnswer !== id,
+                ["hover-underline"]: !showCorrect && selectedAnswer !== id,
               })}
               onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
             >
