@@ -20,6 +20,7 @@ from summarise import summarise_video
 
 from .models import Answer, Category, Label, Question, Quiz, User
 import json
+from download_video import download_video
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -190,11 +191,20 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         file = request.FILES["video"]
+        url = request.data["url"]
         request_data = request.data
+
+        # TODO should only be one of video or url
+
+        print(request_data)
+        print(file)
 
         request_data = request_data.pop(
             "video", None
         )  # Don't want to pass video to serializer
+        request_data = request.data.pop(
+            "url", None
+        )  # don't want to pass url to serializer
         print(request.data)
         # https://stackoverflow.com/questions/26274021/simply-save-file-to-folder-in-django
 
@@ -209,8 +219,18 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
         # Create Quiz instance
         self.perform_create(serializer)
 
+        # TODO if something goes wrong, delete newly created quiz ^
+
+        # Download youtube video
+        print(url)
+        file_name = download_video(url)
+
+        # OR
+
         # Summarise video
-        summarised_questions = summarise_video(file)
+
+        # summarised_questions = summarise_video(file)
+        summarised_questions = summarise_video(file_name)
         summarised_questions = json.loads(summarised_questions)
 
         return JsonResponse(
