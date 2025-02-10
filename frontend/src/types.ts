@@ -45,6 +45,7 @@ export type CreateQuizDetails = {
   userId: number | undefined;
   labels: number[];
   video: FormEntry;
+  url: FormEntry | null;
 };
 
 export type FormError = string[];

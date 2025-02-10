@@ -32,12 +32,14 @@ export default function CreateQuiz() {
     const category = formData.get("category");
     const title = formData.get("quiz-title");
     const video = formData.get("video");
+    const url = formData.get("url");
     mutate({
       category,
       title,
       userId,
       labels: selectedIds,
       video,
+      url,
     });
   }
 
@@ -60,6 +62,7 @@ export default function CreateQuiz() {
           className="btn btn-secondary"
           required
         />
+        <input name="url" type="text" />
         <label className="form-item" htmlFor="category">
           category
           {formErrors.category && <FormError error={formErrors.category} />}

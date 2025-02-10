@@ -6,3 +6,7 @@ django-cors-headers==4.6.0
 pytest-django==4.9.0
 pytest-cov==6.0.0
 psycopg==3.2.3
+protobuf==5.29.3
+typing_extensions==4.12.2
+yt_dlp==2025.1.26
+google-genai==1.0.0

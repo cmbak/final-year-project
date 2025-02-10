@@ -20,11 +20,11 @@ class Question(typing.TypedDict):
     correct_answer: str
 
 
-def upload_video(file_path: str) -> File:
-    print(f"./media/{file_path}")
-    """Upload video from path to File API"""
+def upload_video(file_name: str) -> File:
+    print(f"./media/{file_name}")
+    """Upload video titled {file_name} to File API"""
     print("Uploading file...")
-    video_file = genai.upload_file(f"./media/{file_path}")
+    video_file = genai.upload_file(f"./media/{file_name}")
 
     # Check that video is ready to be used
     while video_file.state.name == "PROCESSING":
@@ -37,9 +37,9 @@ def upload_video(file_path: str) -> File:
     return video_file
 
 
-def summarise_video(file_path: str):
+def summarise_video(file_name: str):
     """Summarises video using Gemini 1.5 Flash"""
-    video_file = upload_video(file_path)
+    video_file = upload_video(file_name)
 
     prompt = """
     You are a video summariser tool which summarises a video into a series of 10 multiple choice questions, each with 3 possible answers with only 1 of these being the correct one.
