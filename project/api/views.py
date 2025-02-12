@@ -14,23 +14,32 @@ from django.contrib.auth import login, logout
 from django.core.exceptions import FieldError
 from django.http.response import HttpResponseRedirectBase, JsonResponse
 from download_video import download_video
+from google.api_core.exceptions import GoogleAPICallError, ServerError, TooManyRequests
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 from summarise import summarise_video
+from yt_dlp.utils import DownloadError
 
 from .models import Answer, Category, Label, Question, Quiz, User
 
 
-def handle_invalid_serializer(serializer: ModelSerializer):
+def handle_invalid_serializer(serializer: ModelSerializer) -> Response:
     """Returns response with code 400 containing serializer and its errors"""
     # Can be used to show errors on DJANGO forms
     return Response(
         {"serializer": serializer, "errors": serializer.errors},
         status=status.HTTP_400_BAD_REQUEST,
     )
+
+
+def video_error_json(error_message: str, status_code: int) -> JsonResponse:
+    """
+    Return JsonResponse for video field with the error message and status code specified
+    """
+    return JsonResponse({"errors": {"video": [error_message]}}, status=status_code)
 
 
 class HttpResponseSeeOther(HttpResponseRedirectBase):
@@ -198,15 +207,9 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
         if (file_name is None and url is None) or (
             file_name is not None and url is not None
         ):
-            return JsonResponse(
-                {
-                    "errors": {
-                        "video": [
-                            "You must upload either an mp4 or upload a YouTube video"
-                        ]
-                    }
-                },
-                status=status.HTTP_400_BAD_REQUEST,
+            return video_error_json(
+                "You must upload either an mp4 or upload a YouTube video",
+                status.HTTP_400_BAD_REQUEST,
             )
 
         # URL shouldn't be empty
@@ -215,8 +218,6 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
                 {"errors": {"video": ["You must not enter an empty URL"]}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        print(file_name)
 
         # https://stackoverflow.com/questions/26274021/simply-save-file-to-folder-in-django
 
@@ -230,21 +231,62 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
 
         # Create Quiz instance
         self.perform_create(serializer)
+        quiz = Quiz.objects.get(id=serializer.data["id"])
 
-        # TODO if something goes wrong, delete newly created quiz ^
+        # Delete created quiz if error thrown when summarising
+        try:
+            # Download youtube video
+            if url is not None:
+                file_name = download_video(url)
 
-        # Download youtube video
-        if url is not None:
-            file_name = download_video(url)
+            # Summarise video
+            summarised_questions = summarise_video(file_name)
+            summarised_questions = json.loads(summarised_questions)
 
-        # Summarise video (youtube or uploaded)
-        summarised_questions = summarise_video(file_name)
-        summarised_questions = json.loads(summarised_questions)
+            # Return response with new quiz id and questions
+            return JsonResponse(
+                {"id": serializer.data["id"], "questions": summarised_questions},
+                status=status.HTTP_201_CREATED,
+            )
+        except DownloadError as e:
+            print(f"Something went wrong when trying to download video from {url}")
+            print(e.msg)
+            quiz.delete()
 
-        return JsonResponse(
-            {"id": serializer.data["id"], "questions": summarised_questions},
-            status=status.HTTP_201_CREATED,
-        )
+            if "is not a valid URL" in e.msg:
+                return video_error_json(
+                    "Please enter a valid url for a YouTube video",
+                    status.HTTP_400_BAD_REQUEST,
+                )
+            else:
+                return video_error_json(
+                    f"Something went wrong when downloading video from url {url}",
+                    status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+        except TooManyRequests as e:
+            print("Too many requests sent to Gemini API (429)")
+            print(e.code, e.message)
+            quiz.delete()
+            # File name without path
+            return video_error_json(
+                "Recieved response 429 when trying to summarise video",
+                e.code,
+            )
+        except ServerError as e:
+            print("Something went wrong when trying to summarise video")
+            print(e.code, e.message)
+            return video_error_json(
+                f"Recieved {e.code} response when trying to summarise video",
+                e.code,
+            )
+        # Other API related error not caught by ^
+        except GoogleAPICallError as e:
+            print("Something went wrong when trying to summarise video")
+            print(e.code, e.message)
+            return video_error_json(
+                "Something went wrong when trying to summarise video",
+                e.code,
+            )
 
 
 quiz_create_view = QuizCreateView.as_view()
