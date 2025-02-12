@@ -20,7 +20,7 @@ type FormErrors = {
 type VideoType = "YouTube" | "Upload"; // TODO verify that url is for YT video
 
 export default function CreateQuiz() {
-  const [videoType, setVideoType] = useState<VideoType>("YouTube");
+  const [videoType, setVideoType] = useState<VideoType>("Upload");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const { isError, data, error, userId } = useCategories(); // TODO pending error
@@ -67,6 +67,7 @@ export default function CreateQuiz() {
             className="input"
             name="videoType"
             id="videoType"
+            defaultValue={videoType}
             onChange={(e) => setVideoType(e.target.value as VideoType)}
             required
           >
