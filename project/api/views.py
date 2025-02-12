@@ -1,3 +1,5 @@
+import json
+
 from api.serializers import (
     AnswerSerializer,
     CategorySerializer,
@@ -11,6 +13,7 @@ from decouple import config
 from django.contrib.auth import login, logout
 from django.core.exceptions import FieldError
 from django.http.response import HttpResponseRedirectBase, JsonResponse
+from download_video import download_video
 from rest_framework import generics, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -19,8 +22,6 @@ from rest_framework.views import APIView
 from summarise import summarise_video
 
 from .models import Answer, Category, Label, Question, Quiz, User
-import json
-from download_video import download_video
 
 
 def handle_invalid_serializer(serializer: ModelSerializer):
@@ -190,22 +191,33 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        file = request.FILES["video"]
-        url = request.data["url"]
-        request_data = request.data
+        file_name = request.FILES.get("video")
+        url = request.data.get("url")
 
-        # TODO should only be one of video or url
+        # Should only enter URL OR upload video (XOR)
+        if (file_name is None and url is None) or (
+            file_name is not None and url is not None
+        ):
+            return JsonResponse(
+                {
+                    "errors": {
+                        "video": [
+                            "You must upload either an mp4 or upload a YouTube video"
+                        ]
+                    }
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        print(request_data)
-        print(file)
+        # URL shouldn't be empty
+        if url is not None and len(url) == 0:
+            return JsonResponse(
+                {"errors": {"video": ["You must not enter an empty URL"]}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        request_data = request_data.pop(
-            "video", None
-        )  # Don't want to pass video to serializer
-        request_data = request.data.pop(
-            "url", None
-        )  # don't want to pass url to serializer
-        print(request.data)
+        print(file_name)
+
         # https://stackoverflow.com/questions/26274021/simply-save-file-to-folder-in-django
 
         serializer = self.get_serializer(data=request.data)
@@ -222,14 +234,10 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
         # TODO if something goes wrong, delete newly created quiz ^
 
         # Download youtube video
-        print(url)
-        file_name = download_video(url)
+        if url is not None:
+            file_name = download_video(url)
 
-        # OR
-
-        # Summarise video
-
-        # summarised_questions = summarise_video(file)
+        # Summarise video (youtube or uploaded)
         summarised_questions = summarise_video(file_name)
         summarised_questions = json.loads(summarised_questions)
 

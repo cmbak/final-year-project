@@ -1,7 +1,7 @@
 import time
-import typing_extensions as typing  # vs typing.TypedDict?
 
 import google.generativeai as genai
+import typing_extensions as typing  # vs typing.TypedDict?
 from decouple import config
 from google.generativeai.types import File
 
