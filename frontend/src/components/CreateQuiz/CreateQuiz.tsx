@@ -10,6 +10,7 @@ import { CreateQuizDetails, FormError as error } from "../../types";
 import Loading from "../Loading/Loading";
 
 type FormErrors = {
+  video?: error;
   category?: error;
   labels?: error;
   title?: error;
@@ -59,6 +60,9 @@ export default function CreateQuiz() {
       <form className={`flex flex-col ${styles.form}`} action={formAction}>
         <label className="form-item" htmlFor="videoType">
           Video Type
+          {formErrors.video && videoType === "Upload" && (
+            <FormError error={formErrors.video} />
+          )}
           <select
             className="input"
             name="videoType"
@@ -69,7 +73,8 @@ export default function CreateQuiz() {
             <option value="YouTube">YouTube</option>
           </select>
         </label>
-        {videoType === "Upload" ? (
+        {videoType ===
+        "Upload" /* Either show file input or url (text) input */ ? (
           <input
             name="video"
             id="video"
@@ -81,6 +86,7 @@ export default function CreateQuiz() {
         ) : (
           <label className="form-item" htmlFor="url">
             YouTube URL
+            {formErrors.video && <FormError error={formErrors.video} />}
             <input name="url" type="text" id="url" />
           </label>
         )}
