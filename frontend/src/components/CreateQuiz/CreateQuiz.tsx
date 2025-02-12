@@ -16,7 +16,10 @@ type FormErrors = {
   user?: error;
 };
 
+type VideoType = "YouTube" | "Upload"; // TODO verify that url is for YT video
+
 export default function CreateQuiz() {
+  const [videoType, setVideoType] = useState<VideoType>("YouTube");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const { isError, data, error, userId } = useCategories(); // TODO pending error
@@ -54,15 +57,33 @@ export default function CreateQuiz() {
         <BackButton />
       </div>
       <form className={`flex flex-col ${styles.form}`} action={formAction}>
-        <input
-          name="video"
-          id="video"
-          type="file"
-          accept=".mp4" // TODO check on backend
-          className="btn btn-secondary"
-          required
-        />
-        <input name="url" type="text" />
+        <label className="form-item" htmlFor="videoType">
+          Video Type
+          <select
+            className="input"
+            name="videoType"
+            id="videoType"
+            onChange={(e) => setVideoType(e.target.value as VideoType)}
+          >
+            <option value="Upload">Upload</option>
+            <option value="YouTube">YouTube</option>
+          </select>
+        </label>
+        {videoType === "Upload" ? (
+          <input
+            name="video"
+            id="video"
+            type="file"
+            accept=".mp4" // TODO check on backend
+            className="btn btn-secondary"
+            required
+          />
+        ) : (
+          <label className="form-item" htmlFor="url">
+            YouTube URL
+            <input name="url" type="text" id="url" />
+          </label>
+        )}
         <label className="form-item" htmlFor="category">
           category
           {formErrors.category && <FormError error={formErrors.category} />}
