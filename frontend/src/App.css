@@ -67,6 +67,12 @@ input,
   padding: 0.3rem 1rem;
 }
 
+/* Add * symbol after label text if label has a required select or input as its next sibling*/
+label:has(+ :is(input, select):required)::after {
+  content: "*";
+  color: var(--color-error);
+}
+
 input.btn {
   border-color: transparent;
 }

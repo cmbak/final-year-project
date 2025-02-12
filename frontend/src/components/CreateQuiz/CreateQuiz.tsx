@@ -58,8 +58,8 @@ export default function CreateQuiz() {
         <BackButton />
       </div>
       <form className={`flex flex-col ${styles.form}`} action={formAction}>
-        <label className="form-item" htmlFor="videoType">
-          Video Type
+        <div className="form-item">
+          <label htmlFor="videoType">Video Type</label>
           {formErrors.video && videoType === "Upload" && (
             <FormError error={formErrors.video} />
           )}
@@ -68,11 +68,12 @@ export default function CreateQuiz() {
             name="videoType"
             id="videoType"
             onChange={(e) => setVideoType(e.target.value as VideoType)}
+            required
           >
             <option value="Upload">Upload</option>
             <option value="YouTube">YouTube</option>
           </select>
-        </label>
+        </div>
         {videoType ===
         "Upload" /* Either show file input or url (text) input */ ? (
           <input
@@ -84,16 +85,16 @@ export default function CreateQuiz() {
             required
           />
         ) : (
-          <label className="form-item" htmlFor="url">
-            YouTube URL
+          <div className="form-item">
+            <label htmlFor="url">YouTube URL</label>
             {formErrors.video && <FormError error={formErrors.video} />}
-            <input name="url" type="text" id="url" />
-          </label>
+            <input name="url" type="text" id="url" required />
+          </div>
         )}
-        <label className="form-item" htmlFor="category">
-          category
+        <div className="form-item">
+          <label htmlFor="category">category</label>
           {formErrors.category && <FormError error={formErrors.category} />}
-          <select name="category" id="category" className="input">
+          <select name="category" id="category" className="input" required>
             <option disabled>Please select a category</option>
             {data?.map(({ id, name }) => (
               <option value={id} key={id}>
@@ -101,17 +102,23 @@ export default function CreateQuiz() {
               </option>
             ))}
           </select>
-        </label>
+        </div>
         <div className="form-item">
           <p>labels</p>
           {formErrors.labels && <FormError error={formErrors.labels} />}
           <LabelSelect userId={userId} setSelectedIds={setSelectedIds} />
         </div>
-        <label className="form-item">
-          quiz title
+        <div className="form-item">
+          <label htmlFor="quiz-title">quiz title</label>
           {formErrors.title && <FormError error={formErrors.title} />}
-          <input type="text" name="quiz-title" required maxLength={50} />
-        </label>
+          <input
+            type="text"
+            name="quiz-title"
+            id="quiz-title"
+            maxLength={50}
+            required
+          />
+        </div>
         <input /* Change to button? */
           type="submit"
           className="btn btn-secondary"
