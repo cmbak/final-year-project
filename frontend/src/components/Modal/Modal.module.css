@@ -14,6 +14,15 @@
   font-size: 1.5rem;
 }
 
+/* 
+Anything which has a modal as a direct child needs to have a width of 100%,
+so that the bg can take up the whole width of the page
+*/
+
+:has(> .modal) {
+  width: 100%;
+}
+
 .modal {
   background-color: var(--colour-card-background);
   border-radius: var(--border-radius-small);

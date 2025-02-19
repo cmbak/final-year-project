@@ -1,8 +1,6 @@
 import { useActionState, useState } from "react";
 import { instance } from "../../axiosConfig";
 import Modal from "../Modal/Modal";
-import { fetchUser } from "../../utils/fetchUser";
-import { useQuery } from "@tanstack/react-query";
 import useUser from "../../hooks/useUser";
 
 // Modal which sends POST request to endpoint
