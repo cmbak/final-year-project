@@ -10,7 +10,7 @@ export default function Dashboard() {
       {/* TODO Search bar here */}
       <Link to="../create-quiz">create quiz</Link>
       <Categories />
-      <div className={`flex ${styles.modalBtnContainers}`}>
+      <div className={`${styles.modalBtnContainers}`}>
         <CreateModal
           endpoint="/api/categories/"
           inputId="create-category-name"
