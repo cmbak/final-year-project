@@ -17,6 +17,9 @@
 /* 
 Anything which has a modal as a direct child needs to have a width of 100%,
 so that the bg can take up the whole width of the page
+
+- Only takes effect when modal shows, so 100% width needs to be taken into account
+for parent element when modal is not showing
 */
 
 :has(> .modal) {
