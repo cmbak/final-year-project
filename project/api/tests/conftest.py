@@ -76,8 +76,14 @@ def get_response_errors(response) -> list[str]:
     """Return a list of the errors in found in the response data"""
     errors = []
 
-    for field_errors in response.data["errors"]:
-        for error in response.data["errors"][field_errors]:
-            errors.append(str(error))
+    # Response is list
+    try:
+        for field_errors in response.data["errors"]:
+            for error in response.data["errors"][field_errors]:
+                errors.append(str(error))
+    except AttributeError:  # Response is dict
+        for field_errors in response.get("errors"):
+            for error in response.get("errors")[field_errors]:
+                errors.append(str(error))
 
     return errors
