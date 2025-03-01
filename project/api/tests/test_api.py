@@ -1,5 +1,6 @@
 import pytest
 from api.models import Category, Label, Quiz, User
+from django.urls import reverse
 from rest_framework.test import APIClient
 
 from .conftest import custom_user, get_response_errors
@@ -238,6 +239,36 @@ def test_post_invalid_category(
 
 # Creating Quiz
 
+# TODO valid quiz
+
+# @pytest.mark.django_db(True)
+# def test_post_quiz_auth(
+#     standard_user: User,
+#     api_client: APIClient,
+# ) -> None:
+#     """
+#     Test that a POST request from an authenticated user with valid quiz details
+#     returns 201 and creates a quiz with those details
+#     """
+#     label_one = Label.objects.create(name="Label One", user=standard_user)
+#     label_two = Label.objects.create(name="Label Two", user=standard_user)
+#     category = Category.objects.create(name="Category", user=standard_user)
+
+#     data = {
+#         "title": "Test Quiz",
+#         "labels": [label_one.id, label_two.id],
+#         "category": category.id,
+#         "user": standard_user.id,
+#         "url": "fakeurl.co.uk",
+#     }
+#     api_client.force_authenticate(user=standard_user)
+
+#     response = api_client.post(reverse("quiz-create"), data)
+
+#     assert response.json() == 1
+#     assert response.status_code == 201
+#     assert Quiz.objects.count() == 1
+
 
 @pytest.mark.django_db(True)
 def test_post_quiz_auth(
@@ -245,8 +276,8 @@ def test_post_quiz_auth(
     api_client: APIClient,
 ) -> None:
     """
-    Test that a POST request from an authenticated user with valid quiz details
-    returns 201 and creates a quiz with those details
+    Test that a POST request from an authenticated user with an invalid YouTube url
+    returns 400 and the appropriate error message
     """
     label_one = Label.objects.create(name="Label One", user=standard_user)
     label_two = Label.objects.create(name="Label Two", user=standard_user)
@@ -257,13 +288,16 @@ def test_post_quiz_auth(
         "labels": [label_one.id, label_two.id],
         "category": category.id,
         "user": standard_user.id,
+        "url": "fakeurl.co.uk",
     }
     api_client.force_authenticate(user=standard_user)
 
-    response = api_client.post("/api/quizzes/", data)
+    response = api_client.post(reverse("quiz-create"), data)
+    errors = get_response_errors(response.json())
 
-    assert response.status_code == 201
-    assert Quiz.objects.count() == 1
+    assert response.status_code == 400
+    assert Quiz.objects.count() == 0
+    assert "Please enter a valid url for a YouTube video" in errors
 
 
 @pytest.mark.django_db(True)
@@ -271,7 +305,7 @@ def test_post_quiz_not_auth(api_client: APIClient) -> None:
     """
     Test that a POST request from an unauthenticated user with returns 401
     """
-    response = api_client.post("/api/quizzes/", {})
+    response = api_client.post(reverse("quiz-create"), {})
     assert response.status_code == 401
 
 
@@ -291,11 +325,12 @@ def test_post_quiz_other_user_labels(
         "labels": [label.id],
         "category": category.id,
         "user": standard_user.id,
+        "url": "fakeurl.co.uk",
     }
     api_client.force_authenticate(user=standard_user)
 
-    response = api_client.post("/api/quizzes/", data)
-    errors = get_response_errors(response)
+    response = api_client.post(reverse("quiz-create"), data)
+    errors = get_response_errors(response.json())
 
     assert response.status_code == 400
     assert Quiz.objects.count() == 0
@@ -317,11 +352,12 @@ def test_post_quiz_other_user_categories(
         "labels": [],
         "category": category.id,
         "user": standard_user.id,
+        "url": "fakeurl.co.uk",
     }
     api_client.force_authenticate(user=standard_user)
 
-    response = api_client.post("/api/quizzes/", data)
-    errors = get_response_errors(response)
+    response = api_client.post(reverse("quiz-create"), data)
+    errors = get_response_errors(response.json())
 
     assert response.status_code == 400
     assert Quiz.objects.count() == 0
