@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from .conftest import custom_user, get_response_errors
+from yt_dlp.utils import DownloadError
 
 # Users API Endpoint
 
@@ -271,10 +272,7 @@ def test_post_invalid_category(
 
 
 @pytest.mark.django_db(True)
-def test_post_quiz_auth(
-    standard_user: User,
-    api_client: APIClient,
-) -> None:
+def test_post_quiz_auth(standard_user: User, api_client: APIClient, mocker) -> None:
     """
     Test that a POST request from an authenticated user with an invalid YouTube url
     returns 400 and the appropriate error message
@@ -290,8 +288,13 @@ def test_post_quiz_auth(
         "user": standard_user.id,
         "url": "fakeurl.co.uk",
     }
-    api_client.force_authenticate(user=standard_user)
 
+    # patch download_video(url) method using mocker
+    mock_download = mocker.patch("download_video.download_video")
+    # Add DownloadError as side effect
+    mock_download.side_effect = DownloadError("Video is not a valid URL")
+
+    api_client.force_authenticate(user=standard_user)
     response = api_client.post(reverse("quiz-create"), data)
     errors = get_response_errors(response.json())
 
