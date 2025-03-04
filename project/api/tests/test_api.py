@@ -611,3 +611,24 @@ def test_quiz_add_no_questions(quiz: Quiz, api_client: APIClient):
 
     assert response.status_code == 400
     assert "No questions provided." in response.json()["error"]
+
+
+# Questions for user's quiz endpoint
+
+
+@pytest.mark.django_db(True)
+def test_get_other_user_questions(quiz: Quiz, api_client: APIClient):
+    """
+    Test that a user trying to access the questions of another user
+    returns a 403 response
+    """
+    other_user = custom_user(username="other_user", email="other.user@gmail.com")
+
+    api_client.force_authenticate(quiz.user)
+    response = api_client.get(
+        reverse(
+            "user_quiz_questions", kwargs={"user_id": other_user.id, "quiz_id": quiz.id}
+        )
+    )
+
+    assert response.status_code == 403
