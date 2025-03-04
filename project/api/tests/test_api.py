@@ -1,3 +1,4 @@
+import json
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -581,9 +582,11 @@ def test_quiz_add_questions(quiz: Quiz, api_client: APIClient):
 
     api_client.force_authenticate(user=user)
     response = api_client.post(
-        reverse("user_quizzes", kwargs={"user_id": user.id, "quiz_id": quiz.id}), data
+        reverse("user_quizzes", kwargs={"user_id": user.id, "quiz_id": quiz.id}),
+        json.dumps(data),
+        content_type="application/json",
     )
-    updated_quiz = response.json()[0]
+    updated_quiz = response.json()["quiz"]
 
     assert response.status_code == 200
     assert updated_quiz["id"] == quiz.id
