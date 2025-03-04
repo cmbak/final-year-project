@@ -279,26 +279,16 @@ def test_post_invalid_category(
 )
 def test_post_quiz_invalid_url(
     mock_download: MagicMock,
-    standard_user: User,
+    quiz_data_and_user: tuple[dict, User],
     api_client: APIClient,
 ) -> None:
     """
     Test that a POST request from an authenticated user with an invalid YouTube url
     returns 400 and the appropriate error message
     """
-    label_one = Label.objects.create(name="Label One", user=standard_user)
-    label_two = Label.objects.create(name="Label Two", user=standard_user)
-    category = Category.objects.create(name="Category", user=standard_user)
+    data, user = quiz_data_and_user
 
-    data = {
-        "title": "Test Quiz",
-        "labels": [label_one.id, label_two.id],
-        "category": category.id,
-        "user": standard_user.id,
-        "url": "fakeurl.co.uk",
-    }
-
-    api_client.force_authenticate(user=standard_user)
+    api_client.force_authenticate(user=user)
     response = api_client.post(reverse("quiz-create"), data)
     errors = get_response_errors(response.json())
 
@@ -316,26 +306,15 @@ def test_post_quiz_invalid_url(
 def test_post_quiz_too_many_reqs(
     mock_download: MagicMock,
     mock_summarise: MagicMock,
-    standard_user: User,
+    quiz_data_and_user: tuple[dict, User],
     api_client: APIClient,
 ) -> None:
     """
     Test that a POST request from an authenticated user with a valid video
     returns the appropriate error message if gemini api returns a 429 response
     """
-    label_one = Label.objects.create(name="Label One", user=standard_user)
-    label_two = Label.objects.create(name="Label Two", user=standard_user)
-    category = Category.objects.create(name="Category", user=standard_user)
-
-    data = {
-        "title": "Test Quiz",
-        "labels": [label_one.id, label_two.id],
-        "category": category.id,
-        "user": standard_user.id,
-        "url": "validurl.co.uk",
-    }
-
-    api_client.force_authenticate(user=standard_user)
+    data, user = quiz_data_and_user
+    api_client.force_authenticate(user=user)
     response = api_client.post(reverse("quiz-create"), data)
     errors = get_response_errors(response.json())
 

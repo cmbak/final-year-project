@@ -72,6 +72,27 @@ def quiz() -> Quiz:
     return quiz
 
 
+@pytest.fixture
+def quiz_data_and_user(standard_user) -> tuple[dict, User]:
+    """
+    Return a tuple of valid data for a Quiz and the user used to create the quiz details
+    """
+    label_one = Label.objects.create(name="Label One", user=standard_user)
+    label_two = Label.objects.create(name="Label Two", user=standard_user)
+    category = Category.objects.create(name="Category", user=standard_user)
+
+    return (
+        {
+            "title": "Test Quiz",
+            "labels": [label_one.id, label_two.id],
+            "category": category.id,
+            "user": standard_user.id,
+            "url": "fakeurl.co.uk",
+        },
+        standard_user,
+    )
+
+
 def get_response_errors(response) -> list[str]:
     """Return a list of the errors in found in the response data"""
     errors = []
