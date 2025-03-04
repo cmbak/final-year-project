@@ -2,9 +2,9 @@ import json
 from unittest.mock import MagicMock, patch
 
 import pytest
-from api.models import Answer, Category, Label, Question, Quiz, User
+from api.models import Category, Label, Question, Quiz, User
 from django.urls import reverse
-from google.api_core.exceptions import GoogleAPICallError, ServerError, TooManyRequests
+from google.api_core.exceptions import TooManyRequests
 from rest_framework.test import APIClient
 from yt_dlp.utils import DownloadError
 
@@ -632,3 +632,23 @@ def test_get_other_user_questions(quiz: Quiz, api_client: APIClient):
     )
 
     assert response.status_code == 403
+
+
+@pytest.mark.django_db(True)
+def test_get_quiz_questions(quiz: Quiz, api_client: APIClient):
+    """
+    Test that a user trying to access the questions for one of the quizzes
+    returns a 200 response and the questions
+    """
+    user = quiz.user
+
+    api_client.force_authenticate(quiz.user)
+    response = api_client.get(
+        reverse("user_quiz_questions", kwargs={"user_id": user.id, "quiz_id": quiz.id})
+    )
+
+    response_question = response.json()
+
+    assert response.status_code == 200
+    assert len(response_question) == 1
+    assert response_question[0]["quiz"] == quiz.id
