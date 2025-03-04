@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 from .conftest import custom_user, get_response_errors
 from yt_dlp.utils import DownloadError
 from google.api_core.exceptions import GoogleAPICallError, ServerError, TooManyRequests
-import download_video
+from unittest.mock import patch, MagicMock
 
 # Users API Endpoint
 
@@ -273,45 +273,51 @@ def test_post_invalid_category(
 #     assert Quiz.objects.count() == 1
 
 
-# @pytest.mark.django_db(True)
-# def test_post_quiz_invalid_url(
-#     standard_user: User, api_client: APIClient, mocker
-# ) -> None:
-#     """
-#     Test that a POST request from an authenticated user with an invalid YouTube url
-#     returns 400 and the appropriate error message
-#     """
-#     label_one = Label.objects.create(name="Label One", user=standard_user)
-#     label_two = Label.objects.create(name="Label Two", user=standard_user)
-#     category = Category.objects.create(name="Category", user=standard_user)
+@pytest.mark.django_db(True)
+@patch(
+    "api.views.download_video", side_effect=DownloadError("Video is not a valid URL")
+)
+def test_post_quiz_invalid_url(
+    mock_download: MagicMock,
+    standard_user: User,
+    api_client: APIClient,
+) -> None:
+    """
+    Test that a POST request from an authenticated user with an invalid YouTube url
+    returns 400 and the appropriate error message
+    """
+    label_one = Label.objects.create(name="Label One", user=standard_user)
+    label_two = Label.objects.create(name="Label Two", user=standard_user)
+    category = Category.objects.create(name="Category", user=standard_user)
 
-#     data = {
-#         "title": "Test Quiz",
-#         "labels": [label_one.id, label_two.id],
-#         "category": category.id,
-#         "user": standard_user.id,
-#         "url": "fakeurl.co.uk",
-#     }
+    data = {
+        "title": "Test Quiz",
+        "labels": [label_one.id, label_two.id],
+        "category": category.id,
+        "user": standard_user.id,
+        "url": "fakeurl.co.uk",
+    }
 
-#     # patch download_video(url) method using mocker and DownloadError as side effect
-#     mock_download = mocker.patch(
-#         "download_video.download_video",
-#         side_effect=DownloadError("Video is not a valid URL"),
-#     )
+    api_client.force_authenticate(user=standard_user)
+    response = api_client.post(reverse("quiz-create"), data)
+    errors = get_response_errors(response.json())
 
-#     api_client.force_authenticate(user=standard_user)
-#     response = api_client.post(reverse("quiz-create"), data)
-#     errors = get_response_errors(response.json())
-
-#     assert response.status_code == 400
-#     assert Quiz.objects.count() == 0
-#     assert "Please enter a valid url for a YouTube video" in errors
-#     assert mock_download.call_count == 1
+    assert response.status_code == 400
+    assert Quiz.objects.count() == 0
+    assert "Please enter a valid url for a YouTube video" in errors
+    assert mock_download.call_count == 1
 
 
 @pytest.mark.django_db(True)
+@patch("api.views.download_video", return_value="valid_video.mp4")
+@patch(
+    "api.views.summarise_video", side_effect=TooManyRequests("Too many requests sent")
+)
 def test_post_quiz_too_many_reqs(
-    standard_user: User, api_client: APIClient, mocker
+    mock_download: MagicMock,
+    mock_summarise: MagicMock,
+    standard_user: User,
+    api_client: APIClient,
 ) -> None:
     """
     Test that a POST request from an authenticated user with a valid video
@@ -329,16 +335,6 @@ def test_post_quiz_too_many_reqs(
         "url": "validurl.co.uk",
     }
 
-    # path download_video method w/ 'valid' file as return value
-    mocker.patch.object(
-        download_video, "download_video", return_value="valid_video.mp4"
-    )
-    # patch summarise_video method w/ TooManyRequests exception as side effect
-    mock_summarise = mocker.patch(
-        "summarise.summarise_video",
-        side_effect=TooManyRequests("Too many requests sent"),
-    )
-
     api_client.force_authenticate(user=standard_user)
     response = api_client.post(reverse("quiz-create"), data)
     errors = get_response_errors(response.json())
@@ -346,6 +342,7 @@ def test_post_quiz_too_many_reqs(
     assert response.status_code == 429
     assert Quiz.objects.count() == 0
     assert "Recieved response 429 when trying to summarise video" in errors
+    assert mock_download.call_count == 1
     assert mock_summarise.call_count == 1
 
 
