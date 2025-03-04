@@ -1,5 +1,5 @@
 import pytest
-from api.models import Category, Label, Quiz, User
+from api.models import Category, Label, Quiz, User, Question, Answer
 from rest_framework.test import APIClient
 
 USER_USERNAME = "bob"
@@ -61,13 +61,21 @@ def api_client() -> APIClient:
 def quiz() -> Quiz:
     """Returns a quiz instance"""
     user = custom_user()
+
     quiz = Quiz.objects.create(
         title="quiz",
         user=user,
         category=Category.objects.create(name="category", user=user),
     )
-
     quiz.labels.add(Label.objects.create(name="label", user=user))
+
+    question = Question.objects.create(
+        question="What is the captial of England?", quiz=quiz
+    )
+    answer = Answer.objects.create(answer="London", question=question)
+    question.correct_answer = answer
+
+    question.save()
     quiz.save()
     return quiz
 

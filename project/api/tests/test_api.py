@@ -1,5 +1,5 @@
 import pytest
-from api.models import Category, Label, Quiz, User
+from api.models import Category, Label, Quiz, User, Question
 from django.urls import reverse
 from rest_framework.test import APIClient
 
@@ -537,3 +537,23 @@ def test_get_user_quiz_by_category_other_user(
     assert response.status_code == 403
     assert len(response.json()) == 1
     assert response.json()["error"] == "You cannot access this"
+
+
+# Endpoint for a User's Quiz
+@pytest.mark.django_db(True)
+def test_get_user_quizzes(quiz: Quiz, api_client: APIClient):
+    """
+    Test that GET request to endpoint for user's specific quiz w/ an authenticated
+    user returns 200 and the questions
+    """
+    user = quiz.user
+
+    api_client.force_authenticate(user=quiz.user)
+    response = api_client.get(
+        reverse("user_quizzes", kwargs={"user_id": user.id, "quiz_id": quiz.id})
+    )
+    response_quiz = response.json()
+
+    assert response.status_code == 200
+    assert len(response_quiz) == 1
+    assert response_quiz[0]["id"] == quiz.id
