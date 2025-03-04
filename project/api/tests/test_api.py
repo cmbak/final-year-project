@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from api.models import Category, Label, Question, Quiz, User
+from api.models import Answer, Category, Label, Question, Quiz, User
 from django.urls import reverse
 from google.api_core.exceptions import GoogleAPICallError, ServerError, TooManyRequests
 from rest_framework.test import APIClient
@@ -561,9 +561,41 @@ def test_get_user_quizzes(quiz: Quiz, api_client: APIClient):
 
 
 @pytest.mark.django_db(True)
+def test_quiz_add_questions(quiz: Quiz, api_client: APIClient):
+    """
+    Test that a POST request to endpoint for user's specific quiz w/ questions
+    and answers returns 200 and the updated quiz
+    """
+    user = quiz.user
+    prev_num_questions = Question.objects.filter(quiz=quiz).count()
+
+    data = {
+        "questions": [
+            {
+                "question": "What is one 1+1?",
+                "answers": ["1", "2", "3"],
+                "correct_answer": "1",
+            }
+        ]
+    }
+
+    api_client.force_authenticate(user=user)
+    response = api_client.post(
+        reverse("user_quizzes", kwargs={"user_id": user.id, "quiz_id": quiz.id}), data
+    )
+    updated_quiz = response.json()[0]
+
+    assert response.status_code == 200
+    assert updated_quiz["id"] == quiz.id
+    assert (
+        len(updated_quiz["questions"]) == prev_num_questions + 1
+    )  # added one question via POST
+
+
+@pytest.mark.django_db(True)
 def test_quiz_add_no_questions(quiz: Quiz, api_client: APIClient):
     """
-    Test that a POST request to endpoint for user's specific quiz w/ not questions
+    Test that a POST request to endpoint for user's specific quiz w/ no questions
     returns and error and the correct error message
     """
     user = quiz.user
