@@ -11,4 +11,4 @@ typing_extensions==4.12.2
 yt_dlp==2025.1.26
 google-genai==1.0.0
 google-api-core==2.24.1
-google-generativeapi==0.8.4
+google-generativeai==0.8.4
