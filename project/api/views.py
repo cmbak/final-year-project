@@ -375,7 +375,7 @@ class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
     # TODO is endpoint rest?
     def create(self, request, user_id, quiz_id, *args, **kwargs):
         # Add questions to Quiz only if there's data!
-        if len(request.data["questions"]) == 0:
+        if len(request.data.get("questions", [])) == 0:
             return JsonResponse(
                 {"error": "No questions provided."}, status=status.HTTP_400_BAD_REQUEST
             )

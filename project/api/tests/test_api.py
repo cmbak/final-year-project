@@ -1,12 +1,13 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from api.models import Category, Label, Quiz, User, Question
+from api.models import Category, Label, Question, Quiz, User
 from django.urls import reverse
+from google.api_core.exceptions import GoogleAPICallError, ServerError, TooManyRequests
 from rest_framework.test import APIClient
+from yt_dlp.utils import DownloadError
 
 from .conftest import custom_user, get_response_errors
-from yt_dlp.utils import DownloadError
-from google.api_core.exceptions import GoogleAPICallError, ServerError, TooManyRequests
-from unittest.mock import patch, MagicMock
 
 # Users API Endpoint
 
@@ -544,11 +545,11 @@ def test_get_user_quiz_by_category_other_user(
 def test_get_user_quizzes(quiz: Quiz, api_client: APIClient):
     """
     Test that GET request to endpoint for user's specific quiz w/ an authenticated
-    user returns 200 and the questions
+    user returns 200 and the quiz details
     """
     user = quiz.user
 
-    api_client.force_authenticate(user=quiz.user)
+    api_client.force_authenticate(user=user)
     response = api_client.get(
         reverse("user_quizzes", kwargs={"user_id": user.id, "quiz_id": quiz.id})
     )
@@ -557,3 +558,21 @@ def test_get_user_quizzes(quiz: Quiz, api_client: APIClient):
     assert response.status_code == 200
     assert len(response_quiz) == 1
     assert response_quiz[0]["id"] == quiz.id
+
+
+@pytest.mark.django_db(True)
+def test_quiz_add_no_questions(quiz: Quiz, api_client: APIClient):
+    """
+    Test that a POST request to endpoint for user's specific quiz w/ not questions
+    returns and error and the correct error message
+    """
+    user = quiz.user
+    data = {"questions": []}
+
+    api_client.force_authenticate(user=user)
+    response = api_client.post(
+        reverse("user_quizzes", kwargs={"user_id": user.id, "quiz_id": quiz.id}), data
+    )
+
+    assert response.status_code == 400
+    assert "No questions provided." in response.json()["error"]
