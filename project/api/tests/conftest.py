@@ -1,5 +1,5 @@
 import pytest
-from api.models import Category, Label, Quiz, User, Question, Answer
+from api.models import Answer, Category, Label, Question, Quiz, User
 from rest_framework.test import APIClient
 
 USER_USERNAME = "bob"
