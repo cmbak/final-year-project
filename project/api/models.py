@@ -71,6 +71,10 @@ class Label(models.Model):
         """Return string representation of label"""
         return self.name
 
+    def as_dict(self):
+        """Return dict representation of label"""
+        return {"id": self.id, "name": self.name}
+
 
 class Quiz(models.Model):
     """Model representing a quiz"""
@@ -117,6 +121,19 @@ class Quiz(models.Model):
 
         return f"{self.title} | {self.category.name} | {label_names} | {self.user.username}"  # noqa e501
 
+    def as_dict(self):
+        """Returns dictionary representation of quiz"""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "user": self.user.id,
+            "category": self.category.id,
+            "labels": [label.as_dict() for label in self.labels.all()],
+            "questions": [
+                question.as_dict() for question in Question.objects.filter(quiz=self.id)
+            ],
+        }
+
 
 class QuizLabels(models.Model):
     """Intermediate model between Quiz and Labels"""
@@ -137,6 +154,17 @@ class Question(models.Model):
         null=True,  # noqa E501 So that questions and answer instance can be made simult; See views.py
     )
 
+    def as_dict(self):
+        """Return dict representation of question"""
+        return {
+            "id": self.id,
+            "question": self.question,
+            "answers": [
+                answer.as_dict() for answer in Answer.objects.filter(question=self)
+            ],
+            "correct_answer": self.correct_answer.id,
+        }
+
 
 class Answer(models.Model):
     """Model representing a question answer"""
@@ -145,3 +173,7 @@ class Answer(models.Model):
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, related_name="answer_to_question"
     )
+
+    def as_dict(self):
+        """Return dict representation of answer"""
+        return {"id": self.id, "answer": self.answer}

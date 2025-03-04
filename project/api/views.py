@@ -400,8 +400,7 @@ class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
                 a.save()
             question.save()
         quiz.save()
-        return JsonResponse({"hi": "hello"})
-        # return JsonResponse({"quiz": quiz.as_dict()})
+        return JsonResponse({"quiz": quiz.as_dict()})
         # TODO implement as_dict()
 
 
