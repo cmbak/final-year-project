@@ -23,11 +23,12 @@
 
 /* Could create pointer utility class */
 .answer {
+  font-size: 1.3rem;
   width: max-content;
   color: darkgray;
   transition: all var(--speed-medium) cubic-bezier(0.075, 0.82, 0.165, 1);
 
-  /* if they haven't checked answers - i.e. has (in)correct class */
+  /* if they haven't checked answers (answer doesn't have (in)correct class) */
   &:not(:is(.correct, .incorrect)):hover {
     cursor: pointer;
     color: black;
@@ -36,6 +37,16 @@
 
 .selected {
   font-weight: bold;
-  font-size: 1.4rem;
   color: black;
+}
+
+.answerContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  & i {
+    font-size: 2rem;
+    font-weight: bold;
+  }
 }

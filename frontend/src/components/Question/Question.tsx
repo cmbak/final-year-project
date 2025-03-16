@@ -50,11 +50,12 @@ export default function Question({
         <ul className={`flex flex-col ${styles.answers}`}>
           {/* Answers */}
           {answers.map(({ id, answer }) => (
-            <div key={id}>
+            <div key={id} className={styles.answerContainer}>
               <li
                 className={clsx({
                   [styles.answer]: true,
                   [styles.selected]: selectedAnswer === id,
+                  [styles.correct]: showCorrect && correctId === id,
                   [styles.incorrect]: showCorrect && correctId !== id,
                   ["hover-underline"]: !showCorrect && selectedAnswer !== id,
                 })}

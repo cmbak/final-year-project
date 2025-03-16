@@ -1,0 +1,7 @@
+.check {
+  color: var(--color-correct);
+}
+
+.cross {
+  color: var(--color-error);
+}
