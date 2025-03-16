@@ -1,5 +1,5 @@
 import pytest
-from api.models import Answer, Category, Label, Question, Quiz, User
+from api.models import Answer, Label, Question, Quiz, User
 from rest_framework.test import APIClient
 
 USER_USERNAME = "bob"
@@ -65,7 +65,6 @@ def quiz() -> Quiz:
     quiz = Quiz.objects.create(
         title="quiz",
         user=user,
-        category=Category.objects.create(name="category", user=user),
     )
     quiz.labels.add(Label.objects.create(name="label", user=user))
 
@@ -87,13 +86,11 @@ def quiz_data_and_user(standard_user) -> tuple[dict, User]:
     """
     label_one = Label.objects.create(name="Label One", user=standard_user)
     label_two = Label.objects.create(name="Label Two", user=standard_user)
-    category = Category.objects.create(name="Category", user=standard_user)
 
     return (
         {
             "title": "Test Quiz",
             "labels": [label_one.id, label_two.id],
-            "category": category.id,
             "user": standard_user.id,
             "url": "fakeurl.co.uk",
         },
