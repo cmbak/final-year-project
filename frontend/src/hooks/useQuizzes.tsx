@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchCategories } from "../utils/fetchCategories";
 import { fetchUser } from "../utils/fetchUser";
 
 // Hook which fetches the categories for the logged in user

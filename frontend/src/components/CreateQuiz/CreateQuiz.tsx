@@ -1,5 +1,4 @@
 import { useActionState, useState } from "react";
-import useCategories from "../../hooks/useCategories";
 import BackButton from "../BackButton/BackButton";
 import LabelSelect from "../LabelSelect/LabelSelect";
 import styles from "./CreateQuiz.module.css";

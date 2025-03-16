@@ -4,6 +4,10 @@
   text-align: center;
 }
 
+.quizzes {
+  width: 85%;
+}
+
 .modalBtnContainers {
   gap: 1rem;
   width: 100%;
