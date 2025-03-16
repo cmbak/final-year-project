@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { Question as QuestionType, StateSetter } from "../../types";
 import styles from "./Question.module.css";
 import useIntersection from "../../hooks/useIntersection";
+import AnswerMark from "../AnswerMark/AnswerMark";
 
 type QuestionProps = {
   number: number;
@@ -42,24 +43,34 @@ export default function Question({
           [styles.visible]: isVisible,
         })}
       >
+        {/* Question */}
         <h3 className={styles.question}>
           {number}. {question}
         </h3>
         <ul className={`flex flex-col ${styles.answers}`}>
+          {/* Answers */}
           {answers.map(({ id, answer }) => (
-            <li
-              key={id}
-              className={clsx({
-                [styles.answer]: true,
-                [styles.selected]: selectedAnswer === id,
-                [styles.correct]: showCorrect && correctId === id,
-                [styles.incorrect]: showCorrect && correctId !== id,
-                ["hover-underline"]: !showCorrect && selectedAnswer !== id,
-              })}
-              onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
-            >
-              {answer}
-            </li>
+            <div key={id}>
+              <li
+                className={clsx({
+                  [styles.answer]: true,
+                  [styles.selected]: selectedAnswer === id,
+                  [styles.incorrect]: showCorrect && correctId !== id,
+                  ["hover-underline"]: !showCorrect && selectedAnswer !== id,
+                })}
+                onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
+              >
+                {answer}
+              </li>
+              {/* Show if answer correct/incorrect only if answers being checked */}
+              {showCorrect && (
+                <AnswerMark
+                  id={id}
+                  selectedId={selectedAnswer}
+                  correctId={correctId}
+                />
+              )}
+            </div>
           ))}
         </ul>
       </div>

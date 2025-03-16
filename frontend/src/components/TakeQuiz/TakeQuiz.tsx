@@ -92,6 +92,7 @@ export default function TakeQuiz() {
       {showCorrect && (
         <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
       )}
+      {/* Questions */}
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
           <Question
