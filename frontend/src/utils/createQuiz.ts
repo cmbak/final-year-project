@@ -2,7 +2,6 @@ import { instance } from "../axiosConfig";
 import { CreateQuizDetails } from "../types";
 
 export const createQuiz = async ({
-  category,
   title,
   userId,
   labels,
@@ -11,7 +10,7 @@ export const createQuiz = async ({
 }: CreateQuizDetails) => {
   const response = await instance.postForm(
     "/api/quizzes/",
-    { category, title, user: userId, labels, video, url },
+    { title, user: userId, labels, video, url },
     { withXSRFToken: true },
   );
 

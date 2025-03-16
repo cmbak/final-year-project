@@ -12,11 +12,6 @@ export default function Dashboard() {
       <Categories />
       <div className={`${styles.modalBtnContainers}`}>
         <CreateModal
-          endpoint="/api/categories/"
-          inputId="create-category-name"
-          title="create category"
-        />
-        <CreateModal
           endpoint="/api/labels/"
           inputId="create-label-name"
           title="create label"

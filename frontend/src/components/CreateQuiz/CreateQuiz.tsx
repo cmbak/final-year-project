@@ -11,7 +11,6 @@ import Loading from "../Loading/Loading";
 
 type FormErrors = {
   video?: error;
-  category?: error;
   labels?: error;
   title?: error;
   user?: error;
@@ -33,12 +32,10 @@ export default function CreateQuiz() {
   const [state, formAction, formPending] = useActionState(onFormSubmit, null);
 
   async function onFormSubmit(prevState: unknown, formData: FormData) {
-    const category = formData.get("category");
     const title = formData.get("quiz-title");
     const video = formData.get("video");
     const url = formData.get("url");
     mutate({
-      category,
       title,
       userId,
       labels: selectedIds,
@@ -92,18 +89,6 @@ export default function CreateQuiz() {
             <input name="url" type="text" id="url" required />
           </div>
         )}
-        <div className="form-item">
-          <label htmlFor="category">category</label>
-          {formErrors.category && <FormError error={formErrors.category} />}
-          <select name="category" id="category" className="input" required>
-            <option disabled>Please select a category</option>
-            {data?.map(({ id, name }) => (
-              <option value={id} key={id}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </div>
         <div className="form-item">
           <p>labels</p>
           {formErrors.labels && <FormError error={formErrors.labels} />}
