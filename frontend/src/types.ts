@@ -14,14 +14,12 @@ type HasIdNameUser = {
   user: number;
 };
 
-export type Category = HasIdNameUser;
 export type Label = HasIdNameUser;
 
 export type Quiz = {
   id: number;
   title: string;
   user: number;
-  category: number;
   labels: Label[];
 };
 
@@ -40,7 +38,6 @@ export type Question = {
 
 type FormEntry = FormDataEntryValue | null; // Type return when calling FormData.get()
 export type CreateQuizDetails = {
-  category: FormEntry;
   title: FormEntry;
   userId: number | undefined;
   labels: number[];
