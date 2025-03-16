@@ -3,10 +3,11 @@ import BackButton from "../BackButton/BackButton";
 import LabelSelect from "../LabelSelect/LabelSelect";
 import styles from "./CreateQuiz.module.css";
 import FormError from "../FormError/FormError";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createQuiz } from "../../utils/createQuiz";
 import { CreateQuizDetails, FormError as error } from "../../types";
 import Loading from "../Loading/Loading";
+import { fetchUser } from "../../utils/fetchUser";
 
 type FormErrors = {
   video?: error;
@@ -21,7 +22,8 @@ export default function CreateQuiz() {
   const [videoType, setVideoType] = useState<VideoType>("Upload");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const { isError, data, error, userId } = useCategories(); // TODO pending error
+  const user = useQuery({ queryKey: ["user"], queryFn: fetchUser });
+  const userId = user.data?.id;
   const { mutate, isPending } = useMutation({
     mutationFn: (newQuiz: CreateQuizDetails) => createQuiz(newQuiz),
     onError: (error: any) => {
