@@ -5,26 +5,13 @@ import { fetchQuizzes } from "../../utils/fetchQuizzes";
 import useUser from "../../hooks/useUser";
 import { Link } from "react-router";
 
-type QuizzesProps = {
-  // TODO better way of doing
-  categoryId: number;
-};
-
-export default function Quizzes({ categoryId }: QuizzesProps) {
+export default function Quizzes() {
   const userData = useUser();
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["quizzes", userData.data?.id],
     queryFn: () => fetchQuizzes(userData.data?.id),
     enabled: Boolean(userData.data?.id),
   });
-
-  function filterByCategory(): Quiz[] {
-    if (data === undefined) {
-      return [];
-    } else {
-      return data.filter((quiz) => quiz.category === categoryId);
-    }
-  }
 
   if (isPending) {
     return <h1>TEMP Loading...</h1>;
@@ -36,10 +23,10 @@ export default function Quizzes({ categoryId }: QuizzesProps) {
 
   return (
     <ul className={styles.quizzes}>
-      {(data && data.length == 0) || filterByCategory().length === 0 ? (
+      {(data && data.length == 0) || data.length === 0 ? (
         <p className={styles.noQuizzes}>No Quizzes</p>
       ) : (
-        filterByCategory().map(({ id, title }) => (
+        data.map(({ id, title }: Quiz) => (
           <li key={id}>
             <Link to={`../take-quiz/${id}`}>{title}</Link>
           </li> // TODO show labels here?
