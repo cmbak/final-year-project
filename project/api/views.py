@@ -2,7 +2,6 @@ import json
 
 from api.serializers import (
     AnswerSerializer,
-    CategorySerializer,
     LabelSerializer,
     LoginSerializer,
     QuestionSerializer,
@@ -23,7 +22,7 @@ from rest_framework.views import APIView
 from summarise import summarise_video
 from yt_dlp.utils import DownloadError
 
-from .models import Answer, Category, Label, Question, Quiz, User
+from .models import Answer, Label, Question, Quiz, User
 
 
 def handle_invalid_serializer(serializer: ModelSerializer) -> Response:
@@ -170,17 +169,6 @@ class CreateSpecifyErrorsMixin:
         )
 
 
-class CategoryListCreateView(CreateSpecifyErrorsMixin, generics.ListCreateAPIView):
-    """API Endpoint for retrieving categories or creating a category"""
-
-    queryset = Category.objects.all().order_by("id")
-    serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-category_list_create_view = CategoryListCreateView.as_view()
-
-
 class LabelCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     """API Endpoint for retrieving labels or creating a label"""
 
@@ -315,20 +303,6 @@ class UsersModelsMixins:
         return Response(serializer.data)
 
 
-class UserCategoryView(UsersModelsMixins, generics.ListAPIView):
-    """
-    API Endpoint which returns the categories a user has created
-    given that they're trying to fetch their own categories
-    """
-
-    queryset = Category.objects.all().order_by("id")
-    serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-user_categories_view = UserCategoryView.as_view()
-
-
 class UserLabelsView(UsersModelsMixins, generics.ListAPIView):
     """
     API Endpoint which returns the labels a user has created
@@ -405,23 +379,6 @@ class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
 
 
 user_quizzes_view = UserQuizView.as_view()
-
-
-class UserQuizByCatView(UsersModelsMixins, generics.ListAPIView):
-    """
-    API Endpoint which returns the quizzes of a specific category a user has created
-    given that they're trying to fetch their own quizzes
-    """
-
-    queryset = Quiz.objects.all().order_by("id")
-    serializer_class = QuizSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, user_id, cat_id):
-        return super().get(request, user_id, category=cat_id)
-
-
-user_quizzes_by_cat_view = UserQuizByCatView.as_view()
 
 
 class UserQuizQuestions(generics.ListAPIView):

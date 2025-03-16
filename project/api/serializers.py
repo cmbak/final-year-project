@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import Answer, Category, Label, Question, Quiz, User
+from .models import Answer, Label, Question, Quiz, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,16 +53,6 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    """Serializer for Category model - convert Category to JSON and vice versa"""
-
-    class Meta:
-        """Metadata for Category serializer"""
-
-        model = Category
-        fields = ["id", "name", "user"]
-
-
 class LabelSerializer(serializers.ModelSerializer):
     """Serializer for Label model - convert Label to JSON and vice versa"""
 
@@ -82,7 +72,7 @@ class QuizSerializer(serializers.ModelSerializer):
         """Metadata for Quiz serializer"""
 
         model = Quiz
-        fields = ["id", "title", "user", "category", "labels"]
+        fields = ["id", "title", "user", "labels"]
 
     def to_internal_value(self, data):
         """
@@ -98,7 +88,7 @@ class QuizSerializer(serializers.ModelSerializer):
         return super().to_internal_value(data)
 
     def validate(self, data):
-        """Check that user of labels and category match against user creating quiz"""
+        """Check that user of labels match against user creating quiz"""
         if len(data["labels"]) > 0:
             user_labels: set[User] = {label.user for label in data["labels"]}
             # Check quiz user has made chosen labels
@@ -106,13 +96,6 @@ class QuizSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {"labels": "You must use labels which you have created."}
                 )
-
-        # Check quiz user has made category
-        if data["category"].user != data["user"]:
-            raise serializers.ValidationError(
-                {"category": "You must use a category which you have created."}
-            )
-
         return data
 
 
