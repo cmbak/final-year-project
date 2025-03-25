@@ -62,10 +62,7 @@ def quiz() -> Quiz:
     """Returns a quiz instance"""
     user = custom_user()
 
-    quiz = Quiz.objects.create(
-        title="quiz",
-        user=user,
-    )
+    quiz = Quiz.objects.create(title="quiz", user=user, type=Quiz.UPLOAD)
     quiz.labels.add(Label.objects.create(name="label", user=user))
 
     question = Question.objects.create(
@@ -93,6 +90,7 @@ def quiz_data_and_user(standard_user) -> tuple[dict, User]:
             "labels": [label_one.id, label_two.id],
             "user": standard_user.id,
             "url": "fakeurl.co.uk",
+            "type": Quiz.UPLOAD,
         },
         standard_user,
     )
