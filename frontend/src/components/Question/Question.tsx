@@ -10,6 +10,7 @@ type QuestionProps = {
   setSelectedAnswers: StateSetter<number[][]>;
   showCorrect: boolean;
   correctAnswerIds: number[];
+  type: "YouTube" | "Upload";
 } & QuestionType;
 
 export default function Question({
@@ -20,6 +21,8 @@ export default function Question({
   setSelectedAnswers,
   showCorrect,
   correctAnswerIds,
+  timestamp,
+  type,
 }: QuestionProps) {
   const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
     threshold: 1.0,
@@ -60,7 +63,11 @@ export default function Question({
       >
         {/* Question */}
         <h3 className={styles.question}>
-          {number}. {question}
+          {number}. {question}{" "}
+          {showCorrect &&
+            type === "YouTube" && ( // Only show timestamps when checking answers for yt quiz
+              <span className={styles.timestamp}>[{timestamp}]</span>
+            )}
         </h3>
         <ul className={`flex flex-col ${styles.answers}`}>
           {/* Answers */}

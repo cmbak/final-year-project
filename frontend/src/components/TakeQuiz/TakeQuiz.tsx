@@ -20,14 +20,16 @@ export default function TakeQuiz() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const { quizId } = useParams();
   const user = useUser();
+
+  // Fetch quiz ddata
   const quizData = useQuery({
-    // Fetch quiz name
     queryKey: ["individual-quiz", quizId, user.data?.id],
     queryFn: () => fetchQuiz(user.data?.id, quizId),
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
+
+  // Fetch quiz questions
   const { isError, isPending, data, error } = useQuery({
-    // Fetch quiz questions
     queryKey: ["quiz-questions", user.data?.id, quizId],
     queryFn: async () => {
       const response = await fetchQuizQuestions(user.data?.id, quizId);
@@ -76,9 +78,6 @@ export default function TakeQuiz() {
         return true;
       }
     }
-    console.log("hi");
-    // const unselected = selectedAnswers.filter((id) => id !== -1);
-
     return showCorrect;
   }
 
@@ -127,6 +126,7 @@ export default function TakeQuiz() {
             setSelectedAnswers={setSelectedAnswers}
             showCorrect={showCorrect}
             correctAnswerIds={correctAnswers[index]}
+            type={quizData.data.type}
           />
         ))}
       </div>
