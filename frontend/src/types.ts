@@ -21,7 +21,7 @@ export type Quiz = {
   title: string;
   user: number;
   labels: Label[];
-  type: "YT" | "UP";
+  type: "YouTube" | "Upload";
 };
 
 export type Answer = {
