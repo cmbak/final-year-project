@@ -8,6 +8,7 @@ import Question from "../Question/Question";
 import styles from "./TakeQuiz.module.css";
 import { useRef, useState } from "react";
 import { arraysEquals } from "../../utils/arraysEqual";
+import { shuffle } from "../../utils/shuffle";
 
 export default function TakeQuiz() {
   const [numCorrect, setNumCorrect] = useState(0);
@@ -33,7 +34,10 @@ export default function TakeQuiz() {
   const { isError, isPending, data, error } = useQuery({
     queryKey: ["quiz-questions", user.data?.id, quizId],
     queryFn: async () => {
-      const response = await fetchQuizQuestions(user.data?.id, quizId);
+      let response = await fetchQuizQuestions(user.data?.id, quizId);
+      // Shuffle questions whenever user takes quiz
+      response = shuffle(response);
+
       // Go through each question, and for each answer
       // If the answer is the correct answer for that question, append that answer id to correct answers array for that question
       const correctAnswers = createMatrix(10);
