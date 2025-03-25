@@ -5,3 +5,5 @@ exclude =
     settings.py,
     venv,
     frontend
+per-file-ignores = 
+    project/summarise.py:E501

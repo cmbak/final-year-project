@@ -1,15 +1,12 @@
 import time
 
 import google.generativeai as genai
-import typing_extensions as typing  # vs typing.TypedDict?
+import typing_extensions as typing
 from decouple import config
 from google.generativeai.types import File
 
 genai.configure(api_key=config("API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash")
-
-# TODO safety settings
-# TODO move prompts etc. here
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 
 class Question(typing.TypedDict):
@@ -17,20 +14,21 @@ class Question(typing.TypedDict):
 
     question: str
     answers: list[str]
-    correct_answer: str
+    correct_answers: list[str]
+    timestamp: str
 
 
 def upload_video(file_name: str) -> File:
-    print(f"./media/{file_name}")
     """Upload video titled {file_name} to File API"""
+    print(f"./media/{file_name}")
     print("Uploading file...")
     video_file = genai.upload_file(f"./media/{file_name}")
 
     # Check that video is ready to be used
     while video_file.state.name == "PROCESSING":
-        time.sleep(10)
         print("Processing Video...")
         video_file = genai.get_file(video_file.name)
+        time.sleep(10)
 
     if video_file.state.name == "FAILED":
         raise ValueError(video_file.state.name)
@@ -42,14 +40,17 @@ def summarise_video(file_name: str):
     video_file = upload_video(file_name)
 
     prompt = """
-    You are a video summariser tool which summarises a video into a series of 10 multiple choice questions, each with 3 possible answers with only 1 of these being the correct one.
-    
-    Each question should have a maximum length of 255 characters and each answer should have a maximum length of 128 characters. However try to keep your questions and answers conscise, yet descriptive to ensure that all the content convered in the video.
-    Ideally Each questions should have a length of around 50-75 characters and each answer should ideally have a length of 15-35 characters.
-    
+    You are a helpful tool which tests a person's understanding of the content of a video.
+    You provide them with a series of 10 multiple choice questions, each with 3 possible answers - with either 1 or 2 of these being correct - and the timestamp for the part of the video which corresponds to the question and.
+
+    You might be used to help understand complex content, so ensure that each question and corresponding answer(s) have plenty of detail to test the user's comprehension of the content.
+    You must make sure that some questions have 2 correct answers, and some only have 1 correct answer.
+
     You should use the JSON schema as supplied through the model configuration.
-    You must make sure that, for each question, the value of the 'correct_answer' is the value of the correct answer within that question's 'answers' list.
+    You must make sure that, for each question, the values of the 'correct_answers' list contains the values of the correct answers within that question's 'answers' list.
+    You must make sure that there are at least 2 questions which have 2 answers - this should be reflected in the length of the correct_answers list.
     """
+
     print("Creating summary...")
     response = model.generate_content(
         [video_file, prompt],

@@ -2,7 +2,10 @@
 # black default is 88 chars
 max-line-length = 88
 exclude =
-    project/api/migrations,
+    ./project/api/migrations,
     settings.py,
     venv,
     frontend
+
+per-file-ignores = 
+    ./project/summarise.py:E501
