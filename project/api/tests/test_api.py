@@ -238,6 +238,7 @@ def test_post_quiz_other_user_labels(
         "labels": [label.id],
         "user": standard_user.id,
         "url": "fakeurl.co.uk",
+        "type": Quiz.UPLOAD,
     }
     api_client.force_authenticate(user=standard_user)
 

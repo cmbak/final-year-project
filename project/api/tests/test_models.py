@@ -23,7 +23,9 @@ def test_unique_user_username(standard_user: User) -> None:
     Test that creating a user with the same username as an existing user is not allowed
     """
     with pytest.raises(IntegrityError):
-        custom_user(email="john.doe@gmail.com")
+        custom_user(
+            email="john.doe@gmail.com"
+        )  # Standard user fixture already creates user w/ this email
 
 
 @pytest.mark.django_db(True)
@@ -88,11 +90,11 @@ def test_label_deleted_on_user_deletion(standard_user: User) -> None:
 @pytest.mark.django_db(True)
 def test_quiz_string(quiz: Quiz, username: str) -> None:
     """Test quiz string method returns the details of the quiz"""
-    assert str(quiz) == f"quiz | label | {username}"
+    assert str(quiz) == f"quiz | {quiz.UPLOAD} | label | {username}"
 
 
 @pytest.mark.django_db(True)
-def test_quiz_unique_title(quiz: Quiz) -> None:
+def test_quiz_unique_title() -> None:
     """Test that title of a quiz should be unique irrespective of case"""
     user = custom_user("new_user", "new_user@gmail.com")
 
