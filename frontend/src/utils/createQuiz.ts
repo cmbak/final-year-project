@@ -7,10 +7,11 @@ export const createQuiz = async ({
   labels,
   video,
   url,
+  videoType,
 }: CreateQuizDetails) => {
   const response = await instance.postForm(
     "/api/quizzes/",
-    { title, user: userId, labels, video, url },
+    { title, user: userId, labels, video, url, type: videoType },
     { withXSRFToken: true },
   );
 

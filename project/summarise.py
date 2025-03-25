@@ -36,7 +36,7 @@ def upload_video(file_name: str) -> File:
 
 
 def summarise_video(file_name: str):
-    """Summarises video using Gemini 1.5 Flash"""
+    """Summarises video using Gemini 2.0 Flash"""
     video_file = upload_video(file_name)
 
     prompt = """

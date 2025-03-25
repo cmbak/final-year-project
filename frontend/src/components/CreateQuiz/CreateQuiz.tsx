@@ -16,21 +16,23 @@ type FormErrors = {
   user?: error;
 };
 
-type VideoType = "YouTube" | "Upload"; // TODO verify that url is for YT video
+type VideoType = "YT" | "UP"; // Same as Quiz model choices
+// TODO verify that url is for YT video
 
 export default function CreateQuiz() {
-  const [videoType, setVideoType] = useState<VideoType>("Upload");
+  const [videoType, setVideoType] = useState<VideoType>("UP");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const user = useQuery({ queryKey: ["user"], queryFn: fetchUser });
   const userId = user.data?.id;
+  const [state, formAction, formPending] = useActionState(onFormSubmit, null);
+
   const { mutate, isPending } = useMutation({
     mutationFn: (newQuiz: CreateQuizDetails) => createQuiz(newQuiz),
     onError: (error: any) => {
       if (error.response) setFormErrors(error.response.data.errors);
     },
   });
-  const [state, formAction, formPending] = useActionState(onFormSubmit, null);
 
   async function onFormSubmit(prevState: unknown, formData: FormData) {
     const title = formData.get("quiz-title");
@@ -42,6 +44,7 @@ export default function CreateQuiz() {
       labels: selectedIds,
       video,
       url,
+      videoType,
     });
   }
 
@@ -58,7 +61,7 @@ export default function CreateQuiz() {
       <form className={`flex flex-col ${styles.form}`} action={formAction}>
         <div className="form-item">
           <label htmlFor="videoType">Video Type</label>
-          {formErrors.video && videoType === "Upload" && (
+          {formErrors.video && videoType === "UP" && (
             <FormError error={formErrors.video} />
           )}
           <select
@@ -69,12 +72,11 @@ export default function CreateQuiz() {
             onChange={(e) => setVideoType(e.target.value as VideoType)}
             required
           >
-            <option value="Upload">Upload</option>
-            <option value="YouTube">YouTube</option>
+            <option value="UP">Upload</option>
+            <option value="YT">YouTube</option>
           </select>
         </div>
-        {videoType ===
-        "Upload" /* Either show file input or url (text) input */ ? (
+        {videoType === "UP" /* Either show file input or url (text) input */ ? (
           <input
             name="video"
             id="video"
