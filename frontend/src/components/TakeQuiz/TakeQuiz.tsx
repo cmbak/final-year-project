@@ -7,6 +7,7 @@ import { createMatrix } from "../../utils/createMatrix";
 import Question from "../Question/Question";
 import styles from "./TakeQuiz.module.css";
 import { useRef, useState } from "react";
+import { arraysEquals } from "../../utils/arraysEqual";
 
 export default function TakeQuiz() {
   const [numCorrect, setNumCorrect] = useState(0);
@@ -57,10 +58,11 @@ export default function TakeQuiz() {
     setShowCorrect(true);
     // Tally num of correct answers
     let correct = 0;
-    correctAnswers.forEach((num, index) => {
-      if (selectedAnswers[index] === num) correct++;
+    correctAnswers.forEach((correctIds, index) => {
+      if (arraysEquals(selectedAnswers[index], correctIds)) correct++;
     });
     setNumCorrect(correct);
+
     // Scroll page up to title (to show number correct)
     if (titleRef.current) {
       titleRef.current.scrollIntoView({ behavior: "smooth" });
