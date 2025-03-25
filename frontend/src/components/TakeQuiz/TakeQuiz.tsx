@@ -3,17 +3,20 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchQuizQuestions } from "../../utils/fetchQuizQuestions";
 import useUser from "../../hooks/useUser";
 import { fetchQuiz } from "../../utils/fetchQuiz";
+import { createMatrix } from "../../utils/createMatrix";
 import Question from "../Question/Question";
 import styles from "./TakeQuiz.module.css";
 import { useRef, useState } from "react";
 
 export default function TakeQuiz() {
   const [numCorrect, setNumCorrect] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState<number[][]>([]); // Each q has array of correct answer ids
+  const [correctAnswers, setCorrectAnswers] = useState<number[][]>(
+    createMatrix(10),
+  ); // Each q has array of correct answer ids
   const [showCorrect, setShowCorrect] = useState(false);
-  const [selectedAnswers, setSelectedAnswers] = useState(
-    new Array(10).fill(-1),
-  );
+  const [selectedAnswers, setSelectedAnswers] = useState<number[][]>(
+    createMatrix(10),
+  ); // 10 Questions, each with potentially multiple answers)
   const titleRef = useRef<HTMLHeadingElement>(null);
   const { quizId } = useParams();
   const user = useUser();
@@ -28,7 +31,6 @@ export default function TakeQuiz() {
     queryKey: ["quiz-questions", user.data?.id, quizId],
     queryFn: async () => {
       const response = await fetchQuizQuestions(user.data?.id, quizId);
-
       // Go through each question, and for each answer
       // If the answer is the correct answer for that question, then append that answer id to correct answers array for that question
       response.forEach((question, index) =>
@@ -36,12 +38,13 @@ export default function TakeQuiz() {
           // console.log(answer.correctAnswerFor);
           // console.log(question.id);
           if (answer.correctAnswerFor == question.id) {
-            const prevCorrectAnswers = correctAnswers.map((prevArray, i) => {
+            const newCorrectAnswers = correctAnswers.map((prevArray, i) => {
               if (i === index) {
                 return [...prevArray, answer.id];
               }
               return prevArray;
             });
+            setCorrectAnswers(newCorrectAnswers);
           }
         }),
       );
@@ -68,10 +71,14 @@ export default function TakeQuiz() {
   // Disable button if they haven't answered all questions
   // Or if they've already seen the answers
   function btnIsDisabled() {
-    const unselected = selectedAnswers.filter((id) => id !== -1);
-    if (unselected.length < 10) {
-      return true;
+    for (let i = 0; i < selectedAnswers.length; i++) {
+      if (selectedAnswers[i].length == 0) {
+        return true;
+      }
     }
+    console.log("hi");
+    // const unselected = selectedAnswers.filter((id) => id !== -1);
+
     return showCorrect;
   }
 
@@ -116,7 +123,7 @@ export default function TakeQuiz() {
             key={index}
             {...question}
             number={index + 1}
-            selectedAnswer={selectedAnswers[index]}
+            selectedAnswers={selectedAnswers[index]}
             setSelectedAnswers={setSelectedAnswers}
             showCorrect={showCorrect}
             correctAnswerIds={correctAnswers[index]}
