@@ -357,25 +357,25 @@ class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
         quiz = Quiz.objects.get(id=quiz_id, user_id=user_id)
 
         # TODO try catch with specified error?
-        # try:
         for question_data in request.data["questions"]:
             # Create Question
             question = Question.objects.create(
-                question=question_data["question"], quiz=quiz
+                question=question_data["question"],
+                quiz=quiz,
+                timestamp=question_data["timestamp"],
             )
 
             # Create Answers
             for answer in question_data["answers"]:
                 a = Answer.objects.create(answer=answer, question=question)
-                # Add correct answer to Question
-                if answer == question_data["correct_answer"]:
-                    question.correct_answer = a
-                    question.save()
+                # Add correct answer to Question if it's one of the correct answers
+                if answer in question_data["correct_answers"]:
+                    a.correct_answer_for = question
                 a.save()
+
             question.save()
         quiz.save()
         return JsonResponse({"quiz": quiz.as_dict()})
-        # TODO implement as_dict()
 
 
 user_quizzes_view = UserQuizView.as_view()

@@ -27,7 +27,7 @@ export type Quiz = {
 export type Answer = {
   id: number;
   answer: string;
-  correctAnswerFor: number;
+  correct_answer_for: number;
 };
 
 export type Question = {
@@ -45,6 +45,7 @@ export type CreateQuizDetails = {
   labels: number[];
   video: FormEntry;
   url: FormEntry | null;
+  videoType: "YT" | "UP";
 };
 
 export type FormError = string[];

@@ -34,22 +34,19 @@ export default function TakeQuiz() {
     queryFn: async () => {
       const response = await fetchQuizQuestions(user.data?.id, quizId);
       // Go through each question, and for each answer
-      // If the answer is the correct answer for that question, then append that answer id to correct answers array for that question
+      // If the answer is the correct answer for that question, append that answer id to correct answers array for that question
+      const correctAnswers = createMatrix(10);
       response.forEach((question, index) =>
         question.answers.forEach((answer) => {
-          // console.log(answer.correctAnswerFor);
-          // console.log(question.id);
-          if (answer.correctAnswerFor == question.id) {
-            const newCorrectAnswers = correctAnswers.map((prevArray, i) => {
-              if (i === index) {
-                return [...prevArray, answer.id];
-              }
-              return prevArray;
-            });
-            setCorrectAnswers(newCorrectAnswers);
+          // If this answer is a correct answer
+          if (answer.correct_answer_for == question.id) {
+            // Append correct answer to array for the current question
+            correctAnswers[index].push(answer.id);
           }
         }),
       );
+      // Set correct answers 2d state array to new array populated w/ ids of correct answers
+      setCorrectAnswers(correctAnswers);
       return response;
     },
     enabled: Boolean(quizId) && Boolean(user.data?.id),
