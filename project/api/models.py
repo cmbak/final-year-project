@@ -52,9 +52,16 @@ class Label(models.Model):
 class Quiz(models.Model):
     """Model representing a quiz"""
 
+    YOUTUBE = "YT"
+    UPLOAD = "UP"
+    VIDEO_TYPE_CHOICES = {YOUTUBE: "Youtube", UPLOAD: "Upload"}
+
     title = models.CharField(max_length=50, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     labels = models.ManyToManyField(Label, related_name="quiz", through="QuizLabels")
+    type = models.CharField(
+        max_length=7, choices=VIDEO_TYPE_CHOICES, default="upload"
+    )  # Used to see if timestamp should be displayed or not
 
     class Meta:
         """Metadata for Quiz model"""
@@ -81,7 +88,7 @@ class Quiz(models.Model):
             if i != len(all_labels) - 1:
                 label_names += ", "
 
-        return f"{self.title} | {label_names} | {self.user.username}"  # noqa e501
+        return f"{self.title} | {self.VIDEO_TYPE_CHOICES(self.type)} | {label_names} | {self.user.username}"  # noqa e501
 
     def as_dict(self):
         """Returns dictionary representation of quiz"""
@@ -93,6 +100,7 @@ class Quiz(models.Model):
             "questions": [
                 question.as_dict() for question in Question.objects.filter(quiz=self.id)
             ],
+            "type": self.VIDEO_TYPE_CHOICES(self.type),
         }
 
 
@@ -106,14 +114,16 @@ class QuizLabels(models.Model):
 class Question(models.Model):
     """Model representing a quiz's questions"""
 
-    question = models.CharField(max_length=255)
+    question = models.CharField()
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    correct_answer = models.OneToOneField(
-        "Answer",  # Have to put in quotes otherwise throws undefined
-        on_delete=models.CASCADE,
-        related_name="correct_answer",
-        null=True,  # noqa E501 So that questions and answer instance can be made simult; See views.py
-    )
+    # correct_answers = models.For
+    # correct_answer = models.OneToOneField(
+    #     "Answer",  # Have to put in quotes otherwise throws undefined
+    #     on_delete=models.CASCADE,
+    #     related_name="correct_answer",
+    #     null=True,  # noqa E501 So that questions and answer instance can be made simult; See views.py
+    # )
+    timestamp = models.CharField(default="00:00")
 
     def as_dict(self):
         """Return dict representation of question"""
@@ -124,15 +134,23 @@ class Question(models.Model):
                 answer.as_dict() for answer in Answer.objects.filter(question=self)
             ],
             "correct_answer": self.correct_answer.id,
+            "timestamp": self.timestamp,
         }
 
 
 class Answer(models.Model):
     """Model representing a question answer"""
 
-    answer = models.CharField(max_length=128)
+    answer = models.CharField()
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, related_name="answer_to_question"
+    )
+    correct_answer_for = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE,
+        related_name="correct_answer_to_question",
+        default=None,
+        null=True,
     )
 
     def as_dict(self):
