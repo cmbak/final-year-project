@@ -72,7 +72,7 @@ class QuizSerializer(serializers.ModelSerializer):
         """Metadata for Quiz serializer"""
 
         model = Quiz
-        fields = ["id", "title", "user", "labels"]
+        fields = ["id", "title", "user", "labels", "type"]
 
     def to_internal_value(self, data):
         """
@@ -106,16 +106,16 @@ class AnswerSerializer(serializers.ModelSerializer):
         """Metadata for answer serializer"""
 
         model = Answer
-        fields = ["id", "answer"]
+        fields = ["id", "answer", "correct_answer_for"]
 
 
 class QuestionSerializer(serializers.ModelSerializer):
     """Serializer for Question model - convert Question to JSON and vice versa"""
 
-    correct_answer = AnswerSerializer()
+    # correct_answer = AnswerSerializer()
 
     class Meta:
         """Metadata for question serializer"""
 
         model = Question
-        fields = ["id", "quiz", "question", "correct_answer"]
+        fields = ["id", "quiz", "question"]

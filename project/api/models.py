@@ -60,7 +60,7 @@ class Quiz(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     labels = models.ManyToManyField(Label, related_name="quiz", through="QuizLabels")
     type = models.CharField(
-        max_length=7, choices=VIDEO_TYPE_CHOICES, default="upload"
+        max_length=7, choices=VIDEO_TYPE_CHOICES
     )  # Used to see if timestamp should be displayed or not
 
     class Meta:
@@ -88,7 +88,7 @@ class Quiz(models.Model):
             if i != len(all_labels) - 1:
                 label_names += ", "
 
-        return f"{self.title} | {self.VIDEO_TYPE_CHOICES(self.type)} | {label_names} | {self.user.username}"  # noqa e501
+        return f"{self.title} | {self.type} | {label_names} | {self.user.username}"  # noqa e501
 
     def as_dict(self):
         """Returns dictionary representation of quiz"""
@@ -100,7 +100,7 @@ class Quiz(models.Model):
             "questions": [
                 question.as_dict() for question in Question.objects.filter(quiz=self.id)
             ],
-            "type": self.VIDEO_TYPE_CHOICES(self.type),
+            "type": self.type,
         }
 
 
@@ -116,13 +116,6 @@ class Question(models.Model):
 
     question = models.CharField()
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    # correct_answers = models.For
-    # correct_answer = models.OneToOneField(
-    #     "Answer",  # Have to put in quotes otherwise throws undefined
-    #     on_delete=models.CASCADE,
-    #     related_name="correct_answer",
-    #     null=True,  # noqa E501 So that questions and answer instance can be made simult; See views.py
-    # )
     timestamp = models.CharField(default="00:00")
 
     def as_dict(self):
@@ -133,7 +126,12 @@ class Question(models.Model):
             "answers": [
                 answer.as_dict() for answer in Answer.objects.filter(question=self)
             ],
-            "correct_answer": self.correct_answer.id,
+            "correct_answers": [
+                answer.as_dict()
+                for answer in Answer.objects.filter(
+                    question=self, correct_answer_for=self
+                )
+            ],
             "timestamp": self.timestamp,
         }
 
@@ -148,7 +146,7 @@ class Answer(models.Model):
     correct_answer_for = models.ForeignKey(
         Question,
         on_delete=models.CASCADE,
-        related_name="correct_answer_to_question",
+        related_name="correct_answer_to_question",  # TODO shouldn't be required!
         default=None,
         null=True,
     )
