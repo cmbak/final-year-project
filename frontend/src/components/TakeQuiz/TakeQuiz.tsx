@@ -9,10 +9,10 @@ import { useRef, useState } from "react";
 
 export default function TakeQuiz() {
   const [numCorrect, setNumCorrect] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState<number[]>([]);
+  const [correctAnswers, setCorrectAnswers] = useState<number[][]>([]); // Each q has array of correct answer ids
   const [showCorrect, setShowCorrect] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState(
-    new Array(10).fill(-1), // Array of answer IDs;
+    new Array(10).fill(-1),
   );
   const titleRef = useRef<HTMLHeadingElement>(null);
   const { quizId } = useParams();
@@ -23,12 +23,28 @@ export default function TakeQuiz() {
     queryFn: () => fetchQuiz(user.data?.id, quizId),
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
-  const { isError, isPending, data } = useQuery({
+  const { isError, isPending, data, error } = useQuery({
     // Fetch quiz questions
     queryKey: ["quiz-questions", user.data?.id, quizId],
     queryFn: async () => {
       const response = await fetchQuizQuestions(user.data?.id, quizId);
-      setCorrectAnswers(response.map((question) => question.correct_answer.id));
+
+      // Go through each question, and for each answer
+      // If the answer is the correct answer for that question, then append that answer id to correct answers array for that question
+      response.forEach((question, index) =>
+        question.answers.forEach((answer) => {
+          // console.log(answer.correctAnswerFor);
+          // console.log(question.id);
+          if (answer.correctAnswerFor == question.id) {
+            const prevCorrectAnswers = correctAnswers.map((prevArray, i) => {
+              if (i === index) {
+                return [...prevArray, answer.id];
+              }
+              return prevArray;
+            });
+          }
+        }),
+      );
       return response;
     },
     enabled: Boolean(quizId) && Boolean(user.data?.id),
@@ -65,7 +81,8 @@ export default function TakeQuiz() {
   }
 
   if (isError) {
-    return <h2>Error...</h2>;
+    console.log(error);
+    return <h2>Error: {error.message} </h2>; // TODO display errors like this
   }
 
   if (quizData.data === undefined) {
@@ -102,7 +119,7 @@ export default function TakeQuiz() {
             selectedAnswer={selectedAnswers[index]}
             setSelectedAnswers={setSelectedAnswers}
             showCorrect={showCorrect}
-            correctId={question.correct_answer.id}
+            correctAnswerIds={correctAnswers[index]}
           />
         ))}
       </div>
