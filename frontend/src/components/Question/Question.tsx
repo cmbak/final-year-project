@@ -6,8 +6,8 @@ import AnswerMark from "../AnswerMark/AnswerMark";
 
 type QuestionProps = {
   number: number;
-  selectedAnswer: number;
-  setSelectedAnswers: StateSetter<number[]>;
+  selectedAnswers: number[];
+  setSelectedAnswers: StateSetter<number[][]>;
   showCorrect: boolean;
   correctAnswerIds: number[];
 } & QuestionType;
@@ -16,7 +16,7 @@ export default function Question({
   question,
   number,
   answers,
-  selectedAnswer,
+  selectedAnswers,
   setSelectedAnswers,
   showCorrect,
   correctAnswerIds,
@@ -26,17 +26,32 @@ export default function Question({
   });
 
   function handleClick(answerID: number) {
-    // Change id of selected answer for this question
-    setSelectedAnswers((prevSelected) => {
-      let newSelected = [...prevSelected];
-      newSelected[number - 1] = answerID; // Question number starts from 0
-      return newSelected;
-    });
+    // Add or remove answer id to selected answers for this questions
+    // depending on if it's been added to array or not
+    let newAnswers = [...selectedAnswers];
+
+    if (newAnswers.includes(answerID)) {
+      // Answer already selected, so clicking unselects it
+      newAnswers = newAnswers.filter((id) => id !== answerID);
+    } else {
+      // Answer not selected, so clicking selects it
+      newAnswers = [...newAnswers, answerID];
+    }
+
+    // Update array containing selected answers for all questions
+    setSelectedAnswers((prevSelectedAnswers) =>
+      prevSelectedAnswers.map((answerIds, index) => {
+        if (index === number - 1) {
+          return newAnswers;
+        }
+        return answerIds;
+      }),
+    );
   }
 
   return (
     <div ref={elementRef}>
-      {/* container to prevent animation from flickering because of scale anim*/}
+      {/* container to prevent animation from flickering because of scale anim */}
       <div
         className={clsx({
           [styles.container]: true,
@@ -54,12 +69,13 @@ export default function Question({
               <li
                 className={clsx({
                   [styles.answer]: true,
-                  [styles.selected]: selectedAnswer === id,
+                  [styles.selected]: selectedAnswers.includes(id),
                   [styles.correct]:
                     showCorrect && correctAnswerIds.includes(id),
                   [styles.incorrect]:
                     showCorrect && correctAnswerIds.includes(id),
-                  ["hover-underline"]: !showCorrect && selectedAnswer !== id,
+                  ["hover-underline"]:
+                    !showCorrect && !selectedAnswers.includes(id),
                 })}
                 onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
               >
@@ -69,7 +85,7 @@ export default function Question({
               {showCorrect && (
                 <AnswerMark
                   id={id}
-                  selectedId={selectedAnswer}
+                  selectedAnswers={selectedAnswers}
                   correctAnswerIds={correctAnswerIds}
                 />
               )}
@@ -80,11 +96,3 @@ export default function Question({
     </div>
   );
 }
-
-/* 
-
-Animate on scroll
-
-- Color goes from transparent black to non transparent
-
-*/

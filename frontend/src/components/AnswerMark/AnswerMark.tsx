@@ -2,13 +2,13 @@ import styles from "./AnswerMark.module.css";
 
 type AnswerMarkProps = {
   id: number;
-  selectedId: number;
+  selectedAnswers: number[];
   correctAnswerIds: number[];
 };
 
 export default function AnswerMark({
   id,
-  selectedId,
+  selectedAnswers,
   correctAnswerIds: correctAnswers,
 }: AnswerMarkProps) {
   // Always show check mark next to correct answer
@@ -17,7 +17,7 @@ export default function AnswerMark({
   }
 
   // If answer is selected, show whether it's correct or incorrect (via check/cross)
-  if (id === selectedId) {
+  if (selectedAnswers.includes(id)) {
     return correctAnswers.includes(id) ? (
       <i className={`bi bi-check ${styles.check}`}></i>
     ) : (
