@@ -9,7 +9,7 @@ type QuestionProps = {
   selectedAnswer: number;
   setSelectedAnswers: StateSetter<number[]>;
   showCorrect: boolean;
-  correctId: number;
+  correctAnswerIds: number[];
 } & QuestionType;
 
 export default function Question({
@@ -19,7 +19,7 @@ export default function Question({
   selectedAnswer,
   setSelectedAnswers,
   showCorrect,
-  correctId,
+  correctAnswerIds,
 }: QuestionProps) {
   const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
     threshold: 1.0,
@@ -55,8 +55,10 @@ export default function Question({
                 className={clsx({
                   [styles.answer]: true,
                   [styles.selected]: selectedAnswer === id,
-                  [styles.correct]: showCorrect && correctId === id,
-                  [styles.incorrect]: showCorrect && correctId !== id,
+                  [styles.correct]:
+                    showCorrect && correctAnswerIds.includes(id),
+                  [styles.incorrect]:
+                    showCorrect && correctAnswerIds.includes(id),
                   ["hover-underline"]: !showCorrect && selectedAnswer !== id,
                 })}
                 onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
@@ -68,7 +70,7 @@ export default function Question({
                 <AnswerMark
                   id={id}
                   selectedId={selectedAnswer}
-                  correctId={correctId}
+                  correctAnswerIds={correctAnswerIds}
                 />
               )}
             </div>

@@ -21,19 +21,21 @@ export type Quiz = {
   title: string;
   user: number;
   labels: Label[];
+  type: "YT" | "UP";
 };
 
 export type Answer = {
   id: number;
   answer: string;
+  correctAnswerFor: number;
 };
 
 export type Question = {
   id: number;
   quizId: number;
   question: string;
-  correct_answer: Answer;
   answers: Answer[];
+  timestamp: string;
 };
 
 type FormEntry = FormDataEntryValue | null; // Type return when calling FormData.get()

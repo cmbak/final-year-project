@@ -118,4 +118,4 @@ class QuestionSerializer(serializers.ModelSerializer):
         """Metadata for question serializer"""
 
         model = Question
-        fields = ["id", "quiz", "question"]
+        fields = ["id", "quiz", "question", "timestamp"]
