@@ -16,12 +16,14 @@ type HasIdNameUser = {
 
 export type Label = HasIdNameUser;
 
+type videoTypeKey = "YT" | "UP";
+
 export type Quiz = {
   id: number;
   title: string;
   user: number;
   labels: Label[];
-  type: "YouTube" | "Upload";
+  type: videoTypeKey;
 };
 
 export type Answer = {
@@ -39,13 +41,14 @@ export type Question = {
 };
 
 type FormEntry = FormDataEntryValue | null; // Type return when calling FormData.get()
+
 export type CreateQuizDetails = {
   title: FormEntry;
   userId: number | undefined;
   labels: number[];
   video: FormEntry;
   url: FormEntry | null;
-  videoType: "YT" | "UP";
+  videoType: videoTypeKey;
 };
 
 export type FormError = string[];
