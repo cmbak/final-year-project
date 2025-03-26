@@ -40,7 +40,7 @@ export default function TakeQuiz() {
 
       // Go through each question, and for each answer
       // If the answer is the correct answer for that question, append that answer id to correct answers array for that question
-      const correctAnswers = createMatrix(10);
+      let correctAnswers = createMatrix(10);
       response.forEach((question, index) =>
         question.answers.forEach((answer) => {
           // If this answer is a correct answer
@@ -50,6 +50,7 @@ export default function TakeQuiz() {
           }
         }),
       );
+
       // Set correct answers 2d state array to new array populated w/ ids of correct answers
       setCorrectAnswers(correctAnswers);
       return response;
@@ -123,13 +124,15 @@ export default function TakeQuiz() {
         {data.map((question, index) => (
           <Question
             key={index}
-            {...question}
+            question={question.question}
             number={index + 1}
+            answers={question.answers}
             selectedAnswers={selectedAnswers[index]}
             setSelectedAnswers={setSelectedAnswers}
             showCorrect={showCorrect}
             correctAnswerIds={correctAnswers[index]}
             type={quizData.data.type}
+            timestamp={question.timestamp}
           />
         ))}
       </div>

@@ -1,17 +1,20 @@
 import clsx from "clsx";
-import { Question as QuestionType, StateSetter } from "../../types";
+import { Answer, StateSetter } from "../../types";
 import styles from "./Question.module.css";
 import useIntersection from "../../hooks/useIntersection";
 import AnswerMark from "../AnswerMark/AnswerMark";
 
 type QuestionProps = {
   number: number;
+  question: string;
+  answers: Answer[];
   selectedAnswers: number[];
   setSelectedAnswers: StateSetter<number[][]>;
   showCorrect: boolean;
   correctAnswerIds: number[];
   type: "YouTube" | "Upload";
-} & QuestionType;
+  timestamp: string;
+};
 
 export default function Question({
   question,
