@@ -1,17 +1,13 @@
-from yt_dlp import YoutubeDL
+from pytubefix import YouTube
 
 
 def download_video(url: str) -> str:
     """
-    Download YT video from url, save in /media directory and return FILE NAME of mp4
+    Download YT video from url, save in media directory and return file name of mp4
     """
-    options = {
-        "paths": {"home": "./media"},
-        "clean_infojson": True,
-        "allow_multiple_audio_streams": True,
-    }
-    downloader = YoutubeDL(options)
-
-    info = downloader.extract_info(url=url, download=True)
-    file_name = f"{info['title']} [{info['id']}].mp4"  # title of video [video id].mp4
-    return file_name
+    yt = YouTube(url)
+    print(yt.title)
+    ys = yt.streams.get_lowest_resolution()
+    file_path = ys.download("./media")
+    print(file_path)
+    return file_path
