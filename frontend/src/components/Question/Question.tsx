@@ -12,7 +12,7 @@ type QuestionProps = {
   setSelectedAnswers: StateSetter<number[][]>;
   showCorrect: boolean;
   correctAnswerIds: number[];
-  type: "YouTube" | "Upload";
+  type: "YT" | "UP";
   timestamp: string;
 };
 
@@ -68,7 +68,7 @@ export default function Question({
         <h3 className={styles.question}>
           {number}. {question}{" "}
           {showCorrect &&
-            type === "YouTube" && ( // Only show timestamps when checking answers for yt quiz
+            type === "YT" && ( // Only show timestamps when checking answers for yt quiz
               <span className={styles.timestamp}>[{timestamp}]</span>
             )}
         </h3>
