@@ -20,9 +20,8 @@ class Question(typing.TypedDict):
 
 def upload_video(file_name: str) -> File:
     """Upload video titled {file_name} to File API"""
-    print(f"./media/{file_name}")
-    print("Uploading file...")
-    video_file = genai.upload_file(f"./media/{file_name}")
+    print(f"Uploading file from {file_name}")
+    video_file = genai.upload_file(file_name)
 
     # Check that video is ready to be used
     while video_file.state.name == "PROCESSING":
@@ -49,6 +48,7 @@ def summarise_video(file_name: str):
     You should use the JSON schema as supplied through the model configuration.
     You must make sure that, for each question, the values of the 'correct_answers' list contains the values of the correct answers within that question's 'answers' list.
     You must make sure that there are at least 2 questions which have 2 answers - this should be reflected in the length of the correct_answers list.
+    You must make sure that there is only one timestamp for each question - this should be formatted as MM:SS with M indicating a minute and S indicating a second.
     """
 
     print("Creating summary...")
