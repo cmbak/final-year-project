@@ -227,6 +227,7 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
             if url is not None:
                 file_name, embed_url = download_video(url)
                 quiz.embed_url = embed_url
+                quiz.save()
 
             # Summarise video
             summarised_questions = summarise_video(file_name)

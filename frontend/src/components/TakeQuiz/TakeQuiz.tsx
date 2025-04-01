@@ -9,6 +9,7 @@ import styles from "./TakeQuiz.module.css";
 import { useRef, useState } from "react";
 import { arraysEquals } from "../../utils/arraysEqual";
 import { shuffle } from "../../utils/shuffle";
+import YoutubeEmbed from "../YoutubeEmbed/YoutubeEmbed";
 
 export default function TakeQuiz() {
   const [numCorrect, setNumCorrect] = useState(0);
@@ -113,13 +114,13 @@ export default function TakeQuiz() {
 
   return (
     <div className="center-container">
+      <YoutubeEmbed url={quizData.data.embed_url} />
       <h1 className={styles.title} ref={titleRef}>
         {quizData.data.title}
       </h1>
       {showCorrect && (
         <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
       )}
-      {/* Questions */}
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
           <Question
