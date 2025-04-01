@@ -223,9 +223,10 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
 
         # Delete created quiz if error thrown when summarising
         try:
-            # Download youtube video
+            # Download youtube video and set embed_url field
             if url is not None:
-                file_name = download_video(url)
+                file_name, embed_url = download_video(url)
+                quiz.embed_url = embed_url
 
             # Summarise video
             summarised_questions = summarise_video(file_name)

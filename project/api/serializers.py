@@ -72,7 +72,7 @@ class QuizSerializer(serializers.ModelSerializer):
         """Metadata for Quiz serializer"""
 
         model = Quiz
-        fields = ["id", "title", "user", "labels", "type"]
+        fields = ["id", "title", "user", "labels", "type", "embed_url"]
 
     def to_internal_value(self, data):
         """
