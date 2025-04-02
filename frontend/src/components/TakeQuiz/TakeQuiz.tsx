@@ -113,13 +113,17 @@ export default function TakeQuiz() {
   }
 
   return (
-    <div className="center-container">
-      <YoutubeEmbed url={quizData.data.embed_url} />
+    <div className={"center-container"}>
       <h1 className={styles.title} ref={titleRef}>
         {quizData.data.title}
       </h1>
       {showCorrect && (
         <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
+      )}
+      {quizData.data.type === "YT" && (
+        <div className={styles.embedContainer}>
+          <YoutubeEmbed url={quizData.data.embed_url} />
+        </div>
       )}
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
