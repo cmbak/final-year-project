@@ -4,14 +4,13 @@ import { CreateQuizDetails } from "../types";
 export const createQuiz = async ({
   title,
   userId,
-  labels,
   video,
   url,
   videoType,
 }: CreateQuizDetails) => {
   const response = await instance.postForm(
     "/api/quizzes/",
-    { title, user: userId, labels, video, url, type: videoType },
+    { title, user: userId, video, url, type: videoType },
     { withXSRFToken: true },
   );
 
