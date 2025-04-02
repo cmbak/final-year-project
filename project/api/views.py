@@ -2,7 +2,6 @@ import json
 
 from api.serializers import (
     AnswerSerializer,
-    LabelSerializer,
     LoginSerializer,
     QuestionSerializer,
     QuizSerializer,
@@ -22,7 +21,7 @@ from rest_framework.views import APIView
 from summarise import summarise_video
 from yt_dlp.utils import DownloadError
 
-from .models import Answer, Label, Question, Quiz, User
+from .models import Answer, Question, Quiz, User
 
 
 def handle_invalid_serializer(serializer: ModelSerializer) -> Response:
@@ -169,17 +168,6 @@ class CreateSpecifyErrorsMixin:
         )
 
 
-class LabelCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
-    """API Endpoint for retrieving labels or creating a label"""
-
-    queryset = Label.objects.all().order_by("id")
-    serializer_class = LabelSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-label_create_view = LabelCreateView.as_view()
-
-
 class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
     """API Endpoint for creating a quiz"""
 
@@ -303,20 +291,6 @@ class UsersModelsMixins:
             queryset = self.get_queryset().filter(**field_names)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-
-class UserLabelsView(UsersModelsMixins, generics.ListAPIView):
-    """
-    API Endpoint which returns the labels a user has created
-    given that they're trying to fetch their own labels
-    """
-
-    queryset = Label.objects.all().order_by("id")
-    serializer_class = LabelSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-user_labels_view = UserLabelsView.as_view()
 
 
 class UserAllQuizzesView(UsersModelsMixins, generics.ListAPIView):

@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import Answer, Label, Question, Quiz, User
+from .models import Answer, Question, Quiz, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,50 +53,14 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
-class LabelSerializer(serializers.ModelSerializer):
-    """Serializer for Label model - convert Label to JSON and vice versa"""
-
-    class Meta:
-        """Metadata for Label serializer"""
-
-        model = Label
-        fields = ["id", "name", "user"]
-
-
 class QuizSerializer(serializers.ModelSerializer):
     """Serializer for Quiz model - convert Quiz to JSON and vice versa"""
-
-    labels = LabelSerializer(many=True)  # Nested list of list items
 
     class Meta:
         """Metadata for Quiz serializer"""
 
         model = Quiz
-        fields = ["id", "title", "user", "labels", "type", "embed_url"]
-
-    def to_internal_value(self, data):
-        """
-        Allow list of Label pks (i.e. foreign keys to labels) to be passed
-        into labels field - e.g. by User when creating Quiz -
-        whilst returning dict representation of Labels
-        https://www.andreas.earth/blog/2022/09/19/drf-serializer-read-nested-data-and-write-primary-key/
-        """
-        self.fields["labels"] = serializers.PrimaryKeyRelatedField(
-            queryset=Label.objects.all(), many=True
-        )  # TODO Filter only request users labels?
-
-        return super().to_internal_value(data)
-
-    def validate(self, data):
-        """Check that user of labels match against user creating quiz"""
-        if len(data["labels"]) > 0:
-            user_labels: set[User] = {label.user for label in data["labels"]}
-            # Check quiz user has made chosen labels
-            if data["user"] not in user_labels:
-                raise serializers.ValidationError(
-                    {"labels": "You must use labels which you have created."}
-                )
-        return data
+        fields = ["id", "title", "user", "type", "embed_url"]
 
 
 class AnswerSerializer(serializers.ModelSerializer):

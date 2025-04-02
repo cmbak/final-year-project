@@ -25,30 +25,6 @@ class User(AbstractUser):
         }
 
 
-class Label(models.Model):
-    """Model representing a quiz label"""
-
-    name = models.CharField(max_length=15, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        """Metadata for Label model"""
-
-        constraints = [
-            models.UniqueConstraint(
-                models.functions.Lower("name"), name="unique_label_name"
-            )
-        ]
-
-    def __str__(self):
-        """Return string representation of label"""
-        return self.name
-
-    def as_dict(self):
-        """Return dict representation of label"""
-        return {"id": self.id, "name": self.name}
-
-
 class Quiz(models.Model):
     """Model representing a quiz"""
 
@@ -58,7 +34,6 @@ class Quiz(models.Model):
 
     title = models.CharField(max_length=50, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    labels = models.ManyToManyField(Label, related_name="quiz", through="QuizLabels")
     type = models.CharField(
         max_length=7, choices=VIDEO_TYPE_CHOICES
     )  # Used to see if timestamp should be displayed or not
@@ -80,16 +55,7 @@ class Quiz(models.Model):
 
     def __str__(self):
         """Returns string representation of quiz"""
-        label_names = ""
-        all_labels: list[Label] = self.labels.all()
-
-        # Format as label | label2 | label3 etc.
-        for i, l in enumerate(all_labels):
-            label_names += l.name
-            if i != len(all_labels) - 1:
-                label_names += ", "
-
-        return f"{self.title} | {self.type} | {label_names} | {self.user.username}"  # noqa e501
+        return f"{self.title} | {self.type} | {self.user.username}"  # noqa e501
 
     def as_dict(self):
         """Returns dictionary representation of quiz"""
@@ -97,19 +63,11 @@ class Quiz(models.Model):
             "id": self.id,
             "title": self.title,
             "user": self.user.id,
-            "labels": [label.as_dict() for label in self.labels.all()],
             "questions": [
                 question.as_dict() for question in Question.objects.filter(quiz=self.id)
             ],
             "type": self.type,
         }
-
-
-class QuizLabels(models.Model):
-    """Intermediate model between Quiz and Labels"""
-
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    label = models.ForeignKey(Label, on_delete=models.CASCADE)
 
 
 class Question(models.Model):
