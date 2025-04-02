@@ -8,7 +8,11 @@ export default function Dashboard() {
     <main className="center-container">
       <h1 className={styles.heading}>my quizzes</h1>
       {/* TODO Search bar here */}
-      <Link to="../create-quiz">create quiz</Link>
+      <button className={`btn btn-primary ${styles.btn}`}>
+        <Link to="../create-quiz" className={styles.createLink}>
+          create quiz
+        </Link>
+      </button>
       <div className={styles.quizzes}>
         <Quizzes />
       </div>

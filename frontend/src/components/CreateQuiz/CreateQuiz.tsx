@@ -13,6 +13,7 @@ type FormErrors = {
   labels?: error;
   title?: error;
   user?: error;
+  colour?: error;
 };
 
 type VideoType = "YT" | "UP"; // Same as Quiz model choices
@@ -36,12 +37,14 @@ export default function CreateQuiz() {
     const title = formData.get("quiz-title");
     const video = formData.get("video");
     const url = formData.get("url");
+    const colour = formData.get("colour");
     mutate({
       title,
       userId,
       video,
       url,
       videoType,
+      colour,
     });
   }
 
@@ -89,6 +92,17 @@ export default function CreateQuiz() {
             <input name="url" type="text" id="url" required />
           </div>
         )}
+        <div className="form-item">
+          <label htmlFor="quiz-colour">quiz colour</label>
+          {formErrors.colour && <FormError error={formErrors.colour} />}
+          <input
+            name="colour"
+            type="color"
+            id="colour"
+            required
+            className={styles.colourInput}
+          />
+        </div>
         <div className="form-item">
           <label htmlFor="quiz-title">quiz title</label>
           {formErrors.title && <FormError error={formErrors.title} />}
