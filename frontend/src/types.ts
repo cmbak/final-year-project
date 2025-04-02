@@ -8,12 +8,6 @@ export type User = {
 
 export type AnonymousUser = {};
 
-type HasIdNameUser = {
-  id: number;
-  name: string;
-  user: number;
-};
-
 type videoTypeKey = "YT" | "UP";
 
 export type Quiz = {

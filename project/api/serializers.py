@@ -60,7 +60,7 @@ class QuizSerializer(serializers.ModelSerializer):
         """Metadata for Quiz serializer"""
 
         model = Quiz
-        fields = ["id", "title", "user", "type", "embed_url"]
+        fields = ["id", "title", "user", "type", "colour", "embed_url"]
 
 
 class AnswerSerializer(serializers.ModelSerializer):

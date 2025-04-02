@@ -1,4 +1,4 @@
-import CreateModal from "../CreateModal/CreateModal";
+// import CreateModal from "../CreateModal/CreateModal";
 import styles from "./Dashboard.module.css";
 import { Link } from "react-router";
 import Quizzes from "../Quizzes/Quizzes";
