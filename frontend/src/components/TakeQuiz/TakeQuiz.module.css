@@ -21,10 +21,15 @@
   text-align: center;
 
   & > div {
-    margin-bottom: 10%; /* TODO use different units - see mobile */
+    margin-bottom: 10%;
 
     &:first-child {
       margin-top: 10%;
     }
   }
+}
+
+/* Don't want button to seem clickable if they shouldn't be allowed to click it */
+.checkBtn:disabled a {
+  cursor: default;
 }

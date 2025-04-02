@@ -143,7 +143,7 @@ export default function TakeQuiz() {
       </div>
       <button
         type="button"
-        className="btn btn-primary ${styles.checkBtn}"
+        className={`btn btn-primary ${styles.checkBtn}`}
         onClick={handleClick}
         disabled={btnIsDisabled()}
       >
