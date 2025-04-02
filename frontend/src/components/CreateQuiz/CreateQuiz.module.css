@@ -25,3 +25,8 @@ input[type="file"] {
     border: none;
   }
 }
+
+.colourInput {
+  width: 100%;
+  height: 2rem;
+}
