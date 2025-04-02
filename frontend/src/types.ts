@@ -15,6 +15,7 @@ export type Quiz = {
   title: string;
   user: number;
   type: videoTypeKey;
+  colour: string;
   embed_url: string;
 };
 
