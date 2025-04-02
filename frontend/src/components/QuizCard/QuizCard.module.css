@@ -1,0 +1,21 @@
+.container {
+  height: fit-content;
+  /* background-color: black; */
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-rows: 150px 1fr;
+  gap: 3rem;
+}
+
+.block {
+  height: 100%;
+  width: 100%;
+  /* background-color: red; */
+}
+
+.details {
+  /* border: 1px solid black; */
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid black;
+}

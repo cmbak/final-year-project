@@ -3,7 +3,7 @@ import { Quiz } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuizzes } from "../../utils/fetchQuizzes";
 import useUser from "../../hooks/useUser";
-import { Link } from "react-router";
+import QuizCard from "../QuizCard/QuizCard";
 
 export default function Quizzes() {
   const userData = useUser();
@@ -22,16 +22,14 @@ export default function Quizzes() {
   }
 
   return (
-    <ul className={styles.quizzes}>
+    <div className={styles.quizzes}>
       {(data && data.length == 0) || data.length === 0 ? (
         <p className={styles.noQuizzes}>No Quizzes</p>
       ) : (
-        data.map(({ id, title }: Quiz) => (
-          <li key={id}>
-            <Link to={`../take-quiz/${id}`}>{title}</Link>
-          </li> // TODO show labels here?
+        data.map(({ id, title, colour }: Quiz) => (
+          <QuizCard key={id} id={id} title={title} colour={colour} />
         ))
       )}
-    </ul>
+    </div>
   );
 }
