@@ -29,12 +29,11 @@
   width: max-content;
   color: darkgray;
   transition: all var(--speed-slow) cubic-bezier(0.075, 0.82, 0.165, 1);
+}
 
-  /* if they haven't checked answers (answer doesn't have (in)correct class) */
-  &:not(:is(.correct, .incorrect)):hover {
-    cursor: pointer;
-    color: black;
-  }
+.hoverAnswer:hover {
+  cursor: pointer;
+  color: black;
 }
 
 .selected {
@@ -55,7 +54,7 @@
   }
 }
 .timestamp {
-  text-decoration: underline;
-  text-underline-offset: 0.2rem;
+  /* text-decoration: underline; */
+  /* text-underline-offset: 0.2rem; */
   font-size: 1.2rem;
 }
