@@ -15,6 +15,7 @@
   --border-radius-rounded: 99px;
   --border-radius-medium: 15px;
   --border-radius-small: 10px;
+  --speed-slow: 850ms;
   --speed-medium: 450ms;
   --speed-quick: 250ms;
 }

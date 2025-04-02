@@ -4,7 +4,8 @@
 }
 
 .title {
-  font-size: 2.5rem;
+  text-align: center;
+  font-size: 2.8rem;
   font-weight: bold;
   margin-block: 1rem;
 }
@@ -15,14 +16,15 @@
 }
 
 .questions {
+  max-width: 100%;
   gap: 1rem;
   text-align: center;
-}
 
-.questions > div {
-  margin-bottom: 50vh; /* TODO use different units - see mobile */
+  & > div {
+    margin-bottom: 10%; /* TODO use different units - see mobile */
 
-  &:first-child {
-    margin-top: 30%;
+    &:first-child {
+      margin-top: 10%;
+    }
   }
 }

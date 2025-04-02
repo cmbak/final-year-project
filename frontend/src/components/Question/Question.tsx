@@ -56,7 +56,8 @@ export default function Question({
   }
 
   return (
-    <div ref={elementRef}>
+    <div>
+      {/* Add ref here for question visibility animation */}
       {/* container to prevent animation from flickering because of scale anim */}
       <div
         className={clsx({
@@ -84,8 +85,8 @@ export default function Question({
                     showCorrect && correctAnswerIds.includes(id),
                   [styles.incorrect]:
                     showCorrect && correctAnswerIds.includes(id),
-                  ["hover-underline"]:
-                    !showCorrect && !selectedAnswers.includes(id),
+                  // ["hover-underline"]:
+                  //   !showCorrect && !selectedAnswers.includes(id),
                 })}
                 onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
               >
