@@ -1,6 +1,6 @@
 .container {
-  opacity: 0;
-  filter: blur(3px);
+  /* opacity: 0; */
+  /* filter: blur(3px); */
   transition: all var(--speed-medium) ease-in-out;
 }
 
@@ -14,6 +14,7 @@
 .question {
   font-size: 1.7rem;
   font-weight: bold;
+  padding-inline: 1rem;
 }
 
 .answers {
@@ -24,9 +25,10 @@
 /* Could create pointer utility class */
 .answer {
   font-size: 1.3rem;
+  font-weight: 300;
   width: max-content;
   color: darkgray;
-  transition: all var(--speed-medium) cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all var(--speed-slow) cubic-bezier(0.075, 0.82, 0.165, 1);
 
   /* if they haven't checked answers (answer doesn't have (in)correct class) */
   &:not(:is(.correct, .incorrect)):hover {
@@ -36,11 +38,13 @@
 }
 
 .selected {
-  font-weight: bold;
+  font-weight: 450;
   color: black;
 }
 
 .answerContainer {
+  max-width: 100%;
+  padding-inline: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
