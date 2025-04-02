@@ -80,6 +80,7 @@ export default function Question({
               <li
                 className={clsx({
                   [styles.answer]: true,
+                  [styles.hoverAnswer]: !showCorrect,
                   [styles.selected]: selectedAnswers.includes(id),
                   [styles.correct]:
                     showCorrect && correctAnswerIds.includes(id),
