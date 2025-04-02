@@ -120,7 +120,7 @@ export default function TakeQuiz() {
       {showCorrect && (
         <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
       )}
-      {quizData.data.type === "YT" && (
+      {quizData.data.type === "YT" && quizData.data.embed_url !== null && (
         <div className={styles.embedContainer}>
           <YoutubeEmbed url={quizData.data.embed_url} />
         </div>
