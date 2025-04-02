@@ -37,6 +37,7 @@ class Quiz(models.Model):
     type = models.CharField(
         max_length=7, choices=VIDEO_TYPE_CHOICES
     )  # Used to see if timestamp should be displayed or not
+    colour = models.CharField(max_length=7, default="#000000")
     embed_url = models.CharField(unique=True, blank=True, null=True)
 
     class Meta:
@@ -55,7 +56,7 @@ class Quiz(models.Model):
 
     def __str__(self):
         """Returns string representation of quiz"""
-        return f"{self.title} | {self.type} | {self.user.username}"  # noqa e501
+        return f"{self.title} | {self.type} | {self.colour} | {self.user.username}"  # noqa e501
 
     def as_dict(self):
         """Returns dictionary representation of quiz"""
@@ -67,6 +68,7 @@ class Quiz(models.Model):
                 question.as_dict() for question in Question.objects.filter(quiz=self.id)
             ],
             "type": self.type,
+            "colour": self.colour,
         }
 
 
