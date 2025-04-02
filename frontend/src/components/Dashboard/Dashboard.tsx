@@ -13,11 +13,11 @@ export default function Dashboard() {
         <Quizzes />
       </div>
       <div className={`${styles.modalBtnContainers}`}>
-        <CreateModal
+        {/* <CreateModal
           endpoint="/api/labels/"
           inputId="create-label-name"
           title="create label"
-        />
+        /> */}
       </div>
     </main>
   );

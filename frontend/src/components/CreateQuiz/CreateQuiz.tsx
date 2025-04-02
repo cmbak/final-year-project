@@ -1,6 +1,5 @@
 import { useActionState, useState } from "react";
 import BackButton from "../BackButton/BackButton";
-import LabelSelect from "../LabelSelect/LabelSelect";
 import styles from "./CreateQuiz.module.css";
 import FormError from "../FormError/FormError";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -21,7 +20,6 @@ type VideoType = "YT" | "UP"; // Same as Quiz model choices
 
 export default function CreateQuiz() {
   const [videoType, setVideoType] = useState<VideoType>("UP");
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const user = useQuery({ queryKey: ["user"], queryFn: fetchUser });
   const userId = user.data?.id;
@@ -41,7 +39,6 @@ export default function CreateQuiz() {
     mutate({
       title,
       userId,
-      labels: selectedIds,
       video,
       url,
       videoType,
@@ -92,11 +89,6 @@ export default function CreateQuiz() {
             <input name="url" type="text" id="url" required />
           </div>
         )}
-        <div className="form-item">
-          <p>labels</p>
-          {formErrors.labels && <FormError error={formErrors.labels} />}
-          <LabelSelect userId={userId} setSelectedIds={setSelectedIds} />
-        </div>
         <div className="form-item">
           <label htmlFor="quiz-title">quiz title</label>
           {formErrors.title && <FormError error={formErrors.title} />}
