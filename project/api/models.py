@@ -39,6 +39,10 @@ class Quiz(models.Model):
     )  # Used to see if timestamp should be displayed or not
     embed_url = models.CharField(unique=True, blank=True, null=True)
     thumbnail_url = models.CharField(unique=True, blank=True, null=True)
+    file_name = models.CharField(blank=True)
+    # Should have unique=True, but ^ also contains video id
+    # so any errors will be the same
+    # blank=True since field gets populated after quiz is created
 
     class Meta:
         """Metadata for Quiz model"""
@@ -69,6 +73,7 @@ class Quiz(models.Model):
             ],
             "type": self.type,
             "thumbnail_url": self.thumbnail_url,
+            "file_name": self.file_name,
         }
 
 

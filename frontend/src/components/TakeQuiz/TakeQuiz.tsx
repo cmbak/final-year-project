@@ -9,7 +9,7 @@ import styles from "./TakeQuiz.module.css";
 import { useRef, useState } from "react";
 import { arraysEquals } from "../../utils/arraysEqual";
 import { shuffle } from "../../utils/shuffle";
-import YoutubeEmbed from "../YoutubeEmbed/YoutubeEmbed";
+import Video from "../Video/Video";
 
 export default function TakeQuiz() {
   const [numCorrect, setNumCorrect] = useState(0);
@@ -122,7 +122,7 @@ export default function TakeQuiz() {
       )}
       {quizData.data.type === "YT" && quizData.data.embed_url !== null && (
         <div className={styles.embedContainer}>
-          <YoutubeEmbed url={quizData.data.embed_url} />
+          <Video name={`http://localhost:8080/${quizData.data.file_name}`} />
         </div>
       )}
       <div className={`flex flex-col ${styles.questions}`}>
