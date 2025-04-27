@@ -213,8 +213,9 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
         try:
             # Download youtube video and set embed_url field
             if url is not None:
-                file_name, embed_url = download_video(url)
+                file_name, embed_url, thumbnail_url = download_video(url)
                 quiz.embed_url = embed_url
+                quiz.thumbnail_url = thumbnail_url
                 quiz.save()
 
             # Summarise video
