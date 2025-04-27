@@ -16,6 +16,7 @@ export type Quiz = {
   user: number;
   type: videoTypeKey;
   embed_url: string;
+  thumbnail_url: string;
 };
 
 export type Answer = {

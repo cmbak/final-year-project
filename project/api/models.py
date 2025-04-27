@@ -38,6 +38,7 @@ class Quiz(models.Model):
         max_length=7, choices=VIDEO_TYPE_CHOICES
     )  # Used to see if timestamp should be displayed or not
     embed_url = models.CharField(unique=True, blank=True, null=True)
+    thumbnail_url = models.CharField(unique=True, blank=True, null=True)
 
     class Meta:
         """Metadata for Quiz model"""
@@ -67,7 +68,7 @@ class Quiz(models.Model):
                 question.as_dict() for question in Question.objects.filter(quiz=self.id)
             ],
             "type": self.type,
-            "colour": self.colour,
+            "thumbnail_url": self.thumbnail_url,
         }
 
 

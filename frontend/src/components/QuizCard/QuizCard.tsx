@@ -1,16 +1,14 @@
 import { Link } from "react-router";
 import styles from "./QuizCard.module.css";
+import { Quiz } from "../../types";
 
-type QuizCardProps = {
-  id: number;
-  title: string;
-};
+type QuizCardProps = Pick<Quiz, "id" | "title" | "thumbnail_url">;
 
-export default function QuizCard({ id, title }: QuizCardProps) {
+export default function QuizCard({ id, title, thumbnail_url }: QuizCardProps) {
   return (
     <div className={styles.container}>
       <Link to={`../take-quiz/${id}`}>
-        <div className={styles.block}></div>
+        <img src={thumbnail_url} />
         <div className={styles.details}>{title}</div>
       </Link>
     </div>

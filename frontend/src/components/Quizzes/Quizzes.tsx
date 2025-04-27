@@ -26,8 +26,13 @@ export default function Quizzes() {
       {(data && data.length == 0) || data.length === 0 ? (
         <p className={styles.noQuizzes}>No Quizzes</p>
       ) : (
-        data.map(({ id, title }: Quiz) => (
-          <QuizCard key={id} id={id} title={title} />
+        data.map(({ id, title, thumbnail_url }: Quiz) => (
+          <QuizCard
+            key={id}
+            id={id}
+            title={title}
+            thumbnail_url={thumbnail_url}
+          />
         ))
       )}
     </div>

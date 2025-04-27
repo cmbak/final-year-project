@@ -1,21 +1,30 @@
 .container {
   height: fit-content;
-  /* background-color: black; */
-  margin-bottom: 2rem;
-  display: grid;
-  grid-template-rows: 150px 1fr;
-  gap: 3rem;
+  transition: all var(--speed-medium) ease;
+  /* number 16 from https://getcssscan.com/css-box-shadow-examples */
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+
+  & img {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+}
+
+.container:hover {
+  scale: 1.1;
 }
 
 .block {
   height: 100%;
   width: 100%;
-  /* background-color: red; */
 }
 
 .details {
-  /* border: 1px solid black; */
-  padding: 1rem;
-  background-color: white;
-  border: 1px solid black;
+  font-weight: bold;
+  padding: 1.5rem 1rem;
+  background-color: rgb(255, 255, 255);
 }
