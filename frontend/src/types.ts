@@ -17,6 +17,7 @@ export type Quiz = {
   type: videoTypeKey;
   embed_url: string;
   thumbnail_url: string;
+  file_name: string;
 };
 
 export type Answer = {
