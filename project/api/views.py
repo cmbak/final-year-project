@@ -1,4 +1,6 @@
 import json
+import os
+import urllib.parse
 
 from api.serializers import (
     AnswerSerializer,
@@ -218,6 +220,12 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
                 quiz.embed_url = embed_url
                 quiz.thumbnail_url = thumbnail_url
                 quiz.save()
+            else:
+                # file gets hosted using http-server
+                # so need to know title as encoded string so can be used as video source
+                quiz.file_name = urllib.parse.quote(file_name.name)
+                quiz.save()
+                file_name = os.getcwd() + "/media/" + file_name.name
 
             # Summarise video
             summarised_questions = summarise_video(file_name)
