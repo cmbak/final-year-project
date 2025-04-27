@@ -15,7 +15,6 @@ export type Quiz = {
   title: string;
   user: number;
   type: videoTypeKey;
-  colour: string;
   embed_url: string;
 };
 
@@ -41,7 +40,6 @@ export type CreateQuizDetails = {
   video: FormEntry;
   url: FormEntry | null;
   videoType: videoTypeKey;
-  colour: FormEntry;
 };
 
 export type FormError = string[];

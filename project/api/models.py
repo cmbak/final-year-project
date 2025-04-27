@@ -37,7 +37,6 @@ class Quiz(models.Model):
     type = models.CharField(
         max_length=7, choices=VIDEO_TYPE_CHOICES
     )  # Used to see if timestamp should be displayed or not
-    colour = models.CharField(max_length=7, default="#000000")
     embed_url = models.CharField(unique=True, blank=True, null=True)
 
     class Meta:
