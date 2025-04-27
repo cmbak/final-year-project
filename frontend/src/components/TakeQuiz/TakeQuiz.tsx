@@ -37,7 +37,7 @@ export default function TakeQuiz() {
     queryFn: async () => {
       let response = await fetchQuizQuestions(user.data?.id, quizId);
       // Shuffle questions whenever user takes quiz
-      response = shuffle(response);
+      // response = shuffle(response); - FIXME shuffles whenever tab back onto page
 
       // Go through each question, and for each answer
       // If the answer is the correct answer for that question, append that answer id to correct answers array for that question
