@@ -29,7 +29,7 @@ export default function Navbar() {
                 queryClient.invalidateQueries({ queryKey: ["user"] });
               }}
             >
-              logout
+              logout {data?.username}
             </button>
           </>
         )}
