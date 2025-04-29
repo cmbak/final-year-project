@@ -31,6 +31,18 @@ export default function Question({
     threshold: 1.0,
   });
 
+  // Return the number of correct answers chosen (for mcq)
+  function selectedAllCorrect(): boolean {
+    console.log("boop");
+    for (let index = 0; index < correctAnswerIds.length; index++) {
+      const element = correctAnswerIds[index];
+      if (!selectedAnswers.includes(element)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   return (
     <div>
       {/* Add ref here for question visibility animation */}
@@ -42,7 +54,13 @@ export default function Question({
         })}
       >
         {/* Question */}
-        <h3 className={styles.question}>
+        <h3
+          className={clsx({
+            [styles.question]: true,
+            [styles.correct]: showCorrect && selectedAllCorrect(),
+            [styles.incorrect]: showCorrect && !selectedAllCorrect(),
+          })}
+        >
           {number}. {question}{" "}
           {showCorrect &&
             type === "YT" && ( // Only show timestamps when checking answers for yt quiz
