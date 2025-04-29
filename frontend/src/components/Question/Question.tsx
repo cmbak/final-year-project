@@ -88,6 +88,7 @@ export default function Question({
               selectedAnswers={selectedAnswers}
               setSelectedAnswers={setSelectedAnswers}
               number={number}
+              hasMultAnswers={correctAnswerIds.length > 1}
             />
           ))}
         </ul>
