@@ -36,7 +36,8 @@
 }
 
 .timestamp {
-  /* text-decoration: underline; */
-  /* text-underline-offset: 0.2rem; */
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+  cursor: pointer;
   font-size: 1.2rem;
 }
