@@ -1,29 +1,10 @@
-/* Could create pointer utility class */
-.answer {
-  font-size: 1.3rem;
-  font-weight: 300;
-  width: max-content;
-  color: darkgray;
-  transition: all var(--speed-slow) cubic-bezier(0.075, 0.82, 0.165, 1);
-
-  color: black;
-}
-
-.hoverAnswer:hover {
-  cursor: pointer;
-}
-
-.selected {
-  font-weight: 450;
-  color: black;
-}
-
 .answerContainer {
   border: 2px solid lightgray;
   background-color: rgb(244, 244, 244);
   border-radius: 5px;
   transition: all var(--speed-quick) ease;
-  width: 30rem;
+  /* width: 30rem; */
+  width: 50%;
 
   padding: 1rem 1rem;
   max-width: 100%;
@@ -39,5 +20,26 @@
 }
 
 .answerContainer:hover {
-  border-color: rgb(99, 99, 99);
+  border-color: rgb(60, 60, 60);
+}
+
+.selected {
+  border-color: rgb(60, 60, 60);
+  background-color: rgb(213, 213, 213);
+}
+
+/* Could create pointer utility class */
+.answer {
+  font-size: 1.3rem;
+  font-weight: 350;
+  width: max-content;
+  color: darkgray;
+  transition: all var(--speed-slow) cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  text-align: left;
+  color: black;
+}
+
+.hoverAnswer:hover {
+  cursor: pointer;
 }
