@@ -63,6 +63,10 @@ export default function TakeQuiz() {
 
   // Show correct answers and number got correct
   function handleClick() {
+    // Scroll page up to title (to show number correct)
+    if (titleRef.current) {
+      titleRef.current.scrollIntoView({ behavior: "smooth" });
+    }
     setShowCorrect(true);
     // Tally num of correct answers
     let correct = 0;
@@ -70,11 +74,6 @@ export default function TakeQuiz() {
       if (arraysEquals(selectedAnswers[index], correctIds)) correct++;
     });
     setNumCorrect(correct);
-
-    // Scroll page up to title (to show number correct)
-    if (titleRef.current) {
-      titleRef.current.scrollIntoView({ behavior: "smooth" });
-    }
   }
 
   // Disable button if they haven't answered all questions
