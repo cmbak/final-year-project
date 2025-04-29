@@ -7,8 +7,6 @@ type AnswerMarkProps = {
 };
 
 export default function AnswerMark({ id, selected, correct }: AnswerMarkProps) {
-  // If answer is selected, show whether it's correct or incorrect (via check/cross)
-
   // Answer selected and correct : checkmark
   // -> means that correct answers which haven't been selected don't have a checkmark
   // Answer selected and incorrect : no checkmark
