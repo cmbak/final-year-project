@@ -1,21 +1,22 @@
 .container {
+  padding: 0 !important;
   height: fit-content;
   transition: all var(--speed-medium) ease;
   /* number 16 from https://getcssscan.com/css-box-shadow-examples */
   box-shadow:
     rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-radius: 12px;
 
+  background-color: rgb(255, 255, 255);
   & img {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
   }
 }
 
-.container:hover {
-  scale: 1.1;
+.hover:hover {
+  scale: 1.05;
 }
 
 .block {
@@ -24,7 +25,19 @@
 }
 
 .details {
+  display: flex;
+  justify-content: space-between;
   font-weight: bold;
   padding: 1.5rem 1rem;
-  background-color: rgb(255, 255, 255);
+}
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.trash {
+  color: rgb(209, 0, 0);
+  background-color: transparent;
 }

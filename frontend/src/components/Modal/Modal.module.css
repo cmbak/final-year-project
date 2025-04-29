@@ -39,7 +39,7 @@ for parent element when modal is not showing
   max-width: 80%;
   /* Allows modal to be placed on top of fixed bg and in middle of screen 
   https://stackoverflow.com/questions/8508275/how-to-center-a-position-absolute-element */
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
