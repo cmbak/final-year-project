@@ -11,6 +11,7 @@ type ModalProps = {
   action?: (formData: FormData) => void;
   isPending?: boolean;
   margin?: string;
+  submitAction?: () => void;
 };
 
 export default function Modal({
@@ -22,6 +23,7 @@ export default function Modal({
   setActive,
   isPending,
   margin,
+  submitAction,
 }: ModalProps) {
   useEffect(() => {
     if (active) {
@@ -30,6 +32,13 @@ export default function Modal({
       document.body.style.overflow = "visible";
     }
   }, [active]);
+
+  function handleClick() {
+    if (submitAction !== undefined) {
+      submitAction();
+    }
+    setActive(false);
+  }
 
   return (
     <>
@@ -68,7 +77,7 @@ export default function Modal({
                 <div className={styles.content}>{children}</div>
                 <button
                   className={`btn btn-secondary ${styles.mainBtn}`}
-                  onClick={() => setActive(false)}
+                  onClick={handleClick}
                 >
                   {title}
                 </button>

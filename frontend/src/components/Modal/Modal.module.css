@@ -30,7 +30,7 @@ for parent element when modal is not showing
   background-color: var(--colour-card-background);
   border-radius: var(--border-radius-small);
   display: grid;
-  grid-template-rows: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 2fr 1fr;
   gap: 1rem;
   padding-block: 4rem;
   width: 25rem;
