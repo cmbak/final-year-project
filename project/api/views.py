@@ -336,6 +336,12 @@ class UserQuizView(UsersModelsMixins, generics.RetrieveUpdateDestroyAPIView):
         quiz.delete()
         return JsonResponse({}, status=status.HTTP_200_OK)
 
+    def put(self, request, user_id, quiz_id):
+        quiz = Quiz.objects.get(user=user_id, id=quiz_id)
+        quiz.title = request.data.get("title")
+        quiz.save()
+        return JsonResponse({"quiz": quiz.as_dict()})
+
     # TODO more of a put request?
     # TODO is endpoint rest?
     def create(self, request, user_id, quiz_id, *args, **kwargs):

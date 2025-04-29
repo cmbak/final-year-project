@@ -26,15 +26,20 @@
 
 .details {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.5rem;
   font-weight: bold;
   padding: 1.5rem 1rem;
 }
 
 .btns {
   display: flex;
-  justify-content: space-between;
   gap: 1rem;
+}
+
+.editBtn {
+  background-color: transparent;
 }
 
 .trash {
