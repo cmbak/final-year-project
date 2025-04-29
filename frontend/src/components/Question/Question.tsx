@@ -53,6 +53,7 @@ export default function Question({
           {/* Answers */}
           {answers.map(({ id, answer }) => (
             <Answer
+              key={id}
               id={id}
               answer={answer}
               correctAnswerIds={correctAnswerIds}

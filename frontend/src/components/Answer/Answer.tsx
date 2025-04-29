@@ -47,7 +47,13 @@ export default function Answer({
   }
 
   return (
-    <div key={id} className={styles.answerContainer}>
+    <div
+      key={id}
+      className={clsx({
+        [styles.answerContainer]: true,
+        [styles.selected]: selectedAnswers.includes(id),
+      })}
+    >
       <li
         className={clsx({
           [styles.answer]: true,
