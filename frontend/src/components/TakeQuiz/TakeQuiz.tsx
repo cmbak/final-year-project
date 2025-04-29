@@ -12,6 +12,7 @@ import { shuffle } from "../../utils/shuffle";
 import Video from "../Video/Video";
 
 export default function TakeQuiz() {
+  const [curTimestamp, setCurTimestamp] = useState(0);
   const [numCorrect, setNumCorrect] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState<number[][]>(
     createMatrix(10),
@@ -121,7 +122,10 @@ export default function TakeQuiz() {
         <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
       )}
       <div className={styles.embedContainer}>
-        <Video name={`http://localhost:8080/${quizData.data.file_name}`} />
+        <Video
+          name={`http://localhost:8080/${quizData.data.file_name}`}
+          timestamp={curTimestamp}
+        />
       </div>
       <div className={`flex flex-col ${styles.questions}`}>
         {data.map((question, index) => (
@@ -134,8 +138,8 @@ export default function TakeQuiz() {
             setSelectedAnswers={setSelectedAnswers}
             showCorrect={showCorrect}
             correctAnswerIds={correctAnswers[index]}
-            type={quizData.data.type}
-            timestamp={question.timestamp}
+            vidTimestamp={question.timestamp}
+            setCurTimestamp={setCurTimestamp}
           />
         ))}
       </div>

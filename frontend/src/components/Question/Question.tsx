@@ -3,6 +3,7 @@ import { Answer as AnswerType, StateSetter } from "../../types";
 import styles from "./Question.module.css";
 import useIntersection from "../../hooks/useIntersection";
 import Answer from "../Answer/Answer";
+import { strToTimestamp } from "../../utils/strToTimestamp";
 
 type QuestionProps = {
   number: number;
@@ -12,8 +13,8 @@ type QuestionProps = {
   setSelectedAnswers: StateSetter<number[][]>;
   showCorrect: boolean;
   correctAnswerIds: number[];
-  type: "YT" | "UP";
-  timestamp: string;
+  vidTimestamp: string;
+  setCurTimestamp: StateSetter<number>;
 };
 
 export default function Question({
@@ -24,8 +25,8 @@ export default function Question({
   setSelectedAnswers,
   showCorrect,
   correctAnswerIds,
-  timestamp,
-  type,
+  vidTimestamp,
+  setCurTimestamp,
 }: QuestionProps) {
   const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
     threshold: 1.0,
@@ -33,7 +34,6 @@ export default function Question({
 
   // Return the number of correct answers chosen (for mcq)
   function selectedAllCorrect(): boolean {
-    console.log("boop");
     for (let index = 0; index < correctAnswerIds.length; index++) {
       const element = correctAnswerIds[index];
       if (!selectedAnswers.includes(element)) {
@@ -62,10 +62,17 @@ export default function Question({
           })}
         >
           {number}. {question}{" "}
-          {showCorrect &&
-            type === "YT" && ( // Only show timestamps when checking answers for yt quiz
-              <span className={styles.timestamp}>[{timestamp}]</span>
-            )}
+          {showCorrect && (
+            // Only show timestamps when checking answers for yt quiz
+            <a
+              className={styles.timestamp}
+              onClick={() => setCurTimestamp(strToTimestamp(vidTimestamp))}
+            >
+              {" "}
+              {/* TODO make fn turn string timestamp into number */}[
+              {vidTimestamp}]
+            </a>
+          )}
         </h3>
         <ul className={`flex flex-col ${styles.answers}`}>
           {/* Answers */}
