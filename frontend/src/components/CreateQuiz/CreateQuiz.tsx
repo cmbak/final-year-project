@@ -27,7 +27,7 @@ export default function CreateQuiz() {
   const [state, formAction, formPending] = useActionState(onFormSubmit, null);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (newQuiz: CreateQuizDetails) => createQuiz(newQuiz),
+    mutationFn: async (newQuiz: CreateQuizDetails) => await createQuiz(newQuiz),
     onError: (error: any) => {
       if (error.response) setFormErrors(error.response.data.errors);
     },

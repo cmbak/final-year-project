@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <nav className={`flex ${styles.nav}`}>
       <Link to="/" className={styles.name}>
-        Name
+        QuizMe
       </Link>
       <div className={`flex ${styles.links}`}>
         {/* If user hasn't logged in, only show login */}
