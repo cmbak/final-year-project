@@ -21,8 +21,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 from summarise import summarise_video
-from yt_dlp.utils import DownloadError
-
+from pytubefix.exceptions import RegexMatchError, VideoUnavailable, PytubeFixError
 from .models import Answer, Question, Quiz, User
 
 
@@ -236,21 +235,33 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
                 {"id": serializer.data["id"], "questions": summarised_questions},
                 status=status.HTTP_201_CREATED,
             )
-        except DownloadError as e:
-            print(f"Something went wrong when trying to download video from {url}")
-            print(e.msg)
+        except RegexMatchError:
+            print(
+                f"Something went wrong (Regex) when trying to download video from {url}"
+            )
             quiz.delete()
 
-            if "is not a valid URL" in e.msg:
-                return video_error_json(
-                    "Please enter a valid url for a YouTube video",
-                    status.HTTP_400_BAD_REQUEST,
-                )
-            else:
-                return video_error_json(
-                    f"Something went wrong when downloading video from url {url}",
-                    status.HTTP_500_INTERNAL_SERVER_ERROR,
-                )
+            # Error thrown if video id can't be found in provided url
+            # Assuming here that it can't be found because url is not for a yt video
+            return video_error_json(
+                "Please enter a valid url for a YouTube video",
+                status.HTTP_400_BAD_REQUEST,
+            )
+        except VideoUnavailable:
+            print(f"Video from {url} unavailable to download")
+            quiz.delete()
+            return video_error_json(
+                "Video unavailable to download. Please try another video",
+                status.HTTP_400_BAD_REQUEST,
+            )
+        except PytubeFixError:
+            print(f"Something went wrong (misc) when downloading video from {url}")
+            quiz.delete()
+            return video_error_json(
+                "Something went wrong when trying to download this video",
+                status.HTTP_400_BAD_REQUEST,
+            )
+
         except TooManyRequests as e:
             print("Too many requests sent to Gemini API (429)")
             print(e.code, e.message)
@@ -261,6 +272,7 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
                 e.code,
             )
         except ServerError as e:
+            quiz.delete()
             print("Something went wrong when trying to summarise video")
             print(e.code, e.message)
             return video_error_json(
@@ -269,12 +281,17 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
             )
         # Other API related error not caught by ^
         except GoogleAPICallError as e:
+            quiz.delete()
             print("Something went wrong when trying to summarise video")
             print(e.code, e.message)
             return video_error_json(
                 "Something went wrong when trying to summarise video",
                 e.code,
             )
+        except:  # noqa e722
+            quiz.delete()
+            print("Something else went wrong during yt/upload/summarise process")
+            return video_error_json("Something went wrong", status.HTTP_400_BAD_REQUEST)
 
 
 quiz_create_view = QuizCreateView.as_view()
