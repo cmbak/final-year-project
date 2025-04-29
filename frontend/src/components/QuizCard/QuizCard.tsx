@@ -3,19 +3,22 @@ import styles from "./QuizCard.module.css";
 import { Quiz } from "../../types";
 import Modal from "../Modal/Modal";
 import { SetStateAction, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteQuiz } from "../../utils/deleteQuiz";
 import useUser from "../../hooks/useUser";
 
 type QuizCardProps = Pick<Quiz, "id" | "title" | "thumbnail_url">;
 
 export default function QuizCard({ id, title, thumbnail_url }: QuizCardProps) {
+  const queryClient = useQueryClient();
   const { data } = useUser();
   const userId = data?.id;
   const [showModal, setShowModal] = useState(false);
   const mutation = useMutation({
-    mutationFn: () => {
-      return deleteQuiz(id, userId);
+    mutationFn: async () => {
+      const res = await deleteQuiz(id, userId);
+      queryClient.refetchQueries({ queryKey: ["quizzes", userId] });
+      return res;
     },
   });
 
