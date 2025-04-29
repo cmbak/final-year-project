@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Modal.module.css";
 import { StateSetter } from "../../types";
 
@@ -10,6 +10,7 @@ type ModalProps = {
   setActive: StateSetter<boolean>;
   action?: (formData: FormData) => void;
   isPending?: boolean;
+  margin?: string;
 };
 
 export default function Modal({
@@ -20,12 +21,24 @@ export default function Modal({
   active,
   setActive,
   isPending,
+  margin,
 }: ModalProps) {
+  useEffect(() => {
+    if (active) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  }, [active]);
+
   return (
     <>
       {active && (
         <>
-          <div className={styles.modalBackground}></div>
+          <div
+            className={styles.modalBackground}
+            style={{ margin: margin }}
+          ></div>
           <div
             className={`${styles.modal} ${type === "form" && styles.form_modal}`}
           >
