@@ -3,11 +3,21 @@ import styles from "./QuizCard.module.css";
 import { Quiz } from "../../types";
 import Modal from "../Modal/Modal";
 import { SetStateAction, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { deleteQuiz } from "../../utils/deleteQuiz";
+import useUser from "../../hooks/useUser";
 
 type QuizCardProps = Pick<Quiz, "id" | "title" | "thumbnail_url">;
 
 export default function QuizCard({ id, title, thumbnail_url }: QuizCardProps) {
+  const { data } = useUser();
+  const userId = data?.id;
   const [showModal, setShowModal] = useState(false);
+  const mutation = useMutation({
+    mutationFn: () => {
+      return deleteQuiz(id, userId);
+    },
+  });
 
   return (
     <>
@@ -17,8 +27,9 @@ export default function QuizCard({ id, title, thumbnail_url }: QuizCardProps) {
         active={showModal}
         setActive={setShowModal}
         margin={"0 -5rem"} // To counteract 5rem of inline padding on div container in Quizzes
+        submitAction={() => mutation.mutate()}
       >
-        <h1>hi</h1>
+        <h1>Are you sure you want to delete the quiz titled '{title}'?</h1>
       </Modal>
       <div className={styles.container}>
         <img src={thumbnail_url} />

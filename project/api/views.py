@@ -317,7 +317,7 @@ class UserAllQuizzesView(UsersModelsMixins, generics.ListAPIView):
 user_all_quizzes_view = UserAllQuizzesView.as_view()
 
 
-class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
+class UserQuizView(UsersModelsMixins, generics.RetrieveUpdateDestroyAPIView):
     """
     API Endpoint which returns the quiz a user has created (given the id)
     And allows them to create a quiz
@@ -330,6 +330,11 @@ class UserQuizView(UsersModelsMixins, generics.ListCreateAPIView):
 
     def get(self, request, user_id, quiz_id, **field_names):
         return super().get(request, user_id, id=quiz_id, **field_names)
+
+    def delete(self, request, user_id, quiz_id):
+        quiz = Quiz.objects.get(user=user_id, id=quiz_id)
+        quiz.delete()
+        return JsonResponse({}, status=status.HTTP_200_OK)
 
     # TODO more of a put request?
     # TODO is endpoint rest?
