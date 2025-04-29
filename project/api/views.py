@@ -317,7 +317,9 @@ class UserAllQuizzesView(UsersModelsMixins, generics.ListAPIView):
 user_all_quizzes_view = UserAllQuizzesView.as_view()
 
 
-class UserQuizView(UsersModelsMixins, generics.RetrieveUpdateDestroyAPIView):
+class UserQuizView(
+    UsersModelsMixins, generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView
+):
     """
     API Endpoint which returns the quiz a user has created (given the id)
     And allows them to create a quiz
