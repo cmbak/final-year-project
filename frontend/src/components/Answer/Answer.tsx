@@ -2,6 +2,7 @@ import clsx from "clsx";
 import styles from "./Answer.module.css";
 import AnswerMark from "../AnswerMark/AnswerMark";
 import { StateSetter } from "../../types";
+import { useState } from "react";
 
 type AnswerProps = {
   id: number;
@@ -22,6 +23,9 @@ export default function Answer({
   setSelectedAnswers,
   number,
 }: AnswerProps) {
+  const selected = selectedAnswers.includes(id);
+  const correctAnswer = correctAnswerIds.includes(id);
+
   function handleClick(answerID: number) {
     // Add or remove answer id to selected answers for this questions
     // depending on if it's been added to array or not
@@ -51,23 +55,13 @@ export default function Answer({
       key={id}
       className={clsx({
         [styles.answerContainer]: true,
-        [styles.selected]: selectedAnswers.includes(id),
+        [styles.selected]: selected,
+        [styles.correct]: showCorrect && correctAnswer,
+        [styles.incorrect]: showCorrect && !correctAnswer,
       })}
+      onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
     >
-      <li
-        className={clsx({
-          [styles.answer]: true,
-          [styles.hoverAnswer]: !showCorrect,
-          [styles.selected]: selectedAnswers.includes(id),
-          [styles.correct]: showCorrect && correctAnswerIds.includes(id),
-          [styles.incorrect]: showCorrect && correctAnswerIds.includes(id),
-          // ["hover-underline"]:
-          //   !showCorrect && !selectedAnswers.includes(id),
-        })}
-        onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
-      >
-        {answer}
-      </li>
+      <li className={styles.answer}>{answer}</li>
       {/* Show if answer correct/incorrect only if answers being checked */}
       {showCorrect && (
         <AnswerMark

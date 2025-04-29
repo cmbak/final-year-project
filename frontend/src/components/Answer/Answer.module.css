@@ -20,7 +20,18 @@
 }
 
 .answerContainer:hover {
+  cursor: pointer;
   border-color: rgb(60, 60, 60);
+}
+
+.correct {
+  border-color: darkgreen;
+  background-color: lightgreen;
+}
+
+.incorrect {
+  border-color: darkred;
+  background-color: lightcoral;
 }
 
 .selected {
@@ -38,8 +49,4 @@
 
   text-align: left;
   color: black;
-}
-
-.hoverAnswer:hover {
-  cursor: pointer;
 }
