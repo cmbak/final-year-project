@@ -56,19 +56,17 @@ export default function Answer({
       className={clsx({
         [styles.answerContainer]: true,
         [styles.selected]: selected,
-        [styles.correct]: showCorrect && correctAnswer,
-        [styles.incorrect]: showCorrect && !correctAnswer,
+        [styles.hover]: !showCorrect,
+        [styles.correct]: selected && showCorrect && correctAnswer,
+        [styles.missingCorrect]: showCorrect && correctAnswer,
+        [styles.incorrect]: selected && showCorrect && !correctAnswer,
       })}
       onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
     >
       <li className={styles.answer}>{answer}</li>
       {/* Show if answer correct/incorrect only if answers being checked */}
       {showCorrect && (
-        <AnswerMark
-          id={id}
-          selectedAnswers={selectedAnswers}
-          correctAnswerIds={correctAnswerIds}
-        />
+        <AnswerMark id={id} selected={selected} correct={correctAnswer} />
       )}
     </div>
   );

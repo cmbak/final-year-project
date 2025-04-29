@@ -19,19 +19,9 @@
   }
 }
 
-.answerContainer:hover {
+.hover:hover {
   cursor: pointer;
   border-color: rgb(60, 60, 60);
-}
-
-.correct {
-  border-color: darkgreen;
-  background-color: lightgreen;
-}
-
-.incorrect {
-  border-color: darkred;
-  background-color: lightcoral;
 }
 
 .selected {
@@ -39,6 +29,21 @@
   background-color: rgb(213, 213, 213);
 }
 
+/* correct and incorrect need to be below selected for styles to apply! */
+.missingCorrect {
+  border-color: darkgreen;
+  background-color: rgb(47, 160, 47);
+}
+
+.correct {
+  border-color: rgb(0, 178, 0);
+  background-color: rgb(118, 220, 118);
+}
+
+.incorrect {
+  border-color: darkred;
+  background-color: lightcoral;
+}
 /* Could create pointer utility class */
 .answer {
   font-size: 1.3rem;
