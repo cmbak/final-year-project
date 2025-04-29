@@ -2,7 +2,7 @@ import clsx from "clsx";
 import styles from "./Answer.module.css";
 import AnswerMark from "../AnswerMark/AnswerMark";
 import { StateSetter } from "../../types";
-import { useState } from "react";
+import { useRef } from "react";
 
 type AnswerProps = {
   id: number;
@@ -25,8 +25,15 @@ export default function Answer({
   number,
   hasMultAnswers,
 }: AnswerProps) {
+  const checkboxRef = useRef<HTMLInputElement>(null);
   const selected = selectedAnswers.includes(id);
   const correctAnswer = correctAnswerIds.includes(id);
+
+  function handleCheckClick() {
+    if (showCorrect) {
+      return false;
+    }
+  }
 
   function handleClick(answerID: number) {
     // Add or remove answer id to selected answers for this questions
@@ -36,6 +43,9 @@ export default function Answer({
     if (newAnswers.includes(answerID)) {
       // Answer already selected, so clicking unselects it
       newAnswers = newAnswers.filter((id) => id !== answerID);
+      if (checkboxRef.current !== null) {
+        checkboxRef.current.checked = false;
+      }
     } else {
       // Only select 1 answer at time for questions w/ 1 correct
       if (!hasMultAnswers && selectedAnswers.length === 1) {
@@ -43,6 +53,9 @@ export default function Answer({
       }
       // Answer not selected, so clicking selects it
       newAnswers = [...newAnswers, answerID];
+      if (checkboxRef.current !== null) {
+        checkboxRef.current.checked = true;
+      }
     }
 
     // Update array containing selected answers for all questions
@@ -69,9 +82,17 @@ export default function Answer({
       })}
       onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
     >
-      {/* {hasMultAnswers ? "true" : "false"} */}
-      {hasMultAnswers && <input type="checkbox" />}
-      <li className={styles.answer}>{answer}</li>
+      <div className={styles.checkContainer}>
+        {hasMultAnswers && (
+          <input
+            type="checkbox"
+            ref={checkboxRef}
+            onClick={handleCheckClick}
+            disabled={showCorrect}
+          />
+        )}
+        <li className={styles.answer}>{answer}</li>
+      </div>
       {/* Show if answer correct/incorrect only if answers being checked */}
       {showCorrect && (
         <AnswerMark id={id} selected={selected} correct={correctAnswer} />

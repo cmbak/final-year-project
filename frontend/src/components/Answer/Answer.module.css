@@ -20,6 +20,11 @@
   }
 }
 
+.checkContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .hover:hover {
   cursor: pointer;
   border-color: rgb(60, 60, 60);
