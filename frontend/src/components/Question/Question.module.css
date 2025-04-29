@@ -22,37 +22,6 @@
   align-items: center;
 }
 
-/* Could create pointer utility class */
-.answer {
-  font-size: 1.3rem;
-  font-weight: 300;
-  width: max-content;
-  color: darkgray;
-  transition: all var(--speed-slow) cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.hoverAnswer:hover {
-  cursor: pointer;
-  color: black;
-}
-
-.selected {
-  font-weight: 450;
-  color: black;
-}
-
-.answerContainer {
-  max-width: 100%;
-  padding-inline: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  & i {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-}
 .timestamp {
   /* text-decoration: underline; */
   /* text-underline-offset: 0.2rem; */
