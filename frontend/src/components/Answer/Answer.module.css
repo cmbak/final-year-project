@@ -1,0 +1,43 @@
+/* Could create pointer utility class */
+.answer {
+  font-size: 1.3rem;
+  font-weight: 300;
+  width: max-content;
+  color: darkgray;
+  transition: all var(--speed-slow) cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  color: black;
+}
+
+.hoverAnswer:hover {
+  cursor: pointer;
+}
+
+.selected {
+  font-weight: 450;
+  color: black;
+}
+
+.answerContainer {
+  border: 2px solid lightgray;
+  background-color: rgb(244, 244, 244);
+  border-radius: 5px;
+  transition: all var(--speed-quick) ease;
+  width: 30rem;
+
+  padding: 1rem 1rem;
+  max-width: 100%;
+  padding-inline: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  & i {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
+
+.answerContainer:hover {
+  border-color: rgb(99, 99, 99);
+}
