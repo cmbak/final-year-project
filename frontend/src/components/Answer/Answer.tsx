@@ -12,6 +12,7 @@ type AnswerProps = {
   selectedAnswers: number[];
   setSelectedAnswers: StateSetter<number[][]>;
   number: number;
+  hasMultAnswers: boolean;
 };
 
 export default function Answer({
@@ -22,6 +23,7 @@ export default function Answer({
   selectedAnswers,
   setSelectedAnswers,
   number,
+  hasMultAnswers,
 }: AnswerProps) {
   const selected = selectedAnswers.includes(id);
   const correctAnswer = correctAnswerIds.includes(id);
@@ -35,6 +37,10 @@ export default function Answer({
       // Answer already selected, so clicking unselects it
       newAnswers = newAnswers.filter((id) => id !== answerID);
     } else {
+      // Only select 1 answer at time for questions w/ 1 correct
+      if (!hasMultAnswers && selectedAnswers.length === 1) {
+        return;
+      }
       // Answer not selected, so clicking selects it
       newAnswers = [...newAnswers, answerID];
     }
@@ -63,6 +69,8 @@ export default function Answer({
       })}
       onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
     >
+      {/* {hasMultAnswers ? "true" : "false"} */}
+      {hasMultAnswers && <input type="checkbox" />}
       <li className={styles.answer}>{answer}</li>
       {/* Show if answer correct/incorrect only if answers being checked */}
       {showCorrect && (
