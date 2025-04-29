@@ -15,6 +15,7 @@ type QuestionProps = {
   correctAnswerIds: number[];
   vidTimestamp: string;
   setCurTimestamp: StateSetter<number>;
+  setTimestampClicked: StateSetter<boolean>;
 };
 
 export default function Question({
@@ -27,10 +28,16 @@ export default function Question({
   correctAnswerIds,
   vidTimestamp,
   setCurTimestamp,
+  setTimestampClicked,
 }: QuestionProps) {
   const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
     threshold: 1.0,
   });
+
+  function handleClick() {
+    setCurTimestamp(strToTimestamp(vidTimestamp));
+    setTimestampClicked(true);
+  }
 
   // Return the number of correct answers chosen (for mcq)
   function selectedAllCorrect(): boolean {
@@ -64,13 +71,8 @@ export default function Question({
           {number}. {question}{" "}
           {showCorrect && (
             // Only show timestamps when checking answers for yt quiz
-            <a
-              className={styles.timestamp}
-              onClick={() => setCurTimestamp(strToTimestamp(vidTimestamp))}
-            >
-              {" "}
-              {/* TODO make fn turn string timestamp into number */}[
-              {vidTimestamp}]
+            <a className={styles.timestamp} onClick={handleClick}>
+              [{vidTimestamp}]
             </a>
           )}
         </h3>
