@@ -120,3 +120,28 @@ class Answer(models.Model):
     def as_dict(self):
         """Return dict representation of answer"""
         return {"id": self.id, "answer": self.answer}
+
+
+class Attempt(models.Model):
+    """Model representing a quiz attempt"""
+
+    date = models.DateField()
+    score = models.IntegerField()  # /10
+    wrong = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="wrongs")
+    correct = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name="corrects"
+    )
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def as_dict(self):
+        """Return dict rep of attempt"""
+        return {
+            "id": self.id,
+            "date": self.date,
+            "score": self.score,
+            "wrong": self.wrong,
+            "correct": self.correct,
+            "quiz": self.quiz,
+            "user": self.user,
+        }
