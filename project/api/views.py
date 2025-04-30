@@ -83,7 +83,7 @@ class SignupView(APIView):
 
         user = serializer.save()
         login(request, user)
-        return HttpResponseSeeOther(config("FRONTEND_URL"))
+        return HttpResponseSeeOther(config("FRONTEND_URL") + "/quizzes")
 
 
 user_signup_view = SignupView.as_view()
@@ -110,7 +110,7 @@ class LoginView(APIView):
             return handle_invalid_serializer(serializer)
 
         login(request, User.objects.get(username=request.data["username"]))
-        return HttpResponseSeeOther(config("FRONTEND_URL"))
+        return HttpResponseSeeOther(config("FRONTEND_URL") + "/quizzes")
 
 
 user_login_view = LoginView.as_view()

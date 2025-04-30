@@ -14,7 +14,8 @@ export default function Quizzes() {
   });
 
   if (isPending) {
-    return <h1>TEMP Loading...</h1>;
+    return;
+    // return <h1>TEMP Loading...</h1>;
   }
 
   if (isError) {

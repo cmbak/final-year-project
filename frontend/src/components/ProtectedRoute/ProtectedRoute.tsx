@@ -13,7 +13,8 @@ export default function ProtectedRoute() {
   // on slower internet it would be longer than a flicker
 
   if (isPending) {
-    return <h1>Loading...</h1>;
+    return;
+    // return <h1>Loading...</h1>;
   }
 
   if (isError) {
