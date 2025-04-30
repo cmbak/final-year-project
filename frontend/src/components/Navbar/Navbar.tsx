@@ -11,7 +11,7 @@ export default function Navbar() {
 
   return (
     <nav className={`flex ${styles.nav}`}>
-      <Link to="/" className={styles.name}>
+      <Link to="quizzes" className={styles.name}>
         QuizMe
       </Link>
       <div className={`flex ${styles.links}`}>
@@ -21,6 +21,7 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="dashboard">dashboard</Link>
+            <Link to="quizzes">quizzes</Link>
             <button
               className="btn btn-primary"
               onClick={async () => {

@@ -1,6 +1,4 @@
 import { Routes, Route } from "react-router";
-import Dashboard from "./components/Dashboard/Dashboard";
-import Home from "./components/Home/Home";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -11,6 +9,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import CreateQuiz from "./components/CreateQuiz/CreateQuiz";
 import TakeQuiz from "./components/TakeQuiz/TakeQuiz";
 import NotFound from "./components/NotFound/NotFound";
+import AllQuizzes from "./components/AllQuizzes/AllQuizzes";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -20,9 +20,11 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route element={<ProtectedRoute />}>
             <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="quizzes" element={<AllQuizzes />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="create-quiz" element={<CreateQuiz />} />
