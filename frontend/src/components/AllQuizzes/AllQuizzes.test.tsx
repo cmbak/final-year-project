@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import Dashboard from "./Dashboard";
+import Dashboard from "./AllQuizzes";
 import { render } from "../../test-utils";
 
 describe("Dashboard", () => {
