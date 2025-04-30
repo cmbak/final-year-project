@@ -3,15 +3,14 @@
   background-color: rgb(244, 244, 244);
   border-radius: 5px;
   transition: all var(--speed-quick) ease;
-  /* width: 30rem; */
-  width: 50%;
+
+  width: 70%;
+  height: 4rem;
+  overflow-wrap: break-word;
 
   padding: 1rem 1rem;
-  max-width: 100%;
   padding-inline: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  height: auto; /* Ensures text fits in height of container  */
   justify-content: space-between;
 
   & i {
@@ -20,9 +19,11 @@
   }
 }
 
-.checkContainer {
+.markContainer {
   display: flex;
-  gap: 0.5rem;
+  width: 100%;
+  gap: 1rem;
+  align-items: center;
 }
 
 .hover:hover {
