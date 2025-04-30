@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetchQuizQuestions } from "../../utils/fetchQuizQuestions";
 import useUser from "../../hooks/useUser";
 import { fetchQuiz } from "../../utils/fetchQuiz";
@@ -10,6 +10,8 @@ import { useRef, useState } from "react";
 import { arraysEquals } from "../../utils/arraysEqual";
 import { shuffle } from "../../utils/shuffle";
 import Video from "../Video/Video";
+import { createAttempt } from "../../utils/createAttempt";
+import { Attempt } from "../../types";
 
 export default function TakeQuiz() {
   const [curTimestamp, setCurTimestamp] = useState(-1);
@@ -25,6 +27,7 @@ export default function TakeQuiz() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const { quizId } = useParams();
   const user = useUser();
+  const userId = user.data?.id;
 
   // Fetch quiz ddata
   const quizData = useQuery({
@@ -61,8 +64,16 @@ export default function TakeQuiz() {
     enabled: Boolean(quizId) && Boolean(user.data?.id),
   });
 
+  // To create new attempt upon checking answers
+  const mutation = useMutation({
+    mutationFn: async (newAttempt: Attempt) => {
+      const res = await createAttempt(newAttempt);
+      return res;
+    },
+  });
+
   // Show correct answers and number got correct
-  function handleClick() {
+  async function handleClick() {
     // Scroll page up to title (to show number correct)
     if (titleRef.current) {
       titleRef.current.scrollIntoView({ behavior: "smooth" });
@@ -74,6 +85,21 @@ export default function TakeQuiz() {
       if (arraysEquals(selectedAnswers[index], correctIds)) correct++;
     });
     setNumCorrect(correct);
+
+    // Create new attempts
+    // Date needs to be formatted YYYY-MM-DD
+
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    await mutation.mutate({
+      date: `${year}-${month}-${day}`,
+      score: correct,
+      quiz: Number(quizId),
+      user: userId,
+    });
   }
 
   // Disable button if they haven't answered all questions

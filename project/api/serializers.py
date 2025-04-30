@@ -96,11 +96,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 class AttemptSerializer(serializers.ModelSerializer):
     """Serializer for Serializer model - convert Attempt to JSON and vice versa"""
 
-    wrong = QuestionSerializer(many=True)
-    correct = QuestionSerializer(many=True)
-
     class Meta:
         """Metadata for attempt serializer"""
 
         model = Attempt
-        fields = ["id", "date", "score", "wrong", "correct", "quiz", "user"]
+        fields = ["id", "date", "score", "quiz", "user"]
