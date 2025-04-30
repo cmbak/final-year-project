@@ -1,5 +1,4 @@
 import { useActionState, useState } from "react";
-import BackButton from "../BackButton/BackButton";
 import styles from "./CreateQuiz.module.css";
 import FormError from "../FormError/FormError";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -52,9 +51,9 @@ export default function CreateQuiz() {
   }
 
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.header}>
-        <BackButton />
+        <h1>Create Quiz</h1>
       </div>
       <form className={`flex flex-col ${styles.form}`} action={formAction}>
         <div className="form-item">
@@ -108,6 +107,6 @@ export default function CreateQuiz() {
           disabled={formPending}
         />
       </form>
-    </>
+    </div>
   );
 }
