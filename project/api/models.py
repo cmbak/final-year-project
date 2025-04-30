@@ -60,7 +60,7 @@ class Quiz(models.Model):
 
     def __str__(self):
         """Returns string representation of quiz"""
-        return f"{self.title} | {self.type} | {self.colour} | {self.user.username}"  # noqa e501
+        return f"{self.title} | {self.type} | {self.user.username}"  # noqa e501
 
     def as_dict(self):
         """Returns dictionary representation of quiz"""
