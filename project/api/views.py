@@ -8,6 +8,7 @@ from api.serializers import (
     QuestionSerializer,
     QuizSerializer,
     UserSerializer,
+    AttemptSerializer,
 )
 from decouple import config
 from django.contrib.auth import login, logout
@@ -22,7 +23,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 from summarise import summarise_video
 from pytubefix.exceptions import RegexMatchError, VideoUnavailable, PytubeFixError
-from .models import Answer, Question, Quiz, User
+from .models import Answer, Question, Quiz, User, Attempt
 
 
 def handle_invalid_serializer(serializer: ModelSerializer) -> Response:
@@ -332,6 +333,20 @@ class UserAllQuizzesView(UsersModelsMixins, generics.ListAPIView):
 
 
 user_all_quizzes_view = UserAllQuizzesView.as_view()
+
+
+class UserAttemptsView(UsersModelsMixins, generics.ListAPIView):
+    """API Endpoint which returns all of the attempts for a user"""
+
+    queryset = Attempt.objects.all().order_by("id")
+    serializer_class = AttemptSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id, attempt_id, **kwargs):
+        return super().get(request, user_id, id=attempt_id, **kwargs)
+
+
+user_attempts_view = UserAttemptsView.as_view()
 
 
 class UserQuizView(
