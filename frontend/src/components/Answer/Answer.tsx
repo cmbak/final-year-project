@@ -83,20 +83,23 @@ export default function Answer({
       onClick={() => !showCorrect && handleClick(id)} // Only allow selection if haven't checked answers
     >
       <div className={styles.checkContainer}>
-        {hasMultAnswers && (
-          <input
-            type="checkbox"
-            ref={checkboxRef}
-            onClick={handleCheckClick}
-            disabled={showCorrect}
-          />
-        )}
-        <li className={styles.answer}>{answer}</li>
+        <div className={styles.markContainer}>
+          {hasMultAnswers && (
+            <input
+              type="checkbox"
+              ref={checkboxRef}
+              onClick={handleCheckClick}
+              disabled={showCorrect}
+            />
+          )}
+          <li className={styles.answer}>{answer}</li>
+          {showCorrect && (
+            <AnswerMark id={id} selected={selected} correct={correctAnswer} />
+          )}
+        </div>
       </div>
+
       {/* Show if answer correct/incorrect only if answers being checked */}
-      {showCorrect && (
-        <AnswerMark id={id} selected={selected} correct={correctAnswer} />
-      )}
     </div>
   );
 }
