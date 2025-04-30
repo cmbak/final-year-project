@@ -311,6 +311,7 @@ class UsersModelsMixins:
         # Try getting models where user id is same as the one requesting
         try:
             queryset = self.get_queryset().filter(user=user_id, **field_names)
+            print("got this")
         except FieldError as e:
             # If model has no user field, then just filter by kwargs
             print(
@@ -355,6 +356,15 @@ class AttemptsView(generics.CreateAPIView):
     queryset = Attempt.objects.all().order_by("id")
     serializer_class = AttemptSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, **kwargs):
+        date = request.data.get("date")
+        score = request.data.get("score")
+        quiz = Quiz.objects.get(id=request.data.get("quiz"))
+        user = User.objects.get(id=request.data.get("user"))
+        attempt = Attempt.objects.create(date=date, score=score, quiz=quiz, user=user)
+        return JsonResponse(attempt.as_dict(), status=status.HTTP_201_CREATED)
+        # return super().post(request, **kwargs)
 
 
 attempts_view = AttemptsView.as_view()

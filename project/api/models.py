@@ -127,10 +127,6 @@ class Attempt(models.Model):
 
     date = models.DateField()
     score = models.IntegerField()  # /10
-    wrong = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="wrongs")
-    correct = models.ForeignKey(
-        Question, on_delete=models.CASCADE, related_name="corrects"
-    )
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -140,8 +136,6 @@ class Attempt(models.Model):
             "id": self.id,
             "date": self.date,
             "score": self.score,
-            "wrong": self.wrong,
-            "correct": self.correct,
-            "quiz": self.quiz,
-            "user": self.user,
+            "quiz": self.quiz.as_dict(),
+            "user": self.user.as_dict(),
         }

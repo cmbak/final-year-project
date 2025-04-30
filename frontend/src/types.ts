@@ -34,6 +34,13 @@ export type Question = {
   timestamp: string;
 };
 
+export type Attempt = {
+  date: string;
+  score: number;
+  quiz: number;
+  user: number | undefined;
+};
+
 type FormEntry = FormDataEntryValue | null; // Type return when calling FormData.get()
 
 export type CreateQuizDetails = {
