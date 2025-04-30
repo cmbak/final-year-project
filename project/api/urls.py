@@ -6,6 +6,7 @@ from api.views import (
     user_quiz_questions,
     user_quizzes_view,
     user_attempts_view,
+    attempts_view,
 )
 from django.urls import path
 
@@ -31,4 +32,5 @@ urlpatterns = [
     path("users/", user_list_create_view, name="user-list-create"),
     path("current-user/", current_user_view, name="current-user"),
     path("quizzes/", quiz_create_view, name="quiz-create"),
+    path("attempts/", attempts_view, name="attempts-view"),
 ]

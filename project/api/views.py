@@ -349,6 +349,17 @@ class UserAttemptsView(UsersModelsMixins, generics.ListAPIView):
 user_attempts_view = UserAttemptsView.as_view()
 
 
+class AttemptsView(generics.CreateAPIView):
+    """API Endpoint for creating an attempt"""
+
+    queryset = Attempt.objects.all().order_by("id")
+    serializer_class = AttemptSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+attempts_view = AttemptsView.as_view()
+
+
 class UserQuizView(
     UsersModelsMixins, generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView
 ):

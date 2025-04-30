@@ -12,7 +12,6 @@ type FormErrors = {
   labels?: error;
   title?: error;
   user?: error;
-  colour?: error;
 };
 
 type VideoType = "YT" | "UP"; // Same as Quiz model choices
