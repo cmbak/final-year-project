@@ -115,8 +115,8 @@ export default function TakeQuiz() {
 
   // TODO look nice
   if (isPending) {
-    // return;
-    return <h2>Loading...</h2>;
+    return;
+    // return <h2>Loading...</h2>;
   }
 
   if (isError) {
