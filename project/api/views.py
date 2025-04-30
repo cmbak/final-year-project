@@ -337,7 +337,7 @@ user_all_quizzes_view = UserAllQuizzesView.as_view()
 
 
 class UserAttemptsView(UsersModelsMixins, generics.ListAPIView):
-    """API Endpoint which returns all of the attempts for a user"""
+    """API Endpoint which returns specific attempt for a user"""
 
     queryset = Attempt.objects.all().order_by("id")
     serializer_class = AttemptSerializer
@@ -348,6 +348,18 @@ class UserAttemptsView(UsersModelsMixins, generics.ListAPIView):
 
 
 user_attempts_view = UserAttemptsView.as_view()
+
+
+class UserAllAttempts(UsersModelsMixins, generics.ListAPIView):
+    queryset = Attempt.objects.all().order_by("id")
+    serializer_class = AttemptSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id, **field_names):
+        return super().get(request, user_id, **field_names)
+
+
+user_all_attempts_view = UserAllAttempts.as_view()
 
 
 class AttemptsView(generics.CreateAPIView):
