@@ -2,7 +2,7 @@ import clsx from "clsx";
 import styles from "./Answer.module.css";
 import AnswerMark from "../AnswerMark/AnswerMark";
 import { StateSetter } from "../../types";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type AnswerProps = {
   id: number;
@@ -29,6 +29,13 @@ export default function Answer({
   const selected = selectedAnswers.includes(id);
   const correctAnswer = correctAnswerIds.includes(id);
 
+  useEffect(() => {
+    // Reset checked state of radio/checkbox
+    if (inputRef.current !== null && showCorrect === false) {
+      inputRef.current.checked = false;
+    }
+    // showCorrect is a dependency so that it resets when retake quiz button is pressed
+  }, [showCorrect]);
   function handleCheckClick() {
     if (showCorrect) {
       return false;
