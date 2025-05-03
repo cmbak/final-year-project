@@ -25,7 +25,7 @@ export default function Answer({
   number,
   hasMultAnswers,
 }: AnswerProps) {
-  const checkboxRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const selected = selectedAnswers.includes(id);
   const correctAnswer = correctAnswerIds.includes(id);
 
@@ -35,16 +35,16 @@ export default function Answer({
     }
   }
 
+  // Add or remove answer id to selected answers for this questions
+  // depending on if it's been added to array or not
   function handleClick(answerID: number) {
-    // Add or remove answer id to selected answers for this questions
-    // depending on if it's been added to array or not
     let newAnswers = [...selectedAnswers];
 
     if (newAnswers.includes(answerID)) {
       // Answer already selected, so clicking unselects it
       newAnswers = newAnswers.filter((id) => id !== answerID);
-      if (checkboxRef.current !== null) {
-        checkboxRef.current.checked = false;
+      if (inputRef.current !== null) {
+        inputRef.current.checked = false;
       }
     } else {
       // Only select 1 answer at time for questions w/ 1 correct
@@ -53,8 +53,8 @@ export default function Answer({
       }
       // Answer not selected, so clicking selects it
       newAnswers = [...newAnswers, answerID];
-      if (checkboxRef.current !== null) {
-        checkboxRef.current.checked = true;
+      if (inputRef.current !== null) {
+        inputRef.current.checked = true;
       }
     }
 
@@ -67,6 +67,13 @@ export default function Answer({
         return answerIds;
       }),
     );
+  }
+
+  // If another answer is selected, then don't allow this radio to be checked
+  function handleRadioClick() {
+    if (!selected && inputRef.current !== null) {
+      inputRef.current.checked = false;
+    }
   }
 
   return (
@@ -84,11 +91,18 @@ export default function Answer({
     >
       <div className={styles.checkContainer}>
         <div className={styles.markContainer}>
-          {hasMultAnswers && (
+          {hasMultAnswers ? (
             <input
               type="checkbox"
-              ref={checkboxRef}
+              ref={inputRef}
               onClick={handleCheckClick}
+              disabled={showCorrect}
+            />
+          ) : (
+            <input
+              type="radio"
+              ref={inputRef}
+              onClick={handleRadioClick}
               disabled={showCorrect}
             />
           )}
@@ -98,8 +112,6 @@ export default function Answer({
           )}
         </div>
       </div>
-
-      {/* Show if answer correct/incorrect only if answers being checked */}
     </div>
   );
 }
