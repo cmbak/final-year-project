@@ -143,21 +143,26 @@ export default function TakeQuiz() {
 
   return (
     <div className={"center-container"}>
+      {showCorrect && (
+        <div
+          className={clsx({
+            [styles.scoreBanner]: true,
+            [styles.scoreFail]: numCorrect < 5,
+            [styles.scorePass]: numCorrect >= 5,
+          })}
+        >
+          <div>
+            <h2 className={styles.scoreText}>
+              You {numCorrect >= 5 ? "Passed" : "Failed"}!
+            </h2>
+            <h3 className={styles.score}>Score: {numCorrect}/10</h3>
+          </div>
+        </div>
+      )}
       <h1 className={styles.title} ref={titleRef}>
         {quizData.data.title}
       </h1>
-      {showCorrect && (
-        <h2
-          className={clsx({
-            [styles.numCorrect]: true,
-            [styles.pass]: numCorrect >= 5,
-            [styles.fail]: numCorrect < 5,
-          })}
-        >
-          You {numCorrect >= 5 ? "Passed" : "Failed"}! <br />
-          You got {numCorrect}/10 correct!
-        </h2>
-      )}
+
       <div className={styles.embedContainer}>
         <Video
           name={`http://localhost:8080/${quizData.data.file_name}`}
