@@ -6,7 +6,7 @@ import Quizzes from "../Quizzes/Quizzes";
 export default function AllQuizzes() {
   return (
     <main className="center-container">
-      <h1 className={styles.heading}>my quizzes</h1>
+      <h1 className={styles.heading}>quizzes</h1>
       {/* TODO Search bar here */}
       <button className={`btn btn-primary ${styles.btn}`}>
         <Link to="../create-quiz" className={styles.createLink}>
