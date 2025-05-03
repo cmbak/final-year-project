@@ -7,7 +7,7 @@ describe("Dashboard", () => {
   it("should have the dashboard text", async () => {
     render(<Dashboard />);
 
-    const dashboardText = await screen.findByText("my quizzes");
+    const dashboardText = await screen.findByText("quizzes");
 
     expect(dashboardText).toBeVisible;
   });
