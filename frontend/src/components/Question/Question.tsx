@@ -33,6 +33,7 @@ export default function Question({
   const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
     threshold: 1.0,
   });
+  const numAnswers = correctAnswerIds.length;
 
   function handleClick() {
     setCurTimestamp(strToTimestamp(vidTimestamp));
@@ -48,6 +49,17 @@ export default function Question({
       }
     }
     return true;
+  }
+
+  // Return number of correct answers selected
+  function numCorrect() {
+    let count = 0;
+    selectedAnswers.forEach((answer) => {
+      if (correctAnswerIds.includes(answer)) {
+        count += 1;
+      }
+    });
+    return count;
   }
 
   return (
@@ -69,6 +81,7 @@ export default function Question({
           })}
         >
           {number}. {question}{" "}
+          {showCorrect && `(${numCorrect()}/${numAnswers})`}{" "}
           {showCorrect && (
             // Only show timestamps when checking answers for yt quiz
             <a className={styles.timestamp} onClick={handleClick}>
