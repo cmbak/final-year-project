@@ -12,6 +12,7 @@ import { shuffle } from "../../utils/shuffle";
 import Video from "../Video/Video";
 import { createAttempt } from "../../utils/createAttempt";
 import { Attempt } from "../../types";
+import clsx from "clsx";
 
 export default function TakeQuiz() {
   const [curTimestamp, setCurTimestamp] = useState(-1);
@@ -146,7 +147,16 @@ export default function TakeQuiz() {
         {quizData.data.title}
       </h1>
       {showCorrect && (
-        <h2 className={styles.numCorrect}>You got {numCorrect}/10 correct</h2>
+        <h2
+          className={clsx({
+            [styles.numCorrect]: true,
+            [styles.pass]: numCorrect >= 5,
+            [styles.fail]: numCorrect < 5,
+          })}
+        >
+          You {numCorrect >= 5 ? "Passed" : "Failed"}! <br />
+          You got {numCorrect}/10 correct!
+        </h2>
       )}
       <div className={styles.embedContainer}>
         <Video
