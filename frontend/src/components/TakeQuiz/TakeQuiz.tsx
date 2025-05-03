@@ -76,7 +76,7 @@ export default function TakeQuiz() {
   // Show correct answers and number got correct
   async function handleClick() {
     // Scroll page up to title (to show number correct)
-    if (titleRef.current) {
+    if (titleRef.current !== null) {
       titleRef.current.scrollIntoView({ behavior: "smooth" });
     }
     setShowCorrect(true);
@@ -101,6 +101,14 @@ export default function TakeQuiz() {
       quiz: Number(quizId),
       user: userId,
     });
+  }
+
+  // Reset everything so quiz can be taken again
+  function handleRetake() {
+    setCurTimestamp(-1);
+    setCorrectAnswers(createMatrix(10));
+    setSelectedAnswers(createMatrix(10));
+    setShowCorrect(false);
   }
 
   // Disable button if they haven't answered all questions
@@ -156,6 +164,9 @@ export default function TakeQuiz() {
               You {numCorrect >= 5 ? "Passed" : "Failed"}!
             </h2>
             <h3 className={styles.score}>Score: {numCorrect}/10</h3>
+            <button className="btn btn-secondary" onClick={handleRetake}>
+              Retake Quiz
+            </button>
           </div>
         </div>
       )}

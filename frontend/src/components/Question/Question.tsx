@@ -33,7 +33,6 @@ export default function Question({
   const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
     threshold: 1.0,
   });
-  const numAnswers = correctAnswerIds.length;
 
   function handleClick() {
     setCurTimestamp(strToTimestamp(vidTimestamp));

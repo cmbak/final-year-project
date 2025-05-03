@@ -60,6 +60,19 @@
     &:first-child {
       margin-top: 10%;
     }
+
+    &:last-child {
+      margin-bottom: 7%;
+    }
+  }
+}
+
+.checkBtn {
+  margin-bottom: 3rem;
+  font-size: 1.3rem;
+
+  &:enabled:hover {
+    scale: 1.1;
   }
 }
 
