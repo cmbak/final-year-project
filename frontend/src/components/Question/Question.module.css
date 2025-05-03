@@ -4,6 +4,16 @@
   transition: all var(--speed-medium) ease-in-out;
 }
 
+.questContainer {
+  font-size: 1.2rem;
+  display: grid;
+  /* grid-template-columns: ; */
+  grid-template-columns: 1.9fr 1.1fr;
+  align-items: center;
+  padding-left: 12rem;
+  /* TODO media queries */
+}
+
 .visible {
   opacity: 1;
   filter: blur(0);
@@ -15,6 +25,7 @@
   font-size: 1.7rem;
   font-weight: bold;
   padding: 1rem;
+  text-align: left;
 }
 
 .incorrect {

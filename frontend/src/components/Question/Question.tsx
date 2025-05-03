@@ -51,17 +51,6 @@ export default function Question({
     return true;
   }
 
-  // Return number of correct answers selected
-  function numCorrect() {
-    let count = 0;
-    selectedAnswers.forEach((answer) => {
-      if (correctAnswerIds.includes(answer)) {
-        count += 1;
-      }
-    });
-    return count;
-  }
-
   return (
     <div>
       {/* Add ref here for question visibility animation */}
@@ -73,22 +62,26 @@ export default function Question({
         })}
       >
         {/* Question */}
-        <h3
-          className={clsx({
-            [styles.question]: true,
-            [styles.correct]: showCorrect && selectedAllCorrect(),
-            [styles.incorrect]: showCorrect && !selectedAllCorrect(),
-          })}
-        >
-          {number}. {question}{" "}
-          {showCorrect && `(${numCorrect()}/${numAnswers})`}{" "}
+        <div className={styles.questContainer}>
+          <h3
+            className={clsx({
+              [styles.question]: true,
+              [styles.correct]: showCorrect && selectedAllCorrect(),
+              [styles.incorrect]: showCorrect && !selectedAllCorrect(),
+            })}
+          >
+            {number}. {question}{" "}
+            {showCorrect && (
+              // Only show timestamps when checking answers for yt quiz
+              <a className={styles.timestamp} onClick={handleClick}>
+                [{vidTimestamp}]
+              </a>
+            )}
+          </h3>
           {showCorrect && (
-            // Only show timestamps when checking answers for yt quiz
-            <a className={styles.timestamp} onClick={handleClick}>
-              [{vidTimestamp}]
-            </a>
+            <h4>[{showCorrect && selectedAllCorrect() ? "1" : "0"}/1 mark]</h4>
           )}
-        </h3>
+        </div>
         <ul className={`flex flex-col ${styles.answers}`}>
           {/* Answers */}
           {answers.map(({ id, answer }) => (
