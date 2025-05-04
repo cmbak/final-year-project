@@ -12,6 +12,23 @@
   /* height: 55rem; */
 }
 
+.statsTitle {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-top: 4rem;
+}
+
+.attemptsGraph > h2 {
+  margin-block: 1rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.attemptsContainer {
+  width: 50%;
+  margin: 0 auto; /* center */
+}
+
 .subtitle {
   font-size: 1.7rem;
   font-weight: bold;
