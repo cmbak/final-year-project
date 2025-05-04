@@ -19,7 +19,7 @@ export default function Quizzes() {
   }
 
   if (isError) {
-    return <h1>TEMP Error {error && error.message}</h1>;
+    return <h1>Error {error && error.message}</h1>;
   }
 
   return (
