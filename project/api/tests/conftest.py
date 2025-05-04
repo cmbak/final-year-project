@@ -1,5 +1,5 @@
 import pytest
-from api.models import Answer, Label, Question, Quiz, User
+from api.models import Answer, Question, Quiz, User
 from rest_framework.test import APIClient
 
 USER_USERNAME = "bob"
@@ -63,7 +63,6 @@ def quiz() -> Quiz:
     user = custom_user()
 
     quiz = Quiz.objects.create(title="quiz", user=user, type=Quiz.UPLOAD)
-    quiz.labels.add(Label.objects.create(name="label", user=user))
 
     question = Question.objects.create(
         question="What is the captial of England?", quiz=quiz
@@ -81,13 +80,10 @@ def quiz_data_and_user(standard_user) -> tuple[dict, User]:
     """
     Return a tuple of valid data for a Quiz and the user used to create the quiz details
     """
-    label_one = Label.objects.create(name="Label One", user=standard_user)
-    label_two = Label.objects.create(name="Label Two", user=standard_user)
 
     return (
         {
             "title": "Test Quiz",
-            "labels": [label_one.id, label_two.id],
             "user": standard_user.id,
             "url": "fakeurl.co.uk",
             "type": Quiz.UPLOAD,

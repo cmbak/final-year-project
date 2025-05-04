@@ -1,6 +1,5 @@
 import pytest
 from api.models import User
-from decouple import config
 from rest_framework.test import APIClient
 
 from .test_view_signup import get_response_errors
@@ -27,7 +26,7 @@ def test_post_valid_login(api_client: APIClient) -> None:
     response = api_client.post("/login/", data)
 
     assert response.status_code == 303
-    assert response.url == config("FRONTEND_URL")
+    assert response.url == "http://localhost:5173/quizzes"
 
 
 @pytest.mark.django_db(True)

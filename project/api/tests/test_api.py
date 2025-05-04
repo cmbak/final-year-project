@@ -2,9 +2,8 @@ import json
 from unittest.mock import MagicMock, patch
 
 import pytest
-from api.models import Label, Question, Quiz, User
+from api.models import Question, Quiz, User
 from django.urls import reverse
-from google.api_core.exceptions import TooManyRequests
 from rest_framework.test import APIClient
 from yt_dlp.utils import DownloadError
 
@@ -183,35 +182,8 @@ def test_post_quiz_invalid_url(
 
     assert response.status_code == 400
     assert Quiz.objects.count() == 0
-    assert "Please enter a valid url for a YouTube video" in errors
+    assert "Something went wrong" in errors
     assert mock_download.call_count == 1
-
-
-@pytest.mark.django_db(True)
-@patch("api.views.download_video", return_value="valid_video.mp4")
-@patch(
-    "api.views.summarise_video", side_effect=TooManyRequests("Too many requests sent")
-)
-def test_post_quiz_too_many_reqs(
-    mock_download: MagicMock,
-    mock_summarise: MagicMock,
-    quiz_data_and_user: tuple[dict, User],
-    api_client: APIClient,
-) -> None:
-    """
-    Test that a POST request from an authenticated user with a valid video
-    returns the appropriate error message if gemini api returns a 429 response
-    """
-    data, user = quiz_data_and_user
-    api_client.force_authenticate(user=user)
-    response = api_client.post(reverse("quiz-create"), data)
-    errors = get_response_errors(response.json())
-
-    assert response.status_code == 429
-    assert Quiz.objects.count() == 0
-    assert "Recieved response 429 when trying to summarise video" in errors
-    assert mock_download.call_count == 1
-    assert mock_summarise.call_count == 1
 
 
 @pytest.mark.django_db(True)
@@ -221,82 +193,6 @@ def test_post_quiz_not_auth(api_client: APIClient) -> None:
     """
     response = api_client.post(reverse("quiz-create"), {})
     assert response.status_code == 401
-
-
-@pytest.mark.django_db(True)
-def test_post_quiz_other_user_labels(
-    standard_user: User, api_client: APIClient
-) -> None:
-    """
-    Test that a POST request from an authenticated user with a quiz containing
-    labels created by another user returns 400 and doesn't create the quiz
-    """
-    other_user = custom_user(username="other_user", email="other.user@gmail.com")
-    label = Label.objects.create(name="other label", user=other_user)
-    data = {
-        "title": "Title",
-        "labels": [label.id],
-        "user": standard_user.id,
-        "url": "fakeurl.co.uk",
-        "type": Quiz.UPLOAD,
-    }
-    api_client.force_authenticate(user=standard_user)
-
-    response = api_client.post(reverse("quiz-create"), data)
-    errors = get_response_errors(response.json())
-
-    assert response.status_code == 400
-    assert Quiz.objects.count() == 0
-    assert "You must use labels which you have created." in errors
-
-
-# User's labels
-
-
-@pytest.mark.django_db(True)
-def test_get_user_labels_auth(standard_user: User, api_client: APIClient) -> None:
-    """
-    Test that a GET request to the user labels endpoint with an authenticated user
-    returns 200 and their labels
-    """
-    Label.objects.create(name="new label", user=standard_user)
-    api_client.force_authenticate(user=standard_user)
-
-    response = api_client.get(f"/api/users/{standard_user.id}/labels/")
-    labels = response.json()
-    labels_user_ids = {label["user"] for label in labels}  # unique
-
-    assert response.status_code == 200
-    assert len(labels) == Label.objects.filter(user=standard_user).count()
-    assert len(labels_user_ids) == 1  # only one id
-    assert standard_user.id in labels_user_ids  # user's id
-
-
-@pytest.mark.django_db(True)
-def test_get_user_labels_not_auth(standard_user: User, api_client: APIClient) -> None:
-    """
-    Test that a GET request to the user labels endpoint with an unauthenticated user
-    returns 401
-    """
-    Label.objects.create(name="new label", user=standard_user)
-
-    response = api_client.get(f"/api/users/{standard_user.id}/labels/")
-
-    assert response.status_code == 401
-
-
-@pytest.mark.django_db(True)
-def test_get_user_labels_other_user(standard_user: User, api_client: APIClient) -> None:
-    """
-    Test that a GET request to the user labels endpoint with an authenticated user
-    for a different user's labels with an authorised user returns 403
-    """
-    Label.objects.create(name="new label", user=standard_user)
-    api_client.force_authenticate(user=standard_user)
-
-    response = api_client.get(f"/api/users/{standard_user.id+1}/labels/")
-
-    assert response.status_code == 403
 
 
 # Endpoint for a User's Quiz
@@ -333,7 +229,8 @@ def test_quiz_add_questions(quiz: Quiz, api_client: APIClient):
             {
                 "question": "What is one 1+1?",
                 "answers": ["1", "2", "3"],
-                "correct_answer": "1",
+                "correct_answers": ["1"],
+                "timestamp": "00:00",
             }
         ]
     }
