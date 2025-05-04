@@ -49,6 +49,7 @@ def summarise_video(file_name: str):
     You must make sure that, for each question, the values of the 'correct_answers' list contains the values of the correct answers within that question's 'answers' list.
     You must make sure that there are at least 2 questions which have 2 answers - this should be reflected in the length of the correct_answers list.
     You must make sure that there is only one timestamp for each question - this should be formatted as MM:SS with M indicating a minute and S indicating a second.
+    You must ensure that there are 3 answers in total
     """
 
     print("Creating summary...")

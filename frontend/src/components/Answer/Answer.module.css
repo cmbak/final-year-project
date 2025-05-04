@@ -2,7 +2,7 @@
   border: 2px solid lightgray;
   background-color: rgb(244, 244, 244);
   border-radius: 5px;
-  transition: all var(--speed-quick) ease;
+  transition: all var(--speed-medium) ease;
 
   width: 70%;
   height: 4rem;
@@ -19,11 +19,17 @@
   }
 }
 
-.markContainer {
+.content {
   display: flex;
-  width: 100%;
-  gap: 1rem;
   align-items: center;
+  justify-content: space-between;
+}
+
+.answerTxt {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  min-width: 0; /* Fixes text overflowing if answer is long */
 }
 
 .hover:hover {
