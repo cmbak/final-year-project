@@ -74,38 +74,42 @@ export default function StatsCard({ id, title }: StatsCardProps) {
         <div></div>
       ) : (
         <>
-          <div className={styles.content}>
-            <h2 className={styles.title}>{title}</h2>
-            <p>
-              <span className={styles.heading}>Number of Attempts: </span>
-              {attempts}
-            </p>
-            <p>
-              <span className={styles.heading}>Highest Score: </span>
-              {topScore}
-            </p>
-            <p>
-              <span className={styles.heading}>Lowest Score: </span>
-              {worstScore}
-            </p>
-            <p>
-              <span className={styles.heading}>Average Score: </span>
-              {avgScore}
-            </p>
-            <p>
-              <span className={styles.heading}>Last Attempt:</span> {date}
-            </p>
+          <div className={styles.allInfo}>
+            <div className={styles.content}>
+              <h2 className={styles.title}>{title}</h2>
+              <p>
+                <span className={styles.heading}>Number of Attempts: </span>
+                {attempts}
+              </p>
+              <p>
+                <span className={styles.heading}>Highest Score: </span>
+                {topScore}
+              </p>
+              <p>
+                <span className={styles.heading}>Lowest Score: </span>
+                {worstScore}
+              </p>
+              <p>
+                <span className={styles.heading}>Average Score: </span>
+                {avgScore}
+              </p>
+              <p>
+                <span className={styles.heading}>Last Attempt:</span> {date}
+              </p>
+            </div>
+            <div className={styles.graphs}>
+              {date !== "N/A" && (
+                <div className={styles.passGraph}>
+                  <PassFail fails={fails} passes={passes} />
+                </div>
+              )}
+              {/* {date !== "N/A" && (
+                <div className={styles.scoreDistGraph}>
+                  <ScoreDist scores={scoreDist} />
+                </div>
+              )} */}
+            </div>
           </div>
-          {date !== "N/A" && (
-            <div className={styles.passGraph}>
-              <PassFail fails={fails} passes={passes} />
-            </div>
-          )}
-          {date !== "N/A" && (
-            <div className={styles.scoreDistGraph}>
-              <ScoreDist scores={scoreDist} />
-            </div>
-          )}
         </>
       )}
     </div>
