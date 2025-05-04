@@ -52,7 +52,7 @@ export default function Dashboard() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Quiz Statistics</h1>
+      <h1 className={styles.title}>Dashboard</h1>
       <h2 className={styles.subtitle}>Quiz Scores</h2>
 
       {data !== undefined && (

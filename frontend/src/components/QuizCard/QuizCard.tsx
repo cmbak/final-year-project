@@ -57,7 +57,7 @@ export default function QuizCard({ id, title, thumbnail_url }: QuizCardProps) {
         ></input>
       </Modal>
       <div className={styles.container}>
-        <img src={thumbnail_url} />
+        <img src={thumbnail_url} className={styles.thumbnail} />
         <div className={styles.details}>
           <span>{title}</span>
           <div className={styles.btns}>
