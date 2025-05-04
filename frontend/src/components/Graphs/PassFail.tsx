@@ -21,12 +21,11 @@ export default function PassFail({ passes, fails }: PassFailProps) {
   return (
     <Pie
       data={data}
-      // width={"450px"} // 450px for dounu
-      // height={"450px"}
-      width={"450px"}
-      height={"450px"}
       // responsive?
-      options={{ maintainAspectRatio: false }}
+      options={{
+        maintainAspectRatio: false,
+        plugins: { legend: { position: "center" } },
+      }}
     />
   );
 }

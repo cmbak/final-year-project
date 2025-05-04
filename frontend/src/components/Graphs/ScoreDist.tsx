@@ -12,7 +12,7 @@ export default function ScoreDist({ scores }: ScoreDistProps) {
     datasets: [
       {
         label: "Score Distribution",
-        data: [scores],
+        data: scores,
         backgroundColor: ["rgba(54, 162, 235, 0.6)"],
       },
     ],
