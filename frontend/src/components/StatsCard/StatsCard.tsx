@@ -5,6 +5,7 @@ import { fetchQuizAttempts } from "../../utils/fetchQuizAttempts";
 import PassFail from "../Graphs/PassFail";
 import { useState } from "react";
 import { Round } from "../../utils/round";
+import ScoreDist from "../Graphs/ScoreDist";
 
 type StatsCardProps = {
   id: number;
@@ -19,6 +20,7 @@ export default function StatsCard({ id, title }: StatsCardProps) {
   const [worstScore, setWorstScore] = useState(0);
   const [avgScore, setAvgScore] = useState(0);
   const [date, setDate] = useState("N/A");
+  const [scoreDist, setScoreDist] = useState(Array(11).fill(0)); // count of scores from 0-10
 
   const user = useUser();
   const userId = user.data?.id;
@@ -28,6 +30,7 @@ export default function StatsCard({ id, title }: StatsCardProps) {
       const data = await fetchQuizAttempts(userId, id);
       const scores = data.map((attempt) => attempt.score);
       const dates = data.map((attempt) => attempt.date).sort(); // Sorts from earliest to latest
+      const dist = Array(11).fill(0);
       let pass = 0;
       let fail = 0;
       let sum = 0;
@@ -38,7 +41,10 @@ export default function StatsCard({ id, title }: StatsCardProps) {
         } else {
           fail += 1;
         }
+
         sum += score;
+        // Tally attempts with each score from 0-10
+        dist[score] += 1;
       });
 
       setAttempts(scores.length);
@@ -48,7 +54,9 @@ export default function StatsCard({ id, title }: StatsCardProps) {
         setTopScore(Math.max.apply(Math, scores));
         setWorstScore(Math.min.apply(Math, scores));
         setAvgScore(Round(sum / scores.length));
+        // Last date in array is latest date
         setDate(dates[dates.length - 1]);
+        setScoreDist(dist);
       }
 
       return data;
@@ -89,8 +97,13 @@ export default function StatsCard({ id, title }: StatsCardProps) {
             </p>
           </div>
           {date !== "N/A" && (
-            <div>
+            <div className={styles.passGraph}>
               <PassFail fails={fails} passes={passes} />
+            </div>
+          )}
+          {date !== "N/A" && (
+            <div className={styles.scoreDistGraph}>
+              <ScoreDist scores={scoreDist} />
             </div>
           )}
         </>
