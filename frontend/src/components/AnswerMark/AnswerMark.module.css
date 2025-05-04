@@ -1,7 +1,15 @@
-.check {
+.notSelectCheck {
   color: var(--color-correct);
 }
 
+.selected {
+  color: white;
+}
+
 .cross {
-  color: var(--color-error);
+  color: white;
+}
+
+.wrong {
+  color: rgb(150, 150, 150);
 }

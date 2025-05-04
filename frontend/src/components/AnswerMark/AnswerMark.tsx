@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import styles from "./AnswerMark.module.css";
 
 type AnswerMarkProps = {
@@ -7,15 +8,30 @@ type AnswerMarkProps = {
 };
 
 export default function AnswerMark({ id, selected, correct }: AnswerMarkProps) {
-  // Answer selected and correct : checkmark
-  // -> means that correct answers which haven't been selected don't have a checkmark
-  // Answer selected and incorrect : no checkmark
-  if (selected) {
-    return correct ? (
-      <i className={`bi bi-check ${styles.check}`}></i>
-    ) : (
-      <i className={`bi bi-x ${styles.cross}`}></i>
+  // Correct answer
+  if (correct) {
+    return (
+      <i
+        className={clsx({
+          [`bi bi-check-circle-fill`]: true,
+          [styles.selected]: selected, // Selected and Correct
+          [styles.notSelectCheck]: !selected, // Not selected and Correct (i.e. should've been selected)
+        })}
+      ></i>
     );
   }
-  return null;
+
+  // Incorrect answer
+  if (!correct) {
+    // Not necessarily needed, but clearer
+    return (
+      <i
+        className={clsx({
+          [`bi bi-x-circle-fill`]: true,
+          [styles.cross]: selected, // Selected and Incorrect
+          [styles.wrong]: !selected, // Not selected and Incorrect
+        })}
+      ></i>
+    );
+  }
 }
