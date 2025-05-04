@@ -24,7 +24,7 @@ export default function PassFail({ passes, fails }: PassFailProps) {
       // responsive?
       options={{
         maintainAspectRatio: false,
-        plugins: { legend: { position: "center" } },
+        plugins: { legend: { position: "bottom" } },
       }}
     />
   );
