@@ -1,5 +1,5 @@
 import pytest
-from api.models import Label, Quiz, User
+from api.models import Quiz, User
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 
@@ -47,50 +47,9 @@ def test_user_string(standard_user: User) -> None:
 
 
 @pytest.mark.django_db(True)
-def test_label_valid_fields(standard_user: User) -> None:
-    """Test label creation functionality with valid label name and user"""
-    label = Label.objects.create(name="label", user=standard_user)
-    assert label.name == "label"
-    assert label.user == standard_user
-
-
-@pytest.mark.django_db(True)
-def test_label_name_unique(standard_user: User) -> None:
-    """Test that the name of a label should be unique irrespective of case"""
-    Label.objects.create(name="label", user=standard_user)
-    with pytest.raises(IntegrityError):
-        Label.objects.create(name="LABEL", user=standard_user)
-
-
-@pytest.mark.django_db(True)
-def test_label_string(standard_user: User) -> None:
-    """Test that the Label string method returns the label name"""
-    label = Label.objects.create(name="label", user=standard_user)
-    assert str(label) == label.name
-
-
-@pytest.mark.django_db(True)
-def test_quiz_valid_fields(quiz: Quiz, username: str) -> None:
-    """Test quiz creation functionality with valid quiz fields"""
-    assert quiz.title == "quiz"
-    assert quiz.user.username == username
-    assert quiz.labels.filter(name="label", user=quiz.user).exists()
-
-
-@pytest.mark.django_db(True)
-def test_label_deleted_on_user_deletion(standard_user: User) -> None:
-    """Test that after a user is deleted, their labels also get deleted"""
-    Label.objects.create(name="to be deleted", user=standard_user)
-
-    standard_user.delete()
-
-    assert Label.objects.count() == 0
-
-
-@pytest.mark.django_db(True)
 def test_quiz_string(quiz: Quiz, username: str) -> None:
     """Test quiz string method returns the details of the quiz"""
-    assert str(quiz) == f"quiz | {quiz.UPLOAD} | label | {username}"
+    assert str(quiz) == f"quiz | {quiz.UPLOAD} | {username}"
 
 
 @pytest.mark.django_db(True)
@@ -103,19 +62,6 @@ def test_quiz_unique_title() -> None:
             title="quiz",
             user=user,
         )
-
-
-@pytest.mark.django_db(True)
-def test_quiz_label_deletion(quiz: Quiz) -> None:
-    """
-    Test that after a label is deleted,
-    it's been removed from its (previously) associated quizzes
-    """
-    label = Label.objects.get(name="label", user=quiz.user)  # Created in fixture
-
-    label.delete()
-
-    assert quiz.labels.count() == 0
 
 
 @pytest.mark.django_db(True)
