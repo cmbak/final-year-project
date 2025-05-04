@@ -311,7 +311,6 @@ class UsersModelsMixins:
         # Try getting models where user id is same as the one requesting
         try:
             queryset = self.get_queryset().filter(user=user_id, **field_names)
-            print("got this")
         except FieldError as e:
             # If model has no user field, then just filter by kwargs
             print(

@@ -4,6 +4,7 @@ import styles from "./Question.module.css";
 import useIntersection from "../../hooks/useIntersection";
 import Answer from "../Answer/Answer";
 import { strToTimestamp } from "../../utils/strToTimestamp";
+import { useEffect, useState } from "react";
 
 type QuestionProps = {
   number: number;
@@ -33,6 +34,17 @@ export default function Question({
   const { elementRef, isVisible } = useIntersection<HTMLDivElement>({
     threshold: 1.0,
   });
+  const [hasMultAnswers, setHasMultAnswers] = useState(false);
+
+  useEffect(() => {
+    console.log(question);
+    console.log(correctAnswerIds.length);
+    if (correctAnswerIds.length > 1) {
+      setHasMultAnswers(true);
+    } else {
+      setHasMultAnswers(false);
+    }
+  }, [correctAnswerIds, showCorrect]);
 
   function handleClick() {
     setCurTimestamp(strToTimestamp(vidTimestamp));
@@ -70,6 +82,7 @@ export default function Question({
             })}
           >
             {number}. {question}{" "}
+            {correctAnswerIds.length > 1 && "(Select all that apply)"}{" "}
             {showCorrect && (
               // Only show timestamps when checking answers for yt quiz
               <a className={styles.timestamp} onClick={handleClick}>
@@ -93,7 +106,7 @@ export default function Question({
               selectedAnswers={selectedAnswers}
               setSelectedAnswers={setSelectedAnswers}
               number={number}
-              hasMultAnswers={correctAnswerIds.length > 1}
+              hasMultAnswers={hasMultAnswers}
             />
           ))}
         </ul>
