@@ -110,7 +110,6 @@ export default function TakeQuiz() {
   // Reset everything so quiz can be taken again
   function handleRetake() {
     setCurTimestamp(-1);
-    setCorrectAnswers(createMatrix(10));
     setSelectedAnswers(createMatrix(10));
     setShowCorrect(false);
   }
