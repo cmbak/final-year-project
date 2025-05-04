@@ -34,7 +34,6 @@ function App() {
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <ReactQueryDevtools />
       </QueryClientProvider>
     </>
   );
