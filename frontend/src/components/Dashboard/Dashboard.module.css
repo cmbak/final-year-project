@@ -51,3 +51,11 @@
   gap: 2rem;
   padding: 4rem; */
 }
+
+@media only screen and (max-width: 768px) {
+  /* Improve visibility on smaller screens */
+  .attemptsContainer {
+    width: auto;
+    height: 20rem;
+  }
+}
