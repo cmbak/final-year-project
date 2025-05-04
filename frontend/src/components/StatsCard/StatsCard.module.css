@@ -4,7 +4,7 @@
   justify-content: space-between;
   text-align: left;
   /* border: 1px solid rgb(159, 159, 159); */
-  padding: 3rem 4rem;
+  padding: 3rem 2rem;
   /* number 16 from https://getcssscan.com/css-box-shadow-examples */
   box-shadow:
     rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
@@ -12,7 +12,19 @@
   background-color: rgb(255, 255, 255);
 }
 
+.card p {
+  font-size: 1rem;
+}
+
+.content {
+  padding: 1rem;
+}
+
 .title {
   font-weight: bold;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+}
+
+.heading {
+  font-weight: 650;
 }
