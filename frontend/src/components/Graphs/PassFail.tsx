@@ -13,7 +13,7 @@ export default function PassFail({ passes, fails }: PassFailProps) {
     datasets: [
       {
         data: [passes, fails],
-        backgroundColor: ["green", "red"],
+        backgroundColor: ["#26b347", "red"],
       },
     ],
   };
@@ -21,10 +21,12 @@ export default function PassFail({ passes, fails }: PassFailProps) {
   return (
     <Pie
       data={data}
-      // ref={ref}
-      width={"450px"} // 450px for dounu
+      // width={"450px"} // 450px for dounu
+      // height={"450px"}
+      width={"450px"}
       height={"450px"}
-      // options={{ maintainAspectRatio: false }}
+      // responsive?
+      options={{ maintainAspectRatio: false }}
     />
   );
 }
