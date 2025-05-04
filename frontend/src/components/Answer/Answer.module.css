@@ -44,13 +44,20 @@
 }
 
 .correct {
-  border-color: rgb(0, 178, 0);
-  background-color: rgb(118, 220, 118);
+  border-color: #088926;
+  background-color: #26b347;
+  & li {
+    color: white;
+  }
 }
 
 .incorrect {
   border-color: darkred;
-  background-color: lightcoral;
+  background-color: rgb(233, 42, 42);
+
+  & li {
+    color: white;
+  }
 }
 /* Could create pointer utility class */
 .answer {
