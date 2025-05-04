@@ -1,0 +1,18 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  /* border: 1px solid rgb(159, 159, 159); */
+  padding: 3rem 4rem;
+  /* number 16 from https://getcssscan.com/css-box-shadow-examples */
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  background-color: rgb(255, 255, 255);
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.4rem;
+}
