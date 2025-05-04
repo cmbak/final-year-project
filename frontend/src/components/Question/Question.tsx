@@ -37,8 +37,6 @@ export default function Question({
   const [hasMultAnswers, setHasMultAnswers] = useState(false);
 
   useEffect(() => {
-    console.log(question);
-    console.log(correctAnswerIds.length);
     if (correctAnswerIds.length > 1) {
       setHasMultAnswers(true);
     } else {
