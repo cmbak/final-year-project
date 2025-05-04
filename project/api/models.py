@@ -37,11 +37,9 @@ class Quiz(models.Model):
     type = models.CharField(
         max_length=7, choices=VIDEO_TYPE_CHOICES
     )  # Used to see if timestamp should be displayed or not
-    embed_url = models.CharField(unique=True, blank=True, null=True)
-    thumbnail_url = models.CharField(unique=True, blank=True, null=True)
+    embed_url = models.CharField(unique=False, blank=True, null=True)
+    thumbnail_url = models.CharField(unique=False, blank=True, null=True)
     file_name = models.CharField(blank=True)
-    # Should have unique=True, but ^ also contains video id
-    # so any errors will be the same
     # blank=True since field gets populated after quiz is created
 
     class Meta:
