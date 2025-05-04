@@ -25,7 +25,7 @@ export default function TakeQuiz() {
   const [selectedAnswers, setSelectedAnswers] = useState<number[][]>(
     createMatrix(10),
   ); // 10 Questions, each with potentially multiple answers)
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
   const { quizId } = useParams();
   const user = useUser();
   const userId = user.data?.id;
@@ -74,11 +74,15 @@ export default function TakeQuiz() {
   });
 
   // Show correct answers and number got correct
-  async function handleClick() {
+  function handleClick() {
     // Scroll page up to title (to show number correct)
-    if (titleRef.current !== null) {
-      titleRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    // Use set timeout to ensure that everything has been rendered first
+    setTimeout(() => {
+      if (titleRef.current !== null) {
+        titleRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+
     setShowCorrect(true);
     // Tally num of correct answers
     let correct = 0;
@@ -95,7 +99,7 @@ export default function TakeQuiz() {
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
-    await mutation.mutate({
+    mutation.mutate({
       date: `${year}-${month}-${day}`,
       score: correct,
       quiz: Number(quizId),
@@ -150,7 +154,7 @@ export default function TakeQuiz() {
   }
 
   return (
-    <div className={"center-container"}>
+    <div className={"center-container"} ref={titleRef}>
       {showCorrect && (
         <div
           className={clsx({
@@ -170,9 +174,7 @@ export default function TakeQuiz() {
           </div>
         </div>
       )}
-      <h1 className={styles.title} ref={titleRef}>
-        {quizData.data.title}
-      </h1>
+      <h1 className={styles.title}>{quizData.data.title}</h1>
 
       <div className={styles.embedContainer}>
         <Video
@@ -206,7 +208,8 @@ export default function TakeQuiz() {
         onClick={handleClick}
         disabled={btnIsDisabled()}
       >
-        <a href="#title">Check Answers</a>
+        Check Answers
+        {/* <a href="#title">Check Answers</a> */}
       </button>
     </div>
   );

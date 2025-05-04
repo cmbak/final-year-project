@@ -10,7 +10,8 @@
   /* grid-template-columns: ; */
   grid-template-columns: 1.9fr 1.1fr;
   align-items: center;
-  padding-left: 12rem;
+  /* padding-left: 12rem; */
+  padding-left: 13%;
   /* TODO media queries */
 }
 
