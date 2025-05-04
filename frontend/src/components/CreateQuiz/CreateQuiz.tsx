@@ -46,7 +46,11 @@ export default function CreateQuiz() {
 
   // Quiz being made
   if (isPending) {
-    return <Loading text="creating quiz" bottomText="generating questions" />;
+    return (
+      <div className={styles.center}>
+        <Loading text="creating quiz" />
+      </div>
+    );
   }
 
   return (

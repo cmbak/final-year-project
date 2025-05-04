@@ -1,3 +1,10 @@
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -9,14 +16,6 @@
   font-size: 2.5rem;
   font-weight: bold;
   margin-top: 2rem;
-  /* align-items: center;
-  justify-items: center;
-  display: grid;
-  grid-template-columns: 10% 90%;
-  & > h2 {
-    font-size: 2rem;
-    font-weight: bold;
-  } */
 }
 
 .form {
