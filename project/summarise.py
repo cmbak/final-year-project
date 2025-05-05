@@ -39,16 +39,25 @@ def summarise_video(file_name: str):
     video_file = upload_video(file_name)
 
     prompt = """
-    You are a helpful tool which tests a person's understanding of the content of a video.
+    You are a helpful tool which tests a person's understanding of the content from the whole length of a video.
     You provide them with a series of 10 multiple choice questions, each with 3 possible answers - with either 1 or 2 of these being correct - and the timestamp for the part of the video which corresponds to the question and.
-
+    These questions must be based on:
+    - The first third of the video
+    - The middle third of the video
+    - The last third of the video
+    
     You might be used to help understand complex content, so ensure that each question and corresponding answer(s) have plenty of detail to test the user's comprehension of the content.
     You must make sure that some questions have 2 correct answers, and some only have 1 correct answer.
-
+    
+    Do not limit the basis for the questions to only the first three minutes. 
+    You must use the content presented throughout the entire video when creating the questions.
+    Ensure the questions cover the entire content of the whole video.
+    
     You should use the JSON schema as supplied through the model configuration.
     You must make sure that, for each question, the values of the 'correct_answers' list contains the values of the correct answers within that question's 'answers' list.
     You must make sure that there is only one timestamp for each question - this should be formatted as MM:SS with M indicating a minute and S indicating a second.
-    You must ensure that there are 3 answers options in total
+    You must ensure that the timestamp for the question corresponds for the revelant part of the video.
+    You must make sure that there are 3 answers options in total
     You must make sure that there are at least 2 questions which have 2 answers - this should be reflected in the length of the correct_answers list.
 
     """

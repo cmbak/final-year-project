@@ -12,7 +12,7 @@ from api.serializers import (
 )
 from decouple import config
 from django.contrib.auth import login, logout
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, ValidationError
 from django.http.response import HttpResponseRedirectBase, JsonResponse
 from download_video import download_video
 from google.api_core.exceptions import GoogleAPICallError, ServerError, TooManyRequests
@@ -40,6 +40,13 @@ def video_error_json(error_message: str, status_code: int) -> JsonResponse:
     Return JsonResponse for video field with the error message and status code specified
     """
     return JsonResponse({"errors": {"video": [error_message]}}, status=status_code)
+
+
+def title_error_json(error_message: str, status_code: int) -> JsonResponse:
+    """
+    Return JsonResponse for quiz title field with the error message and status code specified # noqae501
+    """
+    return JsonResponse({"errors": {"title": [error_message]}}, status=status_code)
 
 
 class HttpResponseSeeOther(HttpResponseRedirectBase):
@@ -236,6 +243,18 @@ class QuizCreateView(CreateSpecifyErrorsMixin, generics.CreateAPIView):
                 {"id": serializer.data["id"], "questions": summarised_questions},
                 status=status.HTTP_201_CREATED,
             )
+        # except (
+        #     ValidationError
+        # ):  # Only gets thrown in quiz already exists with that name
+        #     print(
+        #         f"Something went wrong (Validation - unique quiz name) when trying to download video from {url}"  # noqa e501
+        #     )
+        #     quiz.delete()
+
+        #     return title_error_json(
+        #         "A quiz with that name already exists.",
+        #         status.HTTP_400_BAD_REQUEST,
+        #     )
         except RegexMatchError:
             print(
                 f"Something went wrong (Regex) when trying to download video from {url}"

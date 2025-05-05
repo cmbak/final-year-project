@@ -32,7 +32,7 @@ class Quiz(models.Model):
     UPLOAD = "UP"
     VIDEO_TYPE_CHOICES = {YOUTUBE: "Youtube", UPLOAD: "Upload"}
 
-    title = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=50, unique=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.CharField(
         max_length=7, choices=VIDEO_TYPE_CHOICES
@@ -41,15 +41,6 @@ class Quiz(models.Model):
     thumbnail_url = models.CharField(unique=False, blank=True, null=True)
     file_name = models.CharField(blank=True)
     # blank=True since field gets populated after quiz is created
-
-    class Meta:
-        """Metadata for Quiz model"""
-
-        constraints = [
-            models.UniqueConstraint(
-                models.functions.Lower("title"), name="unique_quiz_title"
-            )
-        ]
 
     def save(self, *args, **kwargs):
         """Override save method so full_clean() (and thefore clean()) can be called"""
