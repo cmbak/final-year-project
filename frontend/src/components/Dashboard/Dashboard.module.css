@@ -52,6 +52,22 @@
   padding: 4rem; */
 }
 
+.noQuizzes {
+  display: flex;
+  justify-content: center;
+  margin-top: 15rem;
+  font-size: 2rem;
+  color: rgb(61, 61, 61);
+}
+
+.noAttempts {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+  font-size: 1.5rem;
+  color: rgb(61, 61, 61);
+}
+
 @media only screen and (max-width: 768px) {
   /* Improve visibility on smaller screens */
   .attemptsContainer {
