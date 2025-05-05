@@ -32,7 +32,9 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="take-quiz/:quizId" element={<TakeQuiz />} />
           </Route>
-          <Route path="*" element={<NotFound />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
       </QueryClientProvider>
     </>

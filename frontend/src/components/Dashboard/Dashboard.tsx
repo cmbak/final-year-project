@@ -29,27 +29,44 @@ export default function Dashboard() {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Dashboard</h1>
-      {attemptsData.isError ? (
+      {/* Only show if there are quizzes */}
+      {data && data.length === 0 ? (
+        <div className={styles.noQuizzes}>
+          <p>No quizzes to show statistics for</p>
+        </div>
+      ) : attemptsData.isError ? (
         <h1>Error {error && error.message}</h1>
       ) : (
         <div className={styles.attemptsGraph}>
-          <h2>Number of attempts by Quiz</h2>
-          {/* <p>Only for attempted quizzes</p> */}
-          <div className={styles.attemptsContainer}>
-            <AllAtempts attempts={attemptsData.data} quizzes={data} />
-          </div>
+          {attemptsData.data && attemptsData.data.length > 0 ? (
+            <>
+              <h2>Number of attempts by Quiz</h2>
+              <div className={styles.attemptsContainer}>
+                <AllAtempts attempts={attemptsData.data} quizzes={data} />
+              </div>
+            </>
+          ) : (
+            <div className={styles.noAttempts}>
+              <p>No quizzes have been attempted</p>
+            </div>
+          )}
         </div>
       )}
-      <h1 className={styles.statsTitle}>Stats for each Quiz</h1>
-      <div className={!isError ? styles.statsGrid : ""}>
-        {isError ? (
-          <h1>Error {error && error.message}</h1>
-        ) : (
-          data.map(({ id, title }: Quiz) => (
-            <StatsCard key={id} id={id} title={title} />
-          ))
-        )}
-      </div>
+      {/* Only show if there are quizzes */}
+      {data && data.length !== 0 && (
+        <>
+          <h1 className={styles.statsTitle}>Stats for each Quiz</h1>
+          <div className={!isError ? styles.statsGrid : ""}>
+            {isError ? (
+              <h1>Error {error && error.message}</h1>
+            ) : (
+              data.map(({ id, title }: Quiz) => (
+                <StatsCard key={id} id={id} title={title} />
+              ))
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
