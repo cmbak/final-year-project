@@ -50,3 +50,7 @@ In another terminal in the frontend directory, run npm run dev
 In another terminal in the project directory, run python manage.py runserver
 
 Go to http://localhost:8000/signup/ to get started!
+
+# To run tests
+
+In project directory, run: pytest --cov=api -v -n auto
