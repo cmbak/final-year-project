@@ -9,12 +9,8 @@ export default function ProtectedRoute() {
     window.location.href = `${import.meta.env.VITE_BACKEND_URL}/login/`;
   };
 
-  // TODO remove flicker of loading before data fetched
-  // on slower internet it would be longer than a flicker
-
   if (isPending) {
     return;
-    // return <h1>Loading...</h1>;
   }
 
   if (isError) {
